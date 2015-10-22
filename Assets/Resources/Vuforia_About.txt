@@ -1,0 +1,15 @@
+﻿The User Defined Targets sample shows how to capture and create an image target at runtime from user-selected camera video frames.
+
+Key Functionality
+- Create and manage user defined image target
+- Activate Extended Tracking
+
+Instructions
+- Hold device parallel to feature rich target and tap camera button
+- Single tap to focus
+- Double tap to access options menu
+
+Terms of Use
+https://developer.vuforia.com/legal/EULA
+
+© 2012-2015 Qualcomm Connected Experiences, Inc. All Rights Reserved.
