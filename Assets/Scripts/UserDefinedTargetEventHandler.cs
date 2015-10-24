@@ -55,7 +55,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         }
 
         //---------------------------start edit
-        //Adds a bomb count when the bomb is taken a picture of. 
+        //bomb count sensitive to display the button to take picture
         if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
         {
             mNewUserDefinedTargetButton = MakeUIButton();
@@ -69,7 +69,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     public void Draw()
     {
         //---------------------------start edit
-        //Adds a bomb count when the bomb is taken a picture of. 
+        //bomb count sensitive to display the button to take picture
         if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
         {
             mNewUserDefinedTargetButton.Draw();
