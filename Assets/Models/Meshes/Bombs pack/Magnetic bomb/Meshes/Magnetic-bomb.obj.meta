@@ -1,25 +1,26 @@
 fileFormatVersion: 2
-guid: 5eb4f6b1a92739246afe586dc2d32c8d
+guid: 2a5a92888a879df478af9de71b7cdbc3
+timeCreated: 1445662291
+licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Plastic_bomb
-    100004: Plastic_bomb_collider
+    100002: Magnetic_bomb
+    100004: Magnetic_bomb_collider
     400000: //RootNode
-    400002: Plastic_bomb
-    400004: Plastic_bomb_collider
-    2300000: Plastic_bomb
-    2300002: Plastic_bomb_collider
-    3300000: Plastic_bomb
-    3300002: Plastic_bomb_collider
-    4300000: Plastic_bomb
-    4300002: Plastic_bomb_collider
-    9500000: //RootNode
+    400002: Magnetic_bomb
+    400004: Magnetic_bomb_collider
+    2300000: Magnetic_bomb
+    2300002: Magnetic_bomb_collider
+    3300000: Magnetic_bomb
+    3300002: Magnetic_bomb_collider
+    4300000: Magnetic_bomb
+    4300002: Magnetic_bomb_collider
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
-    materialSearch: 0
+    materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -53,7 +54,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
