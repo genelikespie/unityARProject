@@ -54,13 +54,29 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
             Debug.Log ("Registering to the events of IUserDefinedTargetEventHandler");
         }
 
-        mNewUserDefinedTargetButton = MakeUIButton();
-        mNewUserDefinedTargetButton.TappedOn += OnTappedOnNewTargetButton;
+        //---------------------------start edit
+        //Adds a bomb count when the bomb is taken a picture of. 
+        if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
+        {
+            mNewUserDefinedTargetButton = MakeUIButton();
+            mNewUserDefinedTargetButton.TappedOn += OnTappedOnNewTargetButton;
+        }
+
+
+        //---------------------------end edit
     }
 
     public void Draw()
     {
-        mNewUserDefinedTargetButton.Draw();
+        //---------------------------start edit
+        //Adds a bomb count when the bomb is taken a picture of. 
+        if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
+        {
+            mNewUserDefinedTargetButton.Draw();
+        }
+
+        //---------------------------end edit
+
     }
 
     #region IUserDefinedTargetEventHandler implementation
@@ -150,6 +166,11 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         // generate a new target name:
         
         mTargetBuildingBehaviour.BuildNewTarget(targetName, ImageTargetTemplate.GetSize().x);
+        
+        //---------------------------start edit
+        //Adds a bomb count when the bomb is taken a picture of. 
+        GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs++; 
+        //---------------------------end edit
     }
 
     private void OnTappedOnNewTargetButton()
