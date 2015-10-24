@@ -26,7 +26,7 @@ public class AppManager : MonoBehaviour
     #region PRIVATE_MEMBER_VARIABLES
     private SplashScreenView mSplashView;
     private AboutScreenView mAboutView;
-    private float mSecondsVisible = 4.0f;
+    private float mSecondsVisible = 0.0f;
     #endregion PRIVATE_MEMBER_VARIABLES
 
     //This gets called from SceneManager's Start() 
