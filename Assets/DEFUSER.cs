@@ -16,8 +16,11 @@ public class DEFUSER : MonoBehaviour {
 	void Update () {
         if (timer > 0) //when the bomb is still able to blow
         {
-            if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE == true) //bomb is active
+            if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE == true)
+            { //bomb is active
                 timer = timer -= Time.deltaTime; //reduce time to kill
+                Debug.Log("decrementing timer: " + timer);
+            }
             else
             {
                 timer = initialTimer; //lost track of bomb reset bomb to initial
