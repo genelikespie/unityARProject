@@ -132,8 +132,9 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         
         // get predefined trackable and instantiate it
         ImageTargetBehaviour imageTargetCopy = (ImageTargetBehaviour)Instantiate(ImageTargetTemplate);
-        imageTargetCopy.gameObject.name = "UserDefinedTarget-" + mTargetCounter;
-        
+        //imageTargetCopy.gameObject.name = "UserDefinedTarget-" + mTargetCounter;
+        imageTargetCopy.gameObject.name = "ActiveBomb";
+
         // add the duplicated trackable to the data set and activate it
         mBuiltDataSet.CreateTrackable(trackableSource, imageTargetCopy.gameObject);
         
@@ -170,6 +171,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //---------------------------start edit
         //Adds a bomb count when the bomb is taken a picture of. 
         GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs++; 
+        //Sends the buildnewtarget 
         //---------------------------end edit
     }
 
