@@ -3,34 +3,40 @@ using System.Collections;
 
 public class MainMenuState : State {
 
-    abstract public void ToMainMenu()
+    public void ToSharedModeMenu()
+    {
+    }
+
+    public void ToTutorialMenu()
     {
 
     }
 
-    abstract public void ToSharedModeMenu()
-    {
-        gameManager.SetState(gameManager.sharedModeMenuState);
-    }
-
-    abstract public void ToTutorialMenu()
+    public void ToMultiplayerMenu()
     {
 
     }
 
-    abstract public void ToMultiplayerMenu()
+    public void PlantBomb()
     {
 
     }
-
-    abstract public void PlantBomb();
 
     // Changes the game state between planting bomb and defusing bomb
-    abstract public void PassPhone(Player from, Player to);
+    public void PassPhone(Player from, Player to)
+    {
+
+    }
 
     // Time runs out
-    abstract public void TimeExpired();
+    public void TimeExpired()
+    {
+
+    }
 
     // All bombs are defused
-    abstract public void AllBombsDefused();
+    public void AllBombsDefused()
+    {
+
+    }
 }

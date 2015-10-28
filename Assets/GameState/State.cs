@@ -1,34 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class State {
+public class State {
     protected GameManager gameManager;
 	
     public State() {
         gameManager = GameManager.Instance();
     }
 
-    abstract public void ToMainMenu();
+    virtual public void ToMainMenu()
+    {
+        gameManager.SetState(gameManager.mainMenuState);
+    }
 
-    abstract public void ToSharedModeMenu();
+    virtual public void ToSharedModeMenu()
+    {
+        gameManager.SetState(gameManager.sharedModeMenuState);
+    }
 
     /*
      * Not implemented yet
      */
-    abstract public void ToTutorialMenu();
+    virtual public void ToTutorialMenu()
+    {
+       //gameManager.SetState(gameManager.mainMenuState);
+    }
 
-    abstract public void ToMultiplayerMenu();
+    virtual public void ToMultiplayerMenu();
 
-    abstract public void PlantBomb();
+    virtual public void PlantBomb();
 
     // Changes the game state between planting bomb and defusing bomb
-    abstract public void PassPhone(Player from, Player to);
+    virtual public void PassPhone(Player from, Player to);
 
     // Time runs out
-    abstract public void TimeExpired();
+    virtual public void TimeExpired();
 
     // All bombs are defused
-    abstract public void AllBombsDefused ();
+    virtual public void AllBombsDefused ();
 
 
 
