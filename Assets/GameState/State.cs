@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class State {
+public class State : MonoBehaviour{
     protected GameManager gameManager;
 	
-    public State() {
+    void Awake() {
         gameManager = GameManager.Instance();
     }
 
@@ -15,6 +15,7 @@ public class State {
 
     virtual public void ToSharedModeMenu()
     {
+        gameManager.sharedModeMenuState.Initialize();
         gameManager.SetState(gameManager.sharedModeMenuState);
     }
 
@@ -23,21 +24,36 @@ public class State {
      */
     virtual public void ToTutorialMenu()
     {
-       //gameManager.SetState(gameManager.mainMenuState);
+        gameManager.SetState(gameManager.tutorialMenuState);
     }
 
-    virtual public void ToMultiplayerMenu();
+    virtual public void ToMultiplayerMenu()
+    {
 
-    virtual public void PlantBomb();
+    }
+
+    virtual public void PlantBomb()
+    {
+
+    }
 
     // Changes the game state between planting bomb and defusing bomb
-    virtual public void PassPhone(Player from, Player to);
+    virtual public void PassPhone(Player from, Player to)
+    {
+
+    }
 
     // Time runs out
-    virtual public void TimeExpired();
+    virtual public void TimeExpired()
+    {
+
+    }
 
     // All bombs are defused
-    virtual public void AllBombsDefused ();
+    virtual public void AllBombsDefused()
+    {
+
+    }
 
 
 

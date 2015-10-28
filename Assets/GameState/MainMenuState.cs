@@ -3,20 +3,6 @@ using System.Collections;
 
 public class MainMenuState : State {
 
-    public void ToSharedModeMenu()
-    {
-    }
-
-    public void ToTutorialMenu()
-    {
-
-    }
-
-    public void ToMultiplayerMenu()
-    {
-
-    }
-
     public void PlantBomb()
     {
 
