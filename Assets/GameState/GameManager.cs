@@ -36,6 +36,21 @@ public class GameManager : MonoBehaviour {
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
     public SharedModeMenuState sharedModeMenuState { get; private set; }
+<<<<<<< HEAD
+
+    public MultiplayerMenuState multiplayerMenuState { get; private set; }
+    public PlantBombState plantBombState { get; private set; }
+    public State currentState {get; private set;}
+
+    //added this for ease of determining how many bombs
+    public static int numOfBombs { get; set; }
+
+    //added these for determining how many wins each team or player has total
+    public static int player1Wins { get; set; }
+    public static int player2Wins { get; set; }
+
+    private volatile static GameManager gameManager;
+=======
     // TODO multiplayerMenuState
     public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
@@ -48,6 +63,7 @@ public class GameManager : MonoBehaviour {
     public List<State> stateList { get; private set; }
 
     public static GameManager gameManager;
+>>>>>>> 9ebac8121f25b3cf90b02bab4a7cb509f9d80c5f
     public static GameManager Instance() {
         if (!gameManager)
         {

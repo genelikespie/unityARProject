@@ -1,16 +1,11 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 
 public class SharedModeMenuState : State {
 
-    // UI elements
-    InputField SMM_PlanterNameInputField;
-    InputField SMM_DefuserNameInputField;
-    Toggle SMM_TutorialToggle; // Toggles between showing tutorial or not
-    Button SMM_BackButton;
-    Button SMM_PlayButton;
+    //float time { get; private set; }
+    //int numOfBombs;
+    public static float timeAllowed { get; private set; }
 
     // To use the List class, use the System.Collections.Generic library
     public List<Player> planters = new List<Player>();
@@ -23,37 +18,39 @@ public class SharedModeMenuState : State {
     {
         base.Awake();// Call the base class's function to initialize all variables
         // Find all UI elements in the scene
-        SMM_PlanterNameInputField = GameObject.Find("SMM_PlanterNameInputField").GetComponent<InputField>();
-        SMM_DefuserNameInputField = GameObject.Find("SMM_DefuserNameInputField").GetComponent<InputField>();
-        SMM_TutorialToggle = GameObject.Find("SMM_TutorialToggle").GetComponent<Toggle>();
-        SMM_BackButton = GameObject.Find("SMM_BackButton").GetComponent<Button>();
-        SMM_PlayButton = GameObject.Find("SMM_PlayButton").GetComponent<Button>();
-        if (!SMM_PlanterNameInputField)
-            Debug.LogError("SMM_PlanterNameInputField");
-        if (!SMM_DefuserNameInputField)
-            Debug.LogError("SMM_DefuserNameInputField");
-        if (!SMM_TutorialToggle)
-            Debug.LogError("SMM_TutorialToggle");
-        if (!SMM_BackButton)
-            Debug.LogError("SMM_BackButton");
-        if (!SMM_PlayButton)
-            Debug.LogError("SMM_PlayButton");
 
-        if (!gameManager)
-            Debug.LogError("AWAKE: CANT find game manager in base");
+	}
+	
+    public override void ToTutorialMenu()
+    {
+        //gameManager.SetState(gameManager.mainMenuState);
     }
 
-    /* Reset the UI
-     */
-    public override void Initialize()
+    virtual public void ToMultiplayerMenu()
     {
-        planters.Clear();
-        defusers.Clear();
-        if (!gameManager)
-            Debug.LogError("Cant find game manager");
+        //do nothing
     }
 
     public override void PlantBomb()
+    {
+        gameManager.SetState(gameManager.plantBombState);
+    }
+	
+    // Changes the game state between planting bomb and defusing bomb
+    public override void PassPhone(Player from, Player to)
+    {
+        //do nothing
+    }
+
+
+    // Time runs out
+    public override void TimeExpired()
+    {
+        //do nothing
+    }
+
+    // All bombs are defused
+    public override void AllBombsDefused()
     {
         planters.Add(new Player(SMM_PlanterNameInputField.text));
         defusers.Add(new Player(SMM_DefuserNameInputField.text));
@@ -69,4 +66,39 @@ public class SharedModeMenuState : State {
         gameManager.SetState(gameManager.plantBombState);
     }
 
+    /*
+    public static void main(string[]args)
+    {
+        //TO DO: Need a button to determine number of bombs 
+        GameManager.numOfBombs = 0; //temporary until button is implemented
+        timeAllowed = GameManager.numOfBombs * 10;
+
+        //TO DO: Add a button to start playing
+        if (GameManager.numOfBombs == 0)
+        {
+            //you can't play...
+        }
+        else
+        {
+            this.PlantBomb();
+        }
+    }
+     * */
+
+    public void execute()
+    {
+        //TO DO: Need a button to determine number of bombs 
+        GameManager.numOfBombs = 0; //temporary until button is implemented
+        timeAllowed = GameManager.numOfBombs * 10;
+
+        //TO DO: Add a button to start playing
+        if (GameManager.numOfBombs == 0)
+        {
+            //you can't play...
+        }
+        else
+        {
+            this.PlantBomb();
+        }
+    }
 }

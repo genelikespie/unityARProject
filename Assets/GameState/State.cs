@@ -47,25 +47,46 @@ public class State : MonoBehaviour{
 
     }
 
+<<<<<<< HEAD
+    virtual public void ToMultiplayerMenu()
+    {
+
+    }
+
+    virtual public void PlantBomb()
+=======
     public virtual void PlantBomb()
+>>>>>>> 9ebac8121f25b3cf90b02bab4a7cb509f9d80c5f
     {
 
     }
 
     // Changes the game state between planting bomb and defusing bomb
+<<<<<<< HEAD
+    virtual public void PassPhone(Player from, Player to)
+=======
     public virtual void PassPhone(Player from, Player to)
+>>>>>>> 9ebac8121f25b3cf90b02bab4a7cb509f9d80c5f
     {
 
     }
 
     // Time runs out
+<<<<<<< HEAD
+    virtual public void TimeExpired()
+=======
     public virtual void TimeExpired()
+>>>>>>> 9ebac8121f25b3cf90b02bab4a7cb509f9d80c5f
     {
 
     }
 
     // All bombs are defused
+<<<<<<< HEAD
+    virtual public void AllBombsDefused ()
+=======
     public virtual void AllBombsDefused()
+>>>>>>> 9ebac8121f25b3cf90b02bab4a7cb509f9d80c5f
     {
 
     }
