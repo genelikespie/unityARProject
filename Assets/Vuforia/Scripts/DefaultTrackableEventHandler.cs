@@ -8,27 +8,24 @@ using UnityEngine;
 
 namespace Vuforia
 {
-    
     /// <summary>
     /// A custom handler that implements the ITrackableEventHandler interface.
     /// </summary>
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
-        public bool bombDefuserActive;
         #region PRIVATE_MEMBER_VARIABLES
-
+ 
         private TrackableBehaviour mTrackableBehaviour;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
-        
+
 
         #region UNTIY_MONOBEHAVIOUR_METHODS
     
         void Start()
         {
-            bombDefuserActive = false;
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
@@ -86,10 +83,7 @@ namespace Vuforia
                 component.enabled = true;
             }
 
-            GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE = true;
-
-
-        Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+            Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
 
@@ -109,8 +103,6 @@ namespace Vuforia
             {
                 component.enabled = false;
             }
-
-            GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE = false;
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }

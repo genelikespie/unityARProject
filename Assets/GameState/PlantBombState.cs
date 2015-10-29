@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlantBombState : State {
-    
+public class PlantBombState : State
+{
+
     public override void ToTutorialMenu()
     {
         //gameManager.SetState(gameManager.mainMenuState);
@@ -39,6 +40,6 @@ public class PlantBombState : State {
 
     public void execute()
     {
-        SharedModeMenuState.timeAllowed
+        //SharedModeMenuState.timeAllowed
     }
 }
