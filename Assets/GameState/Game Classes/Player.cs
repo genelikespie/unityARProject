@@ -5,15 +5,14 @@ using System.Collections;
  * Keeps track of a player's score
  * Loads any saved data for the player
  */
-public class Player : MonoBehaviour {
+public class Player {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    string playerName;
+    int score;
+
+    public Player(string pName)
+    {
+        playerName = pName;
+        score = 0;
+    }
 }
