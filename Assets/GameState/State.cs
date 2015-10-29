@@ -54,7 +54,12 @@ public class State : MonoBehaviour{
     }
 
     // Changes the game state between planting bomb and defusing bomb
-    public virtual void PassPhone(Player from, Player to)
+    public virtual void PassPhone()
+    {
+
+    }
+
+    public virtual void DefuseBomb()
     {
 
     }
@@ -62,6 +67,9 @@ public class State : MonoBehaviour{
     // Time runs out
     public virtual void TimeExpired()
     {
+        /////////////////////////////////////////////////
+        // TODO implement time expired
+        /////////////////////////////////////////////////
 
     }
 

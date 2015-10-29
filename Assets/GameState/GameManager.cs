@@ -16,7 +16,10 @@ public class GameManager : MonoBehaviour {
     AppManager appManager;
 
     // Camera properties
+    ///////////////////////////////////////////////////////
     // TODO rename vuforia camera's name
+    ///////////////////////////////////////////////////////
+
     string arCameraName = "ARCamera";
     string vuforiaCameraName = "Camera";
     string menuCameraName = "MenuCamera";
@@ -37,7 +40,10 @@ public class GameManager : MonoBehaviour {
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
     public SharedModeMenuState sharedModeMenuState { get; private set; }
+    ///////////////////////////////////////////////////////
     // TODO multiplayerMenuState
+    ///////////////////////////////////////////////////////
+
     public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
     public PassingState passingState { get; private set; }
@@ -91,15 +97,28 @@ public class GameManager : MonoBehaviour {
         mainMenuState = GetComponentInChildren<MainMenuState>();
         sharedModeMenuState = GetComponentInChildren<SharedModeMenuState>();
         tutorialMenuState = GetComponentInChildren<TutorialMenuState>();
+        ///////////////////////////////////////////////////////
         // TODO add multiplayer state initialization
+        ///////////////////////////////////////////////////////
+
         plantBombState = GetComponentInChildren<PlantBombState>();
+        passingState = GetComponentInChildren<PassingState>();
+        defuseState = GetComponentInChildren<DefuseState>();
+        gameOverState = GetComponentInChildren<GameOverState>();
+
 
         // Add all of the states to the stateList to keep track of them
         stateList.Add(mainMenuState);
         stateList.Add(sharedModeMenuState);
         stateList.Add(tutorialMenuState);
-        // TODO add multiplayer state
+        ///////////////////////////////////////////////////////
+        //// TODO add multiplayer state
+        ///////////////////////////////////////////////////////
+
         stateList.Add(plantBombState);
+        stateList.Add(passingState);
+        stateList.Add(defuseState);
+        stateList.Add(gameOverState);
 
         // Check if any of the states are null
         if (!mainMenuState)

@@ -21,7 +21,9 @@ public class SharedModeMenuState : State {
 
     protected virtual void Awake()
     {
-        base.Awake();// Call the base class's function to initialize all variables
+        // Call the base class's function to initialize all variables
+        base.Awake();
+
         // Find all UI elements in the scene
         SMM_PlanterNameInputField = GameObject.Find("SMM_PlanterNameInputField").GetComponent<InputField>();
         SMM_DefuserNameInputField = GameObject.Find("SMM_DefuserNameInputField").GetComponent<InputField>();

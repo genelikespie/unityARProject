@@ -78,10 +78,14 @@ public class PlantBombState : State {
                 PB_TimeLeftText.text = string.Format("{0:N1}", timeLeft);
 
                 // If time runs out, planter loses
+                /////////////////////////////////////////////////
+                // TODO implement time expired
+                /////////////////////////////////////////////////
+
                 if (timeLeft <= 0 && !gameManager.bombPlanted)
                 {
                     //Debug.LogWarning("Time ran out to plant the bomb!");
-                    //gameManager.SetState(gameManager.gameOverState);
+                    //
                 }
 
             }
@@ -91,6 +95,12 @@ public class PlantBombState : State {
                 PB_PassPhoneButton.gameObject.SetActive(true);
             }
         }
+    }
 
+    public override void PassPhone()
+    {
+        // Initialize to 30 seconds to pass phone to defuser
+        gameManager.passingState.timeToPass = 30f;
+        gameManager.SetState(gameManager.passingState);
     }
 }
