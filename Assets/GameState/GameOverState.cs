@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOverState : MonoBehaviour {
+public class GameOverState : State {
 
 	// Use this for initialization
 	void Start () {

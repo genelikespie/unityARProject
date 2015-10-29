@@ -2,15 +2,15 @@
 using System.Collections;
 
 public class State : MonoBehaviour{
+
     protected GameManager gameManager;
 	
+    /* NOTE: All derived classes must call this base Awake() function in their respective Awake() functions
+     */
     protected virtual void Awake() {
-        Debug.LogError("AWAKE: STATE");
         gameManager = GameManager.Instance();
         if (!gameManager)
             Debug.LogError("No GameManager found!");
-        else
-            Debug.Log("Found GameManager");
     }
 
     /* This function is called for NextState when the state changes.
@@ -22,8 +22,6 @@ public class State : MonoBehaviour{
 
     public virtual void ToMainMenu()
     {
-        if (!gameManager)
-            Debug.LogError("Cannot find static game manager!");
         Debug.Log("GameManager " + gameManager.name);
         Debug.Log("MainMenuState " + gameManager.mainMenuState.name);
 

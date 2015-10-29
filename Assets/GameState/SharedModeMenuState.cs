@@ -12,16 +12,16 @@ public class SharedModeMenuState : State {
     Button SMM_BackButton;
     Button SMM_PlayButton;
 
-
     // To use the List class, use the System.Collections.Generic library
     public List<Player> planters = new List<Player>();
     public List<Player> defusers = new List<Player>();
-    public int numberOfBombs = 1; // TODO possibly make this dynamic
+    public int numOfBombs = 1; // TODO possibly make this dynamic
     public float timeToPlant = 30.0f; // TODO make this dynamic
+    public float timeToDefuse = 60.0f; // TODO make this dynamic
 
-    protected override void Awake()
+    protected virtual void Awake()
     {
-        Debug.LogError("AWAKE: SHAREDMODE");
+        base.Awake();// Call the base class's function to initialize all variables
         // Find all UI elements in the scene
         SMM_PlanterNameInputField = GameObject.Find("SMM_PlanterNameInputField").GetComponent<InputField>();
         SMM_DefuserNameInputField = GameObject.Find("SMM_DefuserNameInputField").GetComponent<InputField>();
@@ -57,7 +57,15 @@ public class SharedModeMenuState : State {
     {
         planters.Add(new Player(SMM_PlanterNameInputField.text));
         defusers.Add(new Player(SMM_DefuserNameInputField.text));
-        gameManager.plantBombState.Initialize(planters, defusers, numberOfBombs, timeToPlant);
+
+        // Set GameManager's game info
+        gameManager.planters = planters;
+        gameManager.defusers = defusers;
+        gameManager.numOfBombs = numOfBombs;
+        gameManager.timeToPlant = timeToPlant;
+        gameManager.timeToDefuse = timeToDefuse;
+
+        gameManager.SetAR();
         gameManager.SetState(gameManager.plantBombState);
     }
 
