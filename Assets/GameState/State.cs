@@ -26,18 +26,33 @@ public class State {
        //gameManager.SetState(gameManager.mainMenuState);
     }
 
-    virtual public void ToMultiplayerMenu();
+    virtual public void ToMultiplayerMenu()
+    {
 
-    virtual public void PlantBomb();
+    }
+
+    virtual public void PlantBomb()
+    {
+
+    }
 
     // Changes the game state between planting bomb and defusing bomb
-    virtual public void PassPhone(Player from, Player to);
+    virtual public void PassPhone(Player from, Player to)
+    {
+
+    }
 
     // Time runs out
-    virtual public void TimeExpired();
+    virtual public void TimeExpired()
+    {
+
+    }
 
     // All bombs are defused
-    virtual public void AllBombsDefused ();
+    virtual public void AllBombsDefused ()
+    {
+
+    }
 
 
 
