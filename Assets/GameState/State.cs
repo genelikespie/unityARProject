@@ -4,7 +4,8 @@ using System.Collections;
 public class State : MonoBehaviour{
 
     protected GameManager gameManager;
-	
+    public bool isCurrentState; // if this state is the current state
+
     /* NOTE: All derived classes must call this base Awake() function in their respective Awake() functions
      */
     protected virtual void Awake() {

@@ -15,9 +15,9 @@ public class SharedModeMenuState : State {
     // To use the List class, use the System.Collections.Generic library
     public List<Player> planters = new List<Player>();
     public List<Player> defusers = new List<Player>();
-    public int numOfBombs = 1; // TODO possibly make this dynamic
-    public float timeToPlant = 30.0f; // TODO make this dynamic
-    public float timeToDefuse = 60.0f; // TODO make this dynamic
+    public int numOfBombs; 
+    public float timeToPlant;
+    public float timeToDefuse;
 
     protected virtual void Awake()
     {
@@ -55,8 +55,17 @@ public class SharedModeMenuState : State {
 
     public override void PlantBomb()
     {
+        if (SMM_PlanterNameInputField.text == "" || SMM_DefuserNameInputField.text == "")
+        {
+            // TODO throw a modal panel or some message to the screen/camera
+            return;
+        }
         planters.Add(new Player(SMM_PlanterNameInputField.text));
         defusers.Add(new Player(SMM_DefuserNameInputField.text));
+
+        numOfBombs = 1;
+        timeToPlant = 45f;
+        timeToDefuse = 60f;
 
         // Set GameManager's game info
         gameManager.planters = planters;
