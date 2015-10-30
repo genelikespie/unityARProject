@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
     public float timeToDefuse;
 
     public bool bombPlanted;
+    public bool playerOneWins;
 
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
