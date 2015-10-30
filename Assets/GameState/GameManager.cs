@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour {
     public float timeToPlant;
     public float timeToDefuse;
     public bool bombPlanted = false;
+    public bool bombVisible { get; set; }
 
     // Derived states
     public MainMenuState mainMenuState { get; private set; }

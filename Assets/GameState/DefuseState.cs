@@ -56,8 +56,12 @@ public class DefuseState : State {
             // TODO implement checking if the bomb is in view
             /////////////////////////////////////////////////
 
-            if (true) {
+            if (gameManager.bombVisible) {
                 D_DefuseBombButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                D_DefuseBombButton.gameObject.SetActive(false);
             }
 
             // If time runs out and we have not defused the bomb, defuser loses

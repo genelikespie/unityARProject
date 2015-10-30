@@ -11,6 +11,8 @@ namespace Vuforia
     /// <summary>
     /// A custom handler that implements the ITrackableEventHandler interface.
     /// </summary>
+    /// 
+
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
@@ -20,12 +22,15 @@ namespace Vuforia
     
         #endregion // PRIVATE_MEMBER_VARIABLES
 
-
+        // GameManger Object to detect if bomb is visible or not
+        GameManager gameManager;
 
         #region UNTIY_MONOBEHAVIOUR_METHODS
     
         void Start()
         {
+            // Get GameManager instance
+            gameManager = GameManager.Instance();
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
@@ -84,6 +89,10 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
+
+            //Notify GameManager that bomb has been found   
+            gameManager.bombVisible = true;
+
         }
 
 
@@ -105,6 +114,10 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
+
+            //Notify GameManager that bomb has been lost   
+            gameManager.bombVisible = false;
+
         }
 
         #endregion // PRIVATE_METHODS

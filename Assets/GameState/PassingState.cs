@@ -65,6 +65,7 @@ public class PassingState : State {
     public override void DefuseBomb()
     {
         base.DefuseBomb();
+        //gameManager.bombVisible = false;
         gameManager.SetState(gameManager.defuseState);
 
     }
