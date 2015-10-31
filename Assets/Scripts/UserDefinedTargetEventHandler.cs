@@ -176,7 +176,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //If the extended tracking is enabled, we first disable OTT for all the trackables
         //and then enable it for the newly created target
         //UDTUIEventHandler uiMenuEventHandler = FindObjectOfType(typeof(UDTUIEventHandler)) as UDTUIEventHandler;
-        if(UDTUIEventHandler.ExtendedTrackingIsEnabled)
+        if(TrackerAndCameraManager.ExtendedTrackingIsEnabled)
         {
             //Stop extended tracking on all the trackables
             foreach(var behaviour in stateManager.GetTrackableBehaviours())
