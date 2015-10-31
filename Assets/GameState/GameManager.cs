@@ -11,10 +11,6 @@ public class GameManager : MonoBehaviour {
     Vector2 openMenuPivot = new Vector2(0.5f, 0.5f);
     Vector2 screenSize;
 
-    // App Manager (Vuforia's GUI object)
-    SceneViewManager sceneViewManager;
-    AppManager appManager;
-
     // Camera properties
     ///////////////////////////////////////////////////////
     // TODO rename vuforia camera's name
@@ -36,6 +32,7 @@ public class GameManager : MonoBehaviour {
     public float timeToPlant;
     public float timeToDefuse;
     public bool bombPlanted = false;
+	public bool playerOneWins;
     public bool bombVisible { get; set; }
 
     // Derived states
@@ -72,14 +69,6 @@ public class GameManager : MonoBehaviour {
         stateList = new List<State>();
         screenSize = new Vector2(Screen.width, Screen.height);
 
-        // Set Vuforia's GUI with app manager
-        sceneViewManager = FindObjectOfType<SceneViewManager>();
-        appManager = FindObjectOfType<AppManager>();
-        if (!sceneViewManager)
-            Debug.LogError("Cannot find SceneViewManager");
-        if (!appManager)
-            Debug.LogError("Cannot find AppManager");
-
         // Find the cameras in the game scene
         arCamera = GameObject.Find(arCameraName);
         vuforiaCamera = GameObject.Find(vuforiaCameraName).GetComponent<Camera>();
@@ -91,9 +80,6 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Cannot find: " + vuforiaCameraName);
         if (!menuCamera)
             Debug.LogError("Cannot find" + menuCameraName);
-
-        // Disable the AR GUI for now and enable the MainMenu
-        SetMenu();
 
         mainMenuState = GetComponentInChildren<MainMenuState>();
         sharedModeMenuState = GetComponentInChildren<SharedModeMenuState>();
@@ -170,25 +156,12 @@ public class GameManager : MonoBehaviour {
         this.currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
     }
 
-    /* This function disables the Vuforia GUI and the AR Camera component and audio listener.
-     * It enables the menu camera and its audio listener
-     */
-    public void SetMenu()
-    {
-        //arCamera.GetComponent<AudioListener>().enabled = false;
-        //vuforiaCamera.enabled = false;
-        sceneViewManager.gameObject.SetActive(false);
-        //menuCamera.enabled = true;
-        //menuCamera.GetComponent<AudioListener>().enabled = true;
-    }
-
      /* It enables the vuforia GUI and AR camera and its audio listener
      */
     public void SetAR()
     {
         arCamera.GetComponent<AudioListener>().enabled = true;
         vuforiaCamera.enabled = true;
-        sceneViewManager.gameObject.SetActive(true);
         //menuCamera.enabled = false;
         //menuCamera.GetComponent<AudioListener>().enabled = false;
     }

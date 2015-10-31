@@ -18,11 +18,13 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     /// Can be set in the Unity inspector to reference a ImageTargetBehaviour that is instanciated for augmentations of new user defined targets.
     /// </summary>
     public ImageTargetBehaviour ImageTargetTemplate;
+	public int maxNumTargets = 5;
+	public bool ExtendedTrackingIsEnabled = true;
     public int IndexForMostRecentlyAddedTrackable
     {
         get
         {
-            return ( mTargetCounter - 1 ) % 5;
+            return ( mTargetCounter - 1 ) % maxNumTargets;
         }
     }
 
@@ -38,14 +40,13 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     private ImageTargetBuilder.FrameQuality mFrameQuality = ImageTargetBuilder.FrameQuality.FRAME_QUALITY_NONE;
     // counter variable used to name duplicates of the image target template
     private int mTargetCounter;
-    private SampleAppUIButton mNewUserDefinedTargetButton;
 
     #endregion PRIVATE_MEMBERS
 
     /// <summary>
     /// Registers this component as a handler for UserDefinedTargetBuildingBehaviour events
     /// </summary>
-    public void Init()
+    public void Start()
     {
         mTargetBuildingBehaviour = GetComponent<UserDefinedTargetBuildingBehaviour>();
         if (mTargetBuildingBehaviour)
@@ -58,26 +59,9 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //bomb count sensitive to display the button to take picture
         if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
         {
-            mNewUserDefinedTargetButton = MakeUIButton();
-            mNewUserDefinedTargetButton.TappedOn += OnTappedOnNewTargetButton;
+			Debug.Log("Make some UI here.");
         }
-
-
-        //---------------------------end edit
-    }
-
-    public void Draw()
-    {
-        //---------------------------start edit
-        //bomb count sensitive to display the button to take picture
-        if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
-        {
-            mNewUserDefinedTargetButton.Draw();
-        }
-
-        //---------------------------end edit
-
-    }
+	}
 
     #region IUserDefinedTargetEventHandler implementation
     /// <summary>
@@ -115,7 +99,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
 
         // Destroy the oldest target if the dataset is full or the dataset 
         // already contains five user-defined targets.
-        if (mBuiltDataSet.HasReachedTrackableLimit() || mBuiltDataSet.GetTrackables().Count() >= 5)
+        if (mBuiltDataSet.HasReachedTrackableLimit() || mBuiltDataSet.GetTrackables().Count() >= maxNumTargets)
         {
             IEnumerable<Trackable> trackables = mBuiltDataSet.GetTrackables();
             Trackable oldest = null;
@@ -137,7 +121,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
 
         // add the duplicated trackable to the data set and activate it
         mBuiltDataSet.CreateTrackable(trackableSource, imageTargetCopy.gameObject);
-        
         
         // activate the dataset again
         mObjectTracker.ActivateDataSet(mBuiltDataSet);
@@ -178,7 +161,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //---------------------------end edit
     }
 
-    private void OnTappedOnNewTargetButton()
+    public void OnTappedOnNewTargetButton()
     {
         BuildNewTarget();
     }
@@ -194,7 +177,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //If the extended tracking is enabled, we first disable OTT for all the trackables
         //and then enable it for the newly created target
         //UDTUIEventHandler uiMenuEventHandler = FindObjectOfType(typeof(UDTUIEventHandler)) as UDTUIEventHandler;
-        if(UDTUIEventHandler.ExtendedTrackingIsEnabled)
+        if(ExtendedTrackingIsEnabled)
         {
             //Stop extended tracking on all the trackables
             foreach(var behaviour in stateManager.GetTrackableBehaviours())
@@ -215,19 +198,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
                 bhvr.ImageTarget.StartExtendedTracking();
             }
         }
-    }
-
-    private SampleAppUIButton MakeUIButton()
-    {
-        Rect rect = new Rect(0.36f * Screen.width, Screen.height - (130 * Screen.width)/800.0f, 0.28f * Screen.width, (100.0f * Screen.width)/800.0f);
-        GUIStyle style = new GUIStyle();
-        style.normal.background = Resources.Load("UserInterface/capture_button_normal_XHigh") as Texture2D;
-        style.active.background = Resources.Load("UserInterface/capture_button_normal_XHigh") as Texture2D;
-        style.onNormal.background = Resources.Load("UserInterface/capture_button_normal_XHigh") as Texture2D;
-        style.alignment = TextAnchor.MiddleCenter;
-        Texture imageForButton = Resources.Load("UserInterface/icon_camera") as Texture;
-
-        return new SampleAppUIButton(rect, style, imageForButton);
     }
     #endregion PRIVATE_METHODS
 }
