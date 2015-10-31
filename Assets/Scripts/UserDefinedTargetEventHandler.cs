@@ -53,13 +53,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
             mTargetBuildingBehaviour.RegisterEventHandler(this);
             Debug.Log ("Registering to the events of IUserDefinedTargetEventHandler");
         }
-
-        //---------------------------start edit
-        //bomb count sensitive to display the button to take picture
-        if (GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs == 0)
-        {
-			Debug.Log("Make some UI here.");
-        }
 	}
 
     #region IUserDefinedTargetEventHandler implementation
@@ -151,8 +144,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         mTargetBuildingBehaviour.BuildNewTarget(targetName, ImageTargetTemplate.GetSize().x);
         
         //---------------------------start edit
-        //Adds a bomb count when the bomb is taken a picture of. 
-        GameObject.Find("DefusingBOMB").GetComponent<BombState>().numberOfBombs++;
         // Tell the GameManager that the bomb has been planted
         GameManager gameManager = GameManager.Instance();
         gameManager.bombPlanted = true;
@@ -175,7 +166,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         
         //If the extended tracking is enabled, we first disable OTT for all the trackables
         //and then enable it for the newly created target
-        //UDTUIEventHandler uiMenuEventHandler = FindObjectOfType(typeof(UDTUIEventHandler)) as UDTUIEventHandler;
         if(TrackerAndCameraManager.ExtendedTrackingIsEnabled)
         {
             //Stop extended tracking on all the trackables
