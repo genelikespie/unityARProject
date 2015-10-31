@@ -19,7 +19,6 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     /// </summary>
     public ImageTargetBehaviour ImageTargetTemplate;
 	public int maxNumTargets = 5;
-	public bool ExtendedTrackingIsEnabled = true;
     public int IndexForMostRecentlyAddedTrackable
     {
         get
@@ -47,7 +46,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     /// Registers this component as a handler for UserDefinedTargetBuildingBehaviour events
     /// </summary>
     public void Start()
-    {
+	{
         mTargetBuildingBehaviour = GetComponent<UserDefinedTargetBuildingBehaviour>();
         if (mTargetBuildingBehaviour)
         {
@@ -177,7 +176,7 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         //If the extended tracking is enabled, we first disable OTT for all the trackables
         //and then enable it for the newly created target
         //UDTUIEventHandler uiMenuEventHandler = FindObjectOfType(typeof(UDTUIEventHandler)) as UDTUIEventHandler;
-        if(ExtendedTrackingIsEnabled)
+        if(UDTUIEventHandler.ExtendedTrackingIsEnabled)
         {
             //Stop extended tracking on all the trackables
             foreach(var behaviour in stateManager.GetTrackableBehaviours())

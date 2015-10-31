@@ -14,7 +14,7 @@ using Vuforia;
 public class UDTUIEventHandler : MonoBehaviour { 
 	
 	#region PRIVATE_MEMBER_VARIABLES
-	private static bool sExtendedTrackingIsEnabled = false;
+	private static bool sExtendedTrackingIsEnabled = true;
 	#endregion PRIVATE_MEMBER_VARIABLES
 	
 	
