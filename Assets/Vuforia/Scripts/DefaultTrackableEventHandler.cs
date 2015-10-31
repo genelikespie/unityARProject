@@ -92,6 +92,7 @@ namespace Vuforia
 
             //Notify GameManager that bomb has been found   
             gameManager.bombVisible = true;
+            GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE = true;
 
         }
 
@@ -114,9 +115,10 @@ namespace Vuforia
             }
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
-
+          
             //Notify GameManager that bomb has been lost   
             gameManager.bombVisible = false;
+            GameObject.Find("DefusingBOMB").GetComponent<BombState>().BOMBSTATE = false;
 
         }
 

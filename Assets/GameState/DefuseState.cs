@@ -7,6 +7,8 @@ public class DefuseState : State {
     // UI
     Text D_TimeLeftText;
     Button D_DefuseBombButton;
+    public GameObject[] bombs;
+    public Material redtext;
 
     //
     public float timeToDefuse;
@@ -14,6 +16,8 @@ public class DefuseState : State {
 
     public virtual void Awake()
     {
+        bombs = GameObject.FindGameObjectsWithTag("Bomb"); //find bomb tag
+
         // Call the base class's function to initialize all variables
         base.Awake();
 
@@ -83,6 +87,9 @@ public class DefuseState : State {
         /////////////////////////////////////////////////
         // TODO implement game over functionality
         /////////////////////////////////////////////////
+        bombs = GameObject.FindGameObjectsWithTag("Bomb"); //find the bombs again
+        foreach (GameObject x in bombs) //need to fix this but essentially get all the bombs and change the texture
+            x.GetComponent<Renderer>().material = redtext;
 
         gameManager.bombPlanted = false;
         gameManager.SetState(gameManager.gameOverState);
