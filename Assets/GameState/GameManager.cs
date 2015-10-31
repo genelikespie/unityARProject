@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour {
     public int numOfBombs;
     public float timeToPlant;
     public float timeToDefuse;
+
     public bool bombPlanted = false;
 	public bool playerOneWins;
     public bool bombVisible { get; set; }
