@@ -12,13 +12,6 @@ public class SharedModeMenuState : State {
     Button SMM_BackButton;
     Button SMM_PlayButton;
 
-    // To use the List class, use the System.Collections.Generic library
-    public List<Player> planters = new List<Player>();
-    public List<Player> defusers = new List<Player>();
-    public int numOfBombs; 
-    public float timeToPlant;
-    public float timeToDefuse;
-
     protected virtual void Awake()
     {
         // Call the base class's function to initialize all variables
@@ -49,8 +42,6 @@ public class SharedModeMenuState : State {
      */
     public override void Initialize()
     {
-        planters.Clear();
-        defusers.Clear();
         if (!gameManager)
             Debug.LogError("Cant find game manager");
     }
@@ -62,21 +53,18 @@ public class SharedModeMenuState : State {
             // TODO throw a modal panel or some message to the screen/camera
             return;
         }
-        planters.Add(new Player(SMM_PlanterNameInputField.text));
-        defusers.Add(new Player(SMM_DefuserNameInputField.text));
+		session = new Session();
 
-        numOfBombs = 1;
-        timeToPlant = 45f;
-        timeToDefuse = 60f;
+		session.playerDevices.Add(new Player(SMM_PlanterNameInputField.text,
+		                                                        SMM_DefuserNameInputField.text));
 
-        // Set GameManager's game info
-        gameManager.planters = planters;
-        gameManager.defusers = defusers;
-        gameManager.numOfBombs = numOfBombs;
-        gameManager.timeToPlant = timeToPlant;
-        gameManager.timeToDefuse = timeToDefuse;
+		session.plantTimer = new Timer(45);
+		session.defuseTimer = new Timer(60);
+		session.passTimer = new Timer(30);
+		session.numOfBombs = 1;
 
         gameManager.SetAR();
+
         gameManager.SetState(gameManager.plantBombState);
     }
 

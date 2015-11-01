@@ -138,23 +138,12 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         // create the name of the next target.
         // the TrackableName of the original, linked ImageTargetBehaviour is extended with a continuous number to ensure unique names
         string targetName = string.Format("{0}-{1}", ImageTargetTemplate.TrackableName, mTargetCounter);
-        
-        // generate a new target name:
-        
         mTargetBuildingBehaviour.BuildNewTarget(targetName, ImageTargetTemplate.GetSize().x);
-        
-        //---------------------------start edit
-        // Tell the GameManager that the bomb has been planted
-        GameManager gameManager = GameManager.Instance();
-        gameManager.bombPlanted = true;
-        //Sends the buildnewtarget 
-        //---------------------------end edit
     }
 
-    public void OnTappedOnNewTargetButton()
-    {
-        BuildNewTarget();
-    }
+	public void CreateTarget() {
+		BuildNewTarget();
+	}
 
     /// <summary>
     /// This method only demonstrates how to handle extended tracking feature when you have multiple targets in the scene

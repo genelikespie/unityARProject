@@ -8,13 +8,6 @@ public class PassingState : State {
     Text P_TimeLeftText;
     Button P_PassedToDefuserButton;
 
-    // Total time for planter to pass phone to defuser
-    // Set in PlantBombState's PassPhone() function
-    public float timeToPass;
-
-    // Time left for the planter
-    public float timeLeft;
-
     public virtual void Awake()
     {
         // Call the base class's function to initialize all variables
@@ -30,43 +23,34 @@ public class PassingState : State {
             Debug.LogError("P_PassedToDefuserButton");
     }
 
-    public override void Initialize()
-    {
-        timeLeft = timeToPass;
-    }
+	public override void Initialize() {
+		// Initialize to 30 seconds to pass phone to defuser
+		session.passTimer.StartTimer();
+	}
 
-    void Update()
+    public override void RunState()
     {
-        // If this is the current state
-        // and the bomb has NOT been planted
-        if (isCurrentState)
-        {
-            // Decrement the timer
-            timeLeft = timeLeft - Time.deltaTime;
-            if (timeLeft < 0.0f)
-                timeLeft = 0;
-
-            // Update the timer UI
-            P_TimeLeftText.text = string.Format("{0:N1}", timeLeft);
+        // Update the timer UI
+		P_TimeLeftText.text = string.Format("{0:N1}", session.passTimer.timeLeft);
 
             // If time runs out and we have not changed state to DefuseBomb(), planter loses
             /////////////////////////////////////////////////
             // TODO implement time expired
             /////////////////////////////////////////////////
 
-            if (timeLeft <= 0 && isCurrentState)
+		if (session.passTimer.TimedOut())
             {
                 //Debug.LogWarning("Time ran out to plant the bomb!");
                 //
             }
-        }
-
     }
     public override void DefuseBomb()
     {
         base.DefuseBomb();
-        //gameManager.bombVisible = false;
-        gameManager.SetState(gameManager.defuseState);
+		session.passTimer.StopTimer();
+
+		//gameManager.bombVisible = false;
+		gameManager.SetState(gameManager.defuseState);
 
     }
 }

@@ -4,8 +4,11 @@ using System.Collections;
 public class State : MonoBehaviour{
 
     protected GameManager gameManager;
-    public bool isCurrentState; // if this state is the current state
-
+	protected Session session {
+		get { return gameManager.session; }
+		set { gameManager.session = value; }
+	}
+	
     /* NOTE: All derived classes must call this base Awake() function in their respective Awake() functions
      */
     protected virtual void Awake() {
@@ -19,7 +22,13 @@ public class State : MonoBehaviour{
     public virtual void Initialize()
     {
         // Implement this function in the derived classes
+		Debug.Log ("Warning: Initialize() not overridden in subclass of State!");
     }
+
+	// Use in place of Update()
+	public virtual void RunState() {
+		Debug.Log ("Warning: RunState() not overridden in subclass of State!");
+	}
 
     public virtual void ToMainMenu()
     {
@@ -45,7 +54,7 @@ public class State : MonoBehaviour{
 
     public virtual void ToMultiplayerMenu()
     {
-
+		gameManager.SetState(gameManager.multiplayerMenuState);
     }
 
     public virtual void PlantBomb()

@@ -10,7 +10,8 @@ public class GameOverState : State
     // Use this for initialization
     protected virtual void Awake()
     {
-        base.Awake();
+		base.Awake();
+
         PlayAgainButton = GameObject.Find("PlayAgainButton").GetComponent<Button>();
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         DisplayWinner = GameObject.Find("DisplayWinner").GetComponent<Text>();
@@ -44,7 +45,7 @@ public class GameOverState : State
 
     public void displayWinner()
     {
-        if (gameManager.playerOneWins)
+        if (session.playerOneWins)
         {
             DisplayWinner.text = "Player one wins!";
         }

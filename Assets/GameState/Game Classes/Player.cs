@@ -7,12 +7,14 @@ using System.Collections;
  */
 public class Player {
 
-    string playerName;
-    int score;
+    string planterName;
+	string defuserName;
+	int score;
 
-    public Player(string pName)
+    public Player(string pName, string dName)
     {
-        playerName = pName;
+        planterName = pName;
+		defuserName = dName;
         score = 0;
     }
 }

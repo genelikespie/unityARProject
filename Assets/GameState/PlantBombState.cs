@@ -10,21 +10,6 @@ public class PlantBombState : State {
     Text PB_TimeLeftText;
     Button PB_PassPhoneButton;
 
-    // Local copy of game information
-    List<Player> planters;
-    List<Player> defusers;
-    int numOfBombs;
-    float timeToPlant;
-
-    // time left to plant
-    float timeLeft;
-
-    // start time of plant state
-    float timeStart;
-
-    // end time to plant the bomb
-    float timeEnd;
-
     protected virtual void Awake()
     {
         // Call the base class's function to initialize all variables
@@ -45,44 +30,28 @@ public class PlantBombState : State {
 
     public override void Initialize()
     {
-        planters = gameManager.planters;
-        defusers = gameManager.defusers;
-        numOfBombs = gameManager.numOfBombs;
-        timeToPlant = gameManager.timeToPlant;
-
-        timeLeft = timeToPlant;
-        timeStart = Time.time;
-        timeEnd = timeStart + timeToPlant;
-
-        PB_TimeLeftText.text = string.Format("{0:N1}", timeLeft);
+        PB_TimeLeftText.text = string.Format("{0:N1}", session.plantTimer.timeLeft);
         PB_PassPhoneButton.gameObject.SetActive(false);
 
-        Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
+		session.plantTimer.StartTimer();
+		
+		//Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
     }
 
     // Update the timer to plant the bomb
-    void Update()
-    {
-        // If this is the current state
-        // and the bomb has NOT been planted
-        if (isCurrentState)
-        {
-            if (!gameManager.bombPlanted)
+    public override void RunState() 
+	{
+            if (!session.bombPlanted)
             {
-                // Decrement the timer
-                timeLeft = timeLeft - Time.deltaTime;
-                if (timeLeft < 0.0f)
-                    timeLeft = 0;
-
                 // Update the timer UI
-                PB_TimeLeftText.text = string.Format("{0:N1}", timeLeft);
+                PB_TimeLeftText.text = string.Format("{0:N1}", session.plantTimer.timeLeft);
 
                 // If time runs out, planter loses
                 /////////////////////////////////////////////////
                 // TODO implement time expired
                 /////////////////////////////////////////////////
 
-                if (timeLeft <= 0 && !gameManager.bombPlanted)
+                if (session.plantTimer.TimedOut() && !session.bombPlanted)
                 {
                     //Debug.LogWarning("Time ran out to plant the bomb!");
                     //
@@ -94,13 +63,17 @@ public class PlantBombState : State {
             {
                 PB_PassPhoneButton.gameObject.SetActive(true);
             }
-        }
-    }
+	}
 
-    public override void PassPhone()
-    {
-        // Initialize to 30 seconds to pass phone to defuser
-        gameManager.passingState.timeToPass = 30f;
+	public void OnTappedOnNewTargetButton()
+	{
+		gameManager.CreateBombTarget();
+		session.bombPlanted = true;
+	}
+	
+	public override void PassPhone()
+	{
+		session.plantTimer.StopTimer();
         gameManager.SetState(gameManager.passingState);
     }
 }

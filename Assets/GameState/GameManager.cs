@@ -23,18 +23,10 @@ public class GameManager : MonoBehaviour {
     private Camera vuforiaCamera; // Camera for Vuforia's GUI
     private Camera menuCamera; // Camera for menus
 
-    // Keep track of game information
-    public List<Player> planters;
-    public List<Player> defusers;
-
-    // These variables are initialized in SharedModeMenu
-    public int numOfBombs;
-    public float timeToPlant;
-    public float timeToDefuse;
-
-    public bool bombPlanted = false;
-	public bool playerOneWins;
-    public bool bombVisible { get; set; }
+	// Code refactor
+	public Session session;
+	public bool bombVisible { get; set; }
+	private UserDefinedTargetEventHandler udtHandler;
 
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
@@ -42,6 +34,7 @@ public class GameManager : MonoBehaviour {
     ///////////////////////////////////////////////////////
     // TODO multiplayerMenuState
     ///////////////////////////////////////////////////////
+	public MultiplayerMenuState multiplayerMenuState {get; private set;}
 
     public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
@@ -66,6 +59,10 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for linking the states with their variables
 	void Awake () {
+
+		udtHandler = GameObject.Find ("UserDefinedTargetBuilder")
+			.GetComponent<UserDefinedTargetEventHandler>();
+
         // Set Screen Size
         stateList = new List<State>();
         screenSize = new Vector2(Screen.width, Screen.height);
@@ -88,6 +85,7 @@ public class GameManager : MonoBehaviour {
         ///////////////////////////////////////////////////////
         // TODO add multiplayer state initialization
         ///////////////////////////////////////////////////////
+		multiplayerMenuState = GetComponentInChildren<MultiplayerMenuState>();
 
         plantBombState = GetComponentInChildren<PlantBombState>();
         passingState = GetComponentInChildren<PassingState>();
@@ -102,6 +100,7 @@ public class GameManager : MonoBehaviour {
         ///////////////////////////////////////////////////////
         //// TODO add multiplayer state
         ///////////////////////////////////////////////////////
+		stateList.Add (multiplayerMenuState);
 
         stateList.Add(plantBombState);
         stateList.Add(passingState);
@@ -137,20 +136,18 @@ public class GameManager : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
+		if(session != null)
+			session.updateTimers();
+		currentState.RunState();
 	}
 
     public void SetState (State nextState) {
         // Change the pivot of the current menu to set it outside of view
         if (currentState)
-        {
             this.currentState.GetComponent<RectTransform>().pivot = closedMenuPivot;
-            // Set the current state to be false
-            this.currentState.isCurrentState = false;
-        }
+
         // Initialize the next state
         nextState.Initialize();
-        // Set the next state to be true
-        nextState.isCurrentState = true;
         // Set the current state to be the next state
         this.currentState = nextState;
         // Set the next state to be in view
@@ -166,4 +163,11 @@ public class GameManager : MonoBehaviour {
         //menuCamera.enabled = false;
         //menuCamera.GetComponent<AudioListener>().enabled = false;
     }
+
+	public void CreateBombTarget() {
+		if(udtHandler != null)
+			udtHandler.CreateTarget();
+		else
+			Debug.Log ("Could not create new target. UDT Event Handler variable not set in GameManager.");
+	}
 }
