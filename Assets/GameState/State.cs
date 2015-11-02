@@ -8,6 +8,10 @@ public class State : MonoBehaviour{
 		get { return gameManager.session; }
 		set { gameManager.session = value; }
 	}
+	protected Player localPlayer {
+		get { return gameManager.localPlayer; }
+		set { gameManager.localPlayer = value; }
+	}
 	
     /* NOTE: All derived classes must call this base Awake() function in their respective Awake() functions
      */

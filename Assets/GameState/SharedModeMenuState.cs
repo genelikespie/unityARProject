@@ -55,13 +55,13 @@ public class SharedModeMenuState : State {
         }
 		session = new Session();
 
-		session.playerDevices.Add(new Player(SMM_PlanterNameInputField.text,
-		                                                        SMM_DefuserNameInputField.text));
+		gameManager.localPlayer = session.AddPlayer(SMM_PlanterNameInputField.text,
+		        	                     			SMM_DefuserNameInputField.text,
+						                             1);
 
-		session.plantTimer = new Timer(45);
-		session.defuseTimer = new Timer(60);
-		session.passTimer = new Timer(30);
-		session.numOfBombs = 1;
+		gameManager.plantTimer = new Timer(45);
+		gameManager.defuseTimer = new Timer(60);
+		gameManager.passTimer = new Timer(30);
 
         gameManager.SetAR();
 

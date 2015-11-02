@@ -25,8 +25,15 @@ public class GameManager : MonoBehaviour {
 
 	// Code refactor
 	public Session session;
+	public Player localPlayer;
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
+
+	// These variables are initialized in SharedModeMenu
+	public Timer plantTimer;
+	public Timer defuseTimer;
+	public Timer passTimer;
+
 
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
@@ -62,6 +69,9 @@ public class GameManager : MonoBehaviour {
 
 		udtHandler = GameObject.Find ("UserDefinedTargetBuilder")
 			.GetComponent<UserDefinedTargetEventHandler>();
+		plantTimer = new Timer(10);
+		defuseTimer = new Timer(10);
+		passTimer = new Timer(10);
 
         // Set Screen Size
         stateList = new List<State>();
@@ -134,10 +144,16 @@ public class GameManager : MonoBehaviour {
 
         SetState(mainMenuState);
     }
+
+	public void updateTimers() {
+		plantTimer.Run();
+		defuseTimer.Run();
+		passTimer.Run();
+	}
+
 	// Update is called once per frame
 	void Update () {
-		if(session != null)
-			session.updateTimers();
+		updateTimers();
 		currentState.RunState();
 	}
 

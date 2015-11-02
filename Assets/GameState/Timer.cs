@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 public class Timer {
-
+	
 	public float timeLeft;
-
+	
 	private bool isRunning = false;
 
 	public Timer(float val) {

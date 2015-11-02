@@ -25,20 +25,20 @@ public class PassingState : State {
 
 	public override void Initialize() {
 		// Initialize to 30 seconds to pass phone to defuser
-		session.passTimer.StartTimer();
+		gameManager.passTimer.StartTimer();
 	}
 
     public override void RunState()
     {
         // Update the timer UI
-		P_TimeLeftText.text = string.Format("{0:N1}", session.passTimer.timeLeft);
+		P_TimeLeftText.text = string.Format("{0:N1}", gameManager.passTimer.timeLeft);
 
             // If time runs out and we have not changed state to DefuseBomb(), planter loses
             /////////////////////////////////////////////////
             // TODO implement time expired
             /////////////////////////////////////////////////
 
-		if (session.passTimer.TimedOut())
+		if (gameManager.passTimer.TimedOut())
             {
                 //Debug.LogWarning("Time ran out to plant the bomb!");
                 //
@@ -47,7 +47,7 @@ public class PassingState : State {
     public override void DefuseBomb()
     {
         base.DefuseBomb();
-		session.passTimer.StopTimer();
+		gameManager.passTimer.StopTimer();
 
 		//gameManager.bombVisible = false;
 		gameManager.SetState(gameManager.defuseState);

@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MultiplayerMenuState : State {
-	
+
+	public GameObject networkSessionPrefab;
+
 	// UI elements
 	InputField MMS_PlanterNameInputField;
 	InputField MMS_DefuserNameInputField;
@@ -37,17 +39,9 @@ public class MultiplayerMenuState : State {
 		}
 
 		// TODO: Right now the screen results in nonfunctional buttons.
+		// Also is this necessary? NetworkManager may handle this already
+		session = Instantiate(networkSessionPrefab).GetComponent<NetworkSession>().session;
 
-		session.playerDevices.Add(new Player(MMS_PlanterNameInputField.text,
-		                                                 MMS_DefuserNameInputField.text));
-
-		session = new Session();
-
-		session.plantTimer = new Timer(45);
-		session.defuseTimer = new Timer(60);
-		session.passTimer = new Timer(30);
-		session.numOfBombs = 1;
-		
 		gameManager.SetAR();
 		
 		gameManager.SetState(gameManager.plantBombState);

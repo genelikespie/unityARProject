@@ -28,13 +28,13 @@ public class DefuseState : State {
         // Set the defuse button to be false
         // Activate it when the bomb is in view
 		D_DefuseBombButton.gameObject.SetActive(false);
-		session.defuseTimer.StartTimer();
+		gameManager.defuseTimer.StartTimer();
 	}
 
 	public override void RunState()
     {
 		// Update the timer UI
-        D_TimeLeftText.text = string.Format("{0:N1}", session.defuseTimer.timeLeft);
+        D_TimeLeftText.text = string.Format("{0:N1}", gameManager.defuseTimer.timeLeft);
 
         // If bomb is in view, activate the button
         /////////////////////////////////////////////////
@@ -54,7 +54,7 @@ public class DefuseState : State {
         // TODO implement time expired
         /////////////////////////////////////////////////
 
-		if (session.defuseTimer.TimedOut() && session.bombPlanted)
+		if (gameManager.defuseTimer.TimedOut() && localPlayer.allLocalBombsPlanted)
         {
                 //Debug.LogWarning("Time ran out to plant the bomb!");
                 //base.TimeExpired();
@@ -64,12 +64,12 @@ public class DefuseState : State {
     public override void AllBombsDefused()
     {
         base.AllBombsDefused();
-		session.defuseTimer.StopTimer();
+		gameManager.defuseTimer.StopTimer();
         /////////////////////////////////////////////////
         // TODO implement game over functionality
         /////////////////////////////////////////////////
 
-        session.bombPlanted = false;
+        localPlayer.allLocalBombsPlanted = false;
         gameManager.SetState(gameManager.gameOverState);
     }
 }

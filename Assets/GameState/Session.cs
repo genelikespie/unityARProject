@@ -7,27 +7,35 @@ using UnityEngine.Networking;
 
 public class Session {
 	// Keep track of game information
-	public List<Player> playerDevices;
+	private List<Player> playerDevices;
+	public bool isMultiplayer {
+		get { return playerDevices.Count > 1; }
+	}
 	
-	// These variables are initialized in SharedModeMenu
-	public int numOfBombs;
-	public Timer plantTimer;
-	public Timer defuseTimer;
-	public Timer passTimer;
-	
-	public bool bombPlanted = false;
+	[SyncVar]
 	public bool playerOneWins;
 
-	public void updateTimers() {
-		plantTimer.Run();
-		defuseTimer.Run();
-		passTimer.Run();
+	public Player AddPlayer(string planterName, string defuserName, int numLocalBombs = 1) {
+		Player newPlayer = new Player(planterName, defuserName, numLocalBombs);
+		playerDevices.Add(newPlayer);
+		return newPlayer;
+	}
+
+	public bool AllDonePlanting() {
+		bool allDone = true;
+		foreach(Player p in playerDevices)
+			allDone = allDone && p.allLocalBombsPlanted;
+		return allDone;
+	}
+
+	public bool AllDoneSearching() {
+		bool allDone = true;
+		foreach(Player p in playerDevices)
+			allDone = allDone && p.allLocalBombsFound;
+		return allDone;
 	}
 
 	public Session() {
 		playerDevices = new List<Player>();
-		plantTimer = new Timer(42);
-		defuseTimer = new Timer(42);
-		passTimer = new Timer(42);
 	}
 }

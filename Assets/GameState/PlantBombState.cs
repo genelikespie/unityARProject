@@ -30,10 +30,10 @@ public class PlantBombState : State {
 
     public override void Initialize()
     {
-        PB_TimeLeftText.text = string.Format("{0:N1}", session.plantTimer.timeLeft);
+		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
         PB_PassPhoneButton.gameObject.SetActive(false);
 
-		session.plantTimer.StartTimer();
+		gameManager.plantTimer.StartTimer();
 		
 		//Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
     }
@@ -41,17 +41,17 @@ public class PlantBombState : State {
     // Update the timer to plant the bomb
     public override void RunState() 
 	{
-            if (!session.bombPlanted)
+		if (!localPlayer.allLocalBombsPlanted)
             {
                 // Update the timer UI
-                PB_TimeLeftText.text = string.Format("{0:N1}", session.plantTimer.timeLeft);
+			PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
 
                 // If time runs out, planter loses
                 /////////////////////////////////////////////////
                 // TODO implement time expired
                 /////////////////////////////////////////////////
 
-                if (session.plantTimer.TimedOut() && !session.bombPlanted)
+			if (gameManager.plantTimer.TimedOut())
                 {
                     //Debug.LogWarning("Time ran out to plant the bomb!");
                     //
@@ -68,12 +68,14 @@ public class PlantBombState : State {
 	public void OnTappedOnNewTargetButton()
 	{
 		gameManager.CreateBombTarget();
-		session.bombPlanted = true;
+
+		//TODO: Only works when only one bomb is planted
+		localPlayer.allLocalBombsPlanted = true;
 	}
 	
 	public override void PassPhone()
 	{
-		session.plantTimer.StopTimer();
+		gameManager.plantTimer.StopTimer();
         gameManager.SetState(gameManager.passingState);
     }
 }
