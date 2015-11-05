@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour {
         }
 
         SetState(mainMenuState);
+
     }
 
 	public void updateTimers() {
@@ -168,8 +169,15 @@ public class GameManager : MonoBehaviour {
 
         // Initialize the next state
         nextState.Initialize();
+        //Set isCurrentState = TRUE for the current state
+        if (this.currentState != null)
+        {
+            this.currentState.isCurrentState = false;
+        }
         // Set the current state to be the next state
         this.currentState = nextState;
+        //Set isCurrentState = TRUE for the next state
+        nextState.isCurrentState = true;
         // Set the next state to be in view
         this.currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
     }

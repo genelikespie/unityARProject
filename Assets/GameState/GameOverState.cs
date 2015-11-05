@@ -42,16 +42,34 @@ public class GameOverState : State
         gameManager.SetState(gameManager.sharedModeMenuState);
     }
 
+    public override void RunState()
+    {
+        displayWinner();
+    }
 
     public void displayWinner()
     {
         if (localPlayer.playerOneWins)
         {
-            DisplayWinner.text = "Player one wins!";
+            if (gameManager.isMultiplayer)
+            {
+                DisplayWinner.text = "Team 1 wins!";
+            }
+            else
+            {
+                DisplayWinner.text = localPlayer.planterName + " wins!";
+            }
         }
         else
         {
-            DisplayWinner.text = "Player two wins!";
+            if (gameManager.isMultiplayer)
+            {
+                DisplayWinner.text = "Team 2 wins!";
+            }
+            else
+            {
+                DisplayWinner.text = localPlayer.defuserName + " wins!";
+            }
         }
     }
 }
