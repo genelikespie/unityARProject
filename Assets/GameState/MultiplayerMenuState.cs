@@ -32,6 +32,8 @@ public class MultiplayerMenuState : State {
 	
 	public override void PlantBomb()
 	{
+		gameManager.isMultiplayer = true;
+
 		if (MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "")
 		{
 			// TODO throw a modal panel or some message to the screen/camera
@@ -39,8 +41,7 @@ public class MultiplayerMenuState : State {
 		}
 
 		// TODO: Right now the screen results in nonfunctional buttons.
-		// Also is this necessary? NetworkManager may handle this already
-		session = Instantiate(networkSessionPrefab).GetComponent<NetworkSession>().session;
+		// Implement matchmaker here.
 
 		gameManager.SetAR();
 		

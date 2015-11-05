@@ -24,10 +24,14 @@ public class GameManager : MonoBehaviour {
     private Camera menuCamera; // Camera for menus
 
 	// Code refactor
-	public Session session;
 	public Player localPlayer;
+
+	// Do not manually set this. That will be handled by NetworkPlayer code.
+	public NetworkPlayer networkPlayer;
+
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
+	public bool isMultiplayer = false;
 
 	// These variables are initialized in SharedModeMenu
 	public Timer plantTimer;

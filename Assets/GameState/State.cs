@@ -4,10 +4,7 @@ using System.Collections;
 public class State : MonoBehaviour{
 
     protected GameManager gameManager;
-	protected Session session {
-		get { return gameManager.session; }
-		set { gameManager.session = value; }
-	}
+
 	protected Player localPlayer {
 		get { return gameManager.localPlayer; }
 		set { gameManager.localPlayer = value; }

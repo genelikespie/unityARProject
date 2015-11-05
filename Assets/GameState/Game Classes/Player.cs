@@ -11,24 +11,18 @@ using UnityEngine.Networking;
 // Use Commands instead to indicate changes in numLocalBombs and other state booleans.
 
 public class Player {
-
-	[SyncVar]
-    string planterName;
-
-	[SyncVar]
-	string defuserName;
-
-	[SyncVar]
-	int score;
-
-	[SyncVar]
+	
+    public string planterName;
+	public string defuserName;
+	
+	public int score;
+	
 	public int numLocalBombs;
-
-	[SyncVar]
 	public bool allLocalBombsPlanted;
-
-	[SyncVar]
 	public bool allLocalBombsFound;
+	
+	public bool playerOneWins;
+
 
     public Player(string pName, string dName, int numBombs)
     {

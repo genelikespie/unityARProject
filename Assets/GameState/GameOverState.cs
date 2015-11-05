@@ -45,7 +45,7 @@ public class GameOverState : State
 
     public void displayWinner()
     {
-        if (session.playerOneWins)
+        if (localPlayer.playerOneWins)
         {
             DisplayWinner.text = "Player one wins!";
         }

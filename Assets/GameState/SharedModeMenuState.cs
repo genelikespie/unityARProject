@@ -53,11 +53,14 @@ public class SharedModeMenuState : State {
             // TODO throw a modal panel or some message to the screen/camera
             return;
         }
-		session = new Session();
 
-		gameManager.localPlayer = session.AddPlayer(SMM_PlanterNameInputField.text,
+		gameManager.isMultiplayer = false;
+
+		gameManager.localPlayer = new Player(SMM_PlanterNameInputField.text,
 		        	                     			SMM_DefuserNameInputField.text,
 						                             1);
+
+		// Join match here for multiplayer (different state)
 
 		gameManager.plantTimer = new Timer(45);
 		gameManager.defuseTimer = new Timer(60);
