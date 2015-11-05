@@ -21,6 +21,18 @@ public class Session {
 		return newPlayer;
 	}
 
+    //if in shared mode, use the following functions to get the names of the planter
+    //and defuser to display in the game over menu
+    public string GetPlanterName()
+    {
+        return playerDevices[0].GetPlanterName();
+    }
+
+    public string GetDefuserName()
+    {
+        return playerDevices[0].GetDefuserName();
+    }
+
 	public bool AllDonePlanting() {
 		bool allDone = true;
 		foreach(Player p in playerDevices)
