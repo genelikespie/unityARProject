@@ -12,12 +12,12 @@ using UnityEngine.Networking;
 
 public class Player {
 
-	[SyncVar]
+    [SyncVar]
     string planterName;
 
-	[SyncVar]
-	string defuserName;
-
+    [SyncVar]
+    string defuserName;
+    
 	[SyncVar]
 	int score;
 
@@ -36,5 +36,15 @@ public class Player {
 		defuserName = dName;
 		numLocalBombs = numBombs;
         score = 0;
+    }
+
+    public string GetPlanterName()
+    {
+        return planterName;
+    }
+
+    public string GetDefuserName()
+    {
+        return defuserName;
     }
 }

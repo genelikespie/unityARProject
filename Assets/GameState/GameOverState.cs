@@ -51,11 +51,25 @@ public class GameOverState : State
     {
         if (session.playerOneWins)
         {
-            DisplayWinner.text = "Player one wins!";
+            if (session.isMultiplayer)
+            {
+                DisplayWinner.text = "Team 1 wins!";
+            }
+            else
+            {
+                DisplayWinner.text = session.GetPlanterName() + " wins!";
+            }
         }
         else
         {
-            DisplayWinner.text = "Player two wins!";
+            if (session.isMultiplayer)
+            {
+                DisplayWinner.text = "Team 2 wins!";
+            }
+            else
+            {
+                DisplayWinner.text = session.GetDefuserName() + " wins!";
+            }
         }
     }
 }
