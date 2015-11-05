@@ -3,6 +3,7 @@ using System.Collections;
 
 public class State : MonoBehaviour{
 
+    public bool isCurrentState = false;
     protected GameManager gameManager;
 	protected Session session {
 		get { return gameManager.session; }
@@ -83,7 +84,8 @@ public class State : MonoBehaviour{
         /////////////////////////////////////////////////
         // TODO implement time expired
         /////////////////////////////////////////////////
-
+        session.playerOneWins = true;
+        gameManager.SetState(gameManager.gameOverState);
     }
 
     // All bombs are defused

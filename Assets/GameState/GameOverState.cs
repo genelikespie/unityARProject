@@ -42,6 +42,10 @@ public class GameOverState : State
         gameManager.SetState(gameManager.sharedModeMenuState);
     }
 
+    public override void RunState()
+    {
+        displayWinner();
+    }
 
     public void displayWinner()
     {
