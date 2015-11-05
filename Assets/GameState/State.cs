@@ -83,7 +83,8 @@ public class State : MonoBehaviour{
         /////////////////////////////////////////////////
         // TODO implement time expired
         /////////////////////////////////////////////////
-
+        session.playerOneWins = true;
+        gameManager.SetState(gameManager.gameOverState);
     }
 
     // All bombs are defused

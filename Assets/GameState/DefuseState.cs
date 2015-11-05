@@ -57,7 +57,7 @@ public class DefuseState : State {
 		if (gameManager.defuseTimer.TimedOut() && localPlayer.allLocalBombsPlanted)
         {
                 //Debug.LogWarning("Time ran out to plant the bomb!");
-                //base.TimeExpired();
+                base.TimeExpired();
 		}
     }
 
@@ -68,7 +68,7 @@ public class DefuseState : State {
         /////////////////////////////////////////////////
         // TODO implement game over functionality
         /////////////////////////////////////////////////
-
+        session.playerOneWins = false;
         localPlayer.allLocalBombsPlanted = false;
         gameManager.SetState(gameManager.gameOverState);
     }
