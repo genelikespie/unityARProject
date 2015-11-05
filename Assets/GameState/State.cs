@@ -3,6 +3,7 @@ using System.Collections;
 
 public class State : MonoBehaviour{
 
+    public bool isCurrentState; // if this state is the current state
     protected GameManager gameManager;
 	protected Session session {
 		get { return gameManager.session; }
