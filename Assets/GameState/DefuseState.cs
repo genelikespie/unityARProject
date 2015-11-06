@@ -6,6 +6,7 @@ public class DefuseState : State {
 
     // UI
     Text D_TimeLeftText;
+    Text D_HintLeftBehind;
     Button D_DefuseBombButton;
 
     //Bomb Texture
@@ -26,6 +27,7 @@ public class DefuseState : State {
         // Find all UI elements in the scene
         D_TimeLeftText = GameObject.Find("D_TimeLeftText").GetComponent<Text>();
         D_DefuseBombButton = GameObject.Find("D_DefuseBombButton").GetComponent<Button>();
+        D_HintLeftBehind = GameObject.Find("D_HintLeftBehind").GetComponent<Text>();
 
         //find bomb tag
         bombs = GameObject.FindGameObjectsWithTag("Bomb"); 
@@ -34,6 +36,8 @@ public class DefuseState : State {
             Debug.LogError("D_TimeLeftText");
         if (!D_DefuseBombButton)
             Debug.LogError("D_DefuseBombButton");
+        if (!D_HintLeftBehind)
+            Debug.LogError("D_HintLeftBehind");
     }
 
     public override void Initialize()
@@ -43,11 +47,18 @@ public class DefuseState : State {
         // Activate it when the bomb is in view
 		D_DefuseBombButton.gameObject.SetActive(false);
 		gameManager.defuseTimer.StartTimer();
-	}
+
+    }
 
 	public override void RunState()
     {
-		// Update the timer UI
+
+        //update the hint if something was left
+        if (GameObject.Find("Hintholder").GetComponent<Text>().text != "")
+        D_HintLeftBehind.text = "Hint: " + GameObject.Find("Hintholder").GetComponent<Text>().text;
+
+
+        // Update the timer UI
         D_TimeLeftText.text = string.Format("{0:N1}", gameManager.defuseTimer.timeLeft);
 
         // If bomb is in view, activate the button
