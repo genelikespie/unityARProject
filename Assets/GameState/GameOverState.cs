@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+using Vuforia;
 public class GameOverState : State
 {
+    GameObject explosion;
     Button PlayAgainButton;
     Button QuitButton;
     Text DisplayWinner;
     // Use this for initialization
     protected virtual void Awake()
     {
-		base.Awake();
+        explosion = GameObject.Find("explosion");
+        explosion.SetActive(false);
+        base.Awake();
 
         PlayAgainButton = GameObject.Find("PlayAgainButton").GetComponent<Button>();
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
@@ -49,8 +52,14 @@ public class GameOverState : State
 
     public void displayWinner()
     {
+        ObjectTracker imgTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
+        imgTracker.Stop();
         if (localPlayer.playerOneWins)
         {
+            explosion.SetActive(true);
+            /*
+                        CameraDevice.Instance.Stop();
+                        CameraDevice.Instance.Deinit();*/
             if (gameManager.isMultiplayer)
             {
                 DisplayWinner.text = "Team 1 wins!";
