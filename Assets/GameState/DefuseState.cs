@@ -12,6 +12,13 @@ public class DefuseState : State {
     GameObject[] bombs;
     public Material DefuseMaterial;
 
+    IEnumerator DelayForDisarmedRoutine()
+    {
+        yield return new WaitForSeconds(2f);
+        gameManager.SetState(gameManager.gameOverState);
+    }
+
+
     public virtual void Awake()
     {
 		base.Awake();
@@ -89,6 +96,6 @@ public class DefuseState : State {
 
         localPlayer.playerOneWins = false;
         localPlayer.allLocalBombsPlanted = false;
-        gameManager.SetState(gameManager.gameOverState);
+        StartCoroutine(DelayForDisarmedRoutine());
     }
 }
