@@ -8,6 +8,10 @@ public class DefuseState : State {
     Text D_TimeLeftText;
     Button D_DefuseBombButton;
 
+    //Bomb Texture
+    GameObject[] bombs;
+    public Material DefuseMaterial;
+
     public virtual void Awake()
     {
 		base.Awake();
@@ -15,6 +19,9 @@ public class DefuseState : State {
         // Find all UI elements in the scene
         D_TimeLeftText = GameObject.Find("D_TimeLeftText").GetComponent<Text>();
         D_DefuseBombButton = GameObject.Find("D_DefuseBombButton").GetComponent<Button>();
+
+        //find bomb tag
+        bombs = GameObject.FindGameObjectsWithTag("Bomb"); 
 
         if (!D_TimeLeftText)
             Debug.LogError("D_TimeLeftText");
@@ -68,6 +75,18 @@ public class DefuseState : State {
         /////////////////////////////////////////////////
         // TODO implement game over functionality
         /////////////////////////////////////////////////
+
+        //scenario only works for 1 bomb currently need to point to current bomb
+        //redundant looking for all bombs since 1 is a dummy
+        //TODO MAKE POINT TO ACTIVE BOMB
+        bombs = GameObject.FindGameObjectsWithTag("Bomb"); //find the bombs again
+        foreach (GameObject x in bombs)
+        {
+            if(DefuseMaterial != null)
+            x.GetComponent<Renderer>().material = DefuseMaterial;
+        }
+
+
         localPlayer.playerOneWins = false;
         localPlayer.allLocalBombsPlanted = false;
         gameManager.SetState(gameManager.gameOverState);
