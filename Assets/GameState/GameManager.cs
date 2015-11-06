@@ -131,6 +131,8 @@ public class GameManager : MonoBehaviour {
     void Start()
     {
         RectTransform menuRectTransform; // temporary variable to reduce overhead
+
+        // Set the position of all ths states
         foreach (State s in stateList)
         {
             menuRectTransform = s.GetComponent<RectTransform>();
