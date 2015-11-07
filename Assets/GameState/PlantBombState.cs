@@ -10,7 +10,7 @@ public class PlantBombState : State {
     Text PB_TimeLeftText;
     Button PB_PassPhoneButton;
     InputField PB_HintField;
-
+	Button PB_PlantBomb;
 
     protected virtual void Awake()
     {
@@ -18,6 +18,7 @@ public class PlantBombState : State {
         base.Awake();
 
         // Find all UI elements in the scene
+		PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
         PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
         PB_MenuTitle = GameObject.Find("PB_MenuTitle").GetComponent<Text>();
         PB_TimeLeftText = GameObject.Find("PB_TimeLeftText").GetComponent<Text>();
@@ -37,6 +38,7 @@ public class PlantBombState : State {
     {
 		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
         PB_PassPhoneButton.gameObject.SetActive(false);
+		PB_PlantBomb.gameObject.SetActive(true);
 
 		gameManager.plantTimer.StartTimer();
 		
@@ -76,6 +78,7 @@ public class PlantBombState : State {
 		gameManager.CreateBombTarget();
         //TODO: Only works when only one bomb is planted
         localPlayer.allLocalBombsPlanted = true;
+		PB_PlantBomb.gameObject.SetActive(false);
 	}
 	
 	public override void PassPhone()

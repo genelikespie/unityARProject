@@ -3,7 +3,6 @@ using System.Collections;
 
 public class State : MonoBehaviour{
 
-    public bool isCurrentState; // if this state is the current state
     protected GameManager gameManager;
 
 	protected Player localPlayer {

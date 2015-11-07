@@ -12,6 +12,8 @@ public class SharedModeMenuState : State {
     Button SMM_BackButton;
     Button SMM_PlayButton;
 
+	GameObject smBack;
+
     protected virtual void Awake()
     {
         // Call the base class's function to initialize all variables
@@ -36,6 +38,10 @@ public class SharedModeMenuState : State {
 
         if (!gameManager)
             Debug.LogError("AWAKE: CANT find game manager in base");
+
+		// Get SM_Backdrop and disable renderer
+		smBack = GameObject.Find("SM_Backdrop");
+		smBack.GetComponent<MeshRenderer>().enabled = false;
     }
 
     /* Reset the UI
@@ -44,6 +50,9 @@ public class SharedModeMenuState : State {
     {
         if (!gameManager)
             Debug.LogError("Cant find game manager");
+
+		// Enable SM_Backdrop renderer
+		smBack.GetComponent<MeshRenderer>().enabled = true;
     }
 
     public override void PlantBomb()
@@ -67,6 +76,10 @@ public class SharedModeMenuState : State {
 		gameManager.passTimer = new Timer(30);
 
         gameManager.SetAR();
+
+		//Disable SM_Backdrop renderer, enabled camera plane
+		smBack.GetComponent<MeshRenderer>().enabled = false;
+		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
 
         gameManager.SetState(gameManager.plantBombState);
     }
