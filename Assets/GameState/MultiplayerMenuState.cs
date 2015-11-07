@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 
 public class MultiplayerMenuState : State {
 
@@ -10,7 +12,10 @@ public class MultiplayerMenuState : State {
 	// UI elements
 	InputField MMS_PlanterNameInputField;
 	InputField MMS_DefuserNameInputField;
-	Toggle MMS_TutorialToggle; // Toggles between showing tutorial or not
+    InputField MMS_CreateGameInputField;
+    InputField MMS_JoinGameInputField;
+
+    Toggle MMS_TutorialToggle; // Toggles between showing tutorial or not
 	Button MMS_BackButton;
 	Button MMS_PlayButton;
 
@@ -29,8 +34,62 @@ public class MultiplayerMenuState : State {
 		if (!gameManager)
 			Debug.LogError("Cant find game manager");
 	}
-	
-	public override void PlantBomb()
+
+
+    public void CreateGame()
+    {
+        NetworkManager.singleton.StartMatchMaker();
+        MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
+        string roomName = MMS_CreateGameInputField.text;
+        uint roomSize = 8;
+        NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
+        Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
+    }
+
+    List<MatchDesc> roomList = null;
+
+    public void OnMatchList(ListMatchResponse matchList)
+    {
+        if (matchList == null)
+        {
+            Debug.Log("null Match List returned from server");
+            return;
+        }
+
+        roomList = new List<MatchDesc>();
+        roomList.Clear();
+
+        MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
+        string roomName = MMS_CreateGameInputField.text;
+        foreach (MatchDesc match in matchList.matches)
+        {
+            roomList.Add(match);
+        }
+        Debug.Log("room list after calling " + roomList.Count);
+    }
+
+    public void Refresh()
+    {
+        NetworkManager manager = NetworkManager.singleton;
+        manager.StartMatchMaker();
+        manager.matchMaker.ListMatches(0, 10, "", OnMatchList);
+    }
+
+    public void JoinGame()
+    {
+        MMS_JoinGameInputField = GameObject.Find("MMS_JoinGameInputField").GetComponent<InputField>();
+        string roomName = MMS_JoinGameInputField.text;
+        NetworkManager manager = NetworkManager.singleton;
+        foreach (MatchDesc match in roomList)
+        {
+            if (match.name.Equals(roomName))
+            {
+                manager.matchMaker.JoinMatch(roomList[0].networkId, "", manager.OnMatchJoined);
+            }
+        }
+    }
+
+    public override void PlantBomb()
 	{
 		gameManager.isMultiplayer = true;
 
