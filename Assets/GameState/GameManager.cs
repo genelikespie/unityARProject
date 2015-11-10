@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
     // TODO multiplayerMenuState
     ///////////////////////////////////////////////////////
 	public MultiplayerMenuState multiplayerMenuState {get; private set;}
+    public MultiplayerLobbyState multiplayerLobbyState { get; private set; }
 
     public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
@@ -100,6 +101,7 @@ public class GameManager : MonoBehaviour {
         // TODO add multiplayer state initialization
         ///////////////////////////////////////////////////////
 		multiplayerMenuState = GetComponentInChildren<MultiplayerMenuState>();
+        multiplayerLobbyState = GetComponentInChildren<MultiplayerLobbyState>();
 
         plantBombState = GetComponentInChildren<PlantBombState>();
         passingState = GetComponentInChildren<PassingState>();
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour {
         //// TODO add multiplayer state
         ///////////////////////////////////////////////////////
 		stateList.Add (multiplayerMenuState);
+        stateList.Add(multiplayerLobbyState);
 
         stateList.Add(plantBombState);
         stateList.Add(passingState);

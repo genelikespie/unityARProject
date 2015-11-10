@@ -44,6 +44,7 @@ public class MultiplayerMenuState : State {
         uint roomSize = 8;
         NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
         Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
+        gameManager.SetState(gameManager.multiplayerLobbyState);
     }
 
     List<MatchDesc> roomList = null;
@@ -58,9 +59,6 @@ public class MultiplayerMenuState : State {
 
         roomList = new List<MatchDesc>();
         roomList.Clear();
-
-        MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
-        string roomName = MMS_CreateGameInputField.text;
         foreach (MatchDesc match in matchList.matches)
         {
             roomList.Add(match);
@@ -84,7 +82,9 @@ public class MultiplayerMenuState : State {
         {
             if (match.name.Equals(roomName))
             {
-                manager.matchMaker.JoinMatch(roomList[0].networkId, "", manager.OnMatchJoined);
+                manager.matchMaker.JoinMatch(match.networkId, "", manager.OnMatchJoined);
+                gameManager.SetState(gameManager.multiplayerLobbyState);
+                break;
             }
         }
     }

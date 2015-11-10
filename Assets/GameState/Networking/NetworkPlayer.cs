@@ -7,14 +7,17 @@ using UnityEngine.Networking;
 
 public class NetworkPlayer : NetworkBehaviour{
 
-	// All variables with [SyncVar] attribute are synchronized
-	// from server to client. (not the other way around)
+    // All variables with [SyncVar] attribute are synchronized
+    // from server to client. (not the other way around)
 
-	// Because of this, these variables CANNOT be set directly.
-	// They can only be set through functions marked [Command].
-	// However, they can still be read.
+    // Because of this, these variables CANNOT be set directly.
+    // They can only be set through functions marked [Command].
+    // However, they can still be read.
 
-	[SyncVar]
+    [SyncVar]
+    public bool ready = false;
+
+    [SyncVar]
 	string planterName;
 	
 	[SyncVar]
@@ -44,10 +47,10 @@ public class NetworkPlayer : NetworkBehaviour{
 		else
 			Debug.Log ("When creating local NetworkPlayer, GameManager could not be found.");
 	}
-
-	// Do not call this, it is called by BombNetworkManager.
-	// Used to initialize NetworkPlayer on creation.
-	public void InitPlayer(string pName, string dName, int numBombs)
+    
+    // Do not call this, it is called by BombNetworkManager.
+    // Used to initialize NetworkPlayer on creation.
+    public void InitPlayer(string pName, string dName, int numBombs)
 	{
 		planterName = pName;
 		defuserName = dName;
@@ -57,13 +60,21 @@ public class NetworkPlayer : NetworkBehaviour{
 		allNetworkBombsPlanted = false;
 	}
 
-	// All [Command] functions are called on the server.
-	// TODO: Command functions for modifying score and number of bombs.
+    // All [Command] functions are called on the server.
+    // TODO: Command functions for modifying score and number of bombs.
 
 
-	// Sets the boolean indicating if all local bombs are planted.
-	// If true, checks if everyone else is done as well.
-	[Command]
+    // Sets the boolean indicating if the player is ready do start plant bombs.
+    // If true, checks if everyone else is done as well.
+    [Command]
+    public void CmdSetReady()
+    {
+        ready = true;
+    }
+
+    // Sets the boolean indicating if all local bombs are planted.
+    // If true, checks if everyone else is done as well.
+    [Command]
 	public void CmdSetPlanted(bool val) {
 		allLocalBombsPlanted = val;
 		if(val)
