@@ -37,6 +37,7 @@ public class GameOverState : State
         //Debug.Log("MainMenuState " + gameManager.mainMenuState.name);
 
         gameManager.SetState(gameManager.mainMenuState);
+        gameManager.ResetGame();
     }
 
     public override void ToSharedModeMenu()

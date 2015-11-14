@@ -76,7 +76,11 @@ public class PlantBombState : State {
 	{
 
 		gameManager.CreateBombTarget();
+        
+        if (!gameManager.allBombsPlanted())
+            return;
         //TODO: Only works when only one bomb is planted
+        //done
         localPlayer.allLocalBombsPlanted = true;
 		PB_PlantBomb.gameObject.SetActive(false);
 	}
