@@ -23,12 +23,19 @@ public class GameManager : MonoBehaviour {
     private Camera vuforiaCamera; // Camera for Vuforia's GUI
     private Camera menuCamera; // Camera for menus
 
-	// Code refactor
-	public Player localPlayer;
+    // Code refactor
+    public Player localPlayer;
 
-	// Do not manually set this. That will be handled by NetworkPlayer code.
-	public NetworkPlayer networkPlayer;
-
+    // Do not manually set this. That will be handled by NetworkPlayer code.
+    public NetworkPlayer networkPlayer;
+    //
+    private int bombsCount = 3;
+    private int bombsDefused = 0;
+    private int bombsPlanted = 0;
+    public bool allBombsPlanted() { return bombsPlanted == bombsCount ? true : false; }
+    public bool allBombsDefused () { return bombsDefused == bombsCount ? true : false; }
+    public void defuseBomb() { bombsDefused++; }
+//
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
 	public bool isMultiplayer = false;
@@ -132,7 +139,6 @@ public class GameManager : MonoBehaviour {
             if (!s)
                 Debug.LogError("At least one of the states are not found");
         }
-
     }
 
     void Start()
@@ -191,9 +197,19 @@ public class GameManager : MonoBehaviour {
     }
 
 	public void CreateBombTarget() {
-		if(udtHandler != null)
-			udtHandler.CreateTarget();
-		else
-			Debug.Log ("Could not create new target. UDT Event Handler variable not set in GameManager.");
+        if (udtHandler != null)
+        {
+            udtHandler.CreateTarget();
+            bombsPlanted++;
+        }
+        else
+            Debug.Log("Could not create new target. UDT Event Handler variable not set in GameManager.");
 	}
+
+    public void ResetGame()
+    {
+        udtHandler.ReInitialize();
+        bombsDefused = 0;
+        bombsPlanted = 0;
+    }
 }

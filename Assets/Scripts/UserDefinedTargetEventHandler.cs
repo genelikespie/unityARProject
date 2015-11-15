@@ -71,6 +71,17 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
     }
 
     /// <summary>
+    /// Called whe PlayAgain button is pressed
+    /// </summary>
+    public void ReInitialize()
+    {
+        mObjectTracker.DeactivateDataSet(mBuiltDataSet);
+        mBuiltDataSet.DestroyAllTrackables(true);
+        mObjectTracker.ActivateDataSet(mBuiltDataSet);
+        mTargetCounter = 0;
+    }
+
+    /// <summary>
     /// Updates the current frame quality
     /// </summary>
     public void OnFrameQualityChanged(ImageTargetBuilder.FrameQuality frameQuality)
@@ -108,8 +119,8 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         
         // get predefined trackable and instantiate it
         ImageTargetBehaviour imageTargetCopy = (ImageTargetBehaviour)Instantiate(ImageTargetTemplate);
-        //imageTargetCopy.gameObject.name = "UserDefinedTarget-" + mTargetCounter;
-        imageTargetCopy.gameObject.name = "ActiveBomb";
+        imageTargetCopy.gameObject.name = "UserTarget-" + (mTargetCounter-1);
+        //imageTargetCopy.gameObject.name = "ActiveBomb" + (mTargetCounter-1);
 
         // add the duplicated trackable to the data set and activate it
         mBuiltDataSet.CreateTrackable(trackableSource, imageTargetCopy.gameObject);

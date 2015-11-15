@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Vuforia;
+using System.Collections.Generic;
 
-public class DefuseState : State {
+public class DefuseState : State
+{
 
     // UI
     Text D_TimeLeftText;
@@ -22,7 +25,7 @@ public class DefuseState : State {
 
     public virtual void Awake()
     {
-		base.Awake();
+        base.Awake();
 
         // Find all UI elements in the scene
         D_TimeLeftText = GameObject.Find("D_TimeLeftText").GetComponent<Text>();
@@ -30,7 +33,7 @@ public class DefuseState : State {
         D_HintLeftBehind = GameObject.Find("D_HintLeftBehind").GetComponent<Text>();
 
         //find bomb tag
-        bombs = GameObject.FindGameObjectsWithTag("Bomb"); 
+        bombs = GameObject.FindGameObjectsWithTag("Bomb");
 
         if (!D_TimeLeftText)
             Debug.LogError("D_TimeLeftText");
@@ -45,17 +48,17 @@ public class DefuseState : State {
         base.Initialize();
         // Set the defuse button to be false
         // Activate it when the bomb is in view
-		D_DefuseBombButton.gameObject.SetActive(false);
-		gameManager.defuseTimer.StartTimer();
+        D_DefuseBombButton.gameObject.SetActive(false);
+        gameManager.defuseTimer.StartTimer();
 
     }
 
-	public override void RunState()
+    public override void RunState()
     {
 
         //update the hint if something was left
         if (GameObject.Find("Hintholder").GetComponent<Text>().text != "")
-        D_HintLeftBehind.text = "Hint: " + GameObject.Find("Hintholder").GetComponent<Text>().text;
+            D_HintLeftBehind.text = "Hint: " + GameObject.Find("Hintholder").GetComponent<Text>().text;
 
 
         // Update the timer UI
@@ -66,7 +69,8 @@ public class DefuseState : State {
         // TODO implement checking if the bomb is in view
         /////////////////////////////////////////////////
 
-        if (gameManager.bombVisible) {
+        if (gameManager.bombVisible)
+        {
             D_DefuseBombButton.gameObject.SetActive(true);
         }
         else
@@ -79,17 +83,45 @@ public class DefuseState : State {
         // TODO implement time expired
         /////////////////////////////////////////////////
 
-		if (gameManager.defuseTimer.TimedOut() && localPlayer.allLocalBombsPlanted)
+        if (gameManager.defuseTimer.TimedOut() && localPlayer.allLocalBombsPlanted)
         {
-                //Debug.LogWarning("Time ran out to plant the bomb!");
-                base.TimeExpired();
-		}
+            //Debug.LogWarning("Time ran out to plant the bomb!");
+            base.TimeExpired();
+        }
     }
 
     public override void AllBombsDefused()
     {
         base.AllBombsDefused();
-		gameManager.defuseTimer.StopTimer();
+
+        StateManager sm = TrackerManager.Instance.GetStateManager();
+        IEnumerable<TrackableBehaviour> tbs = sm.GetActiveTrackableBehaviours();
+
+        foreach (TrackableBehaviour tb in tbs)
+        {
+            //find all bombs that are currently in camera view
+            string name = tb.TrackableName;
+
+            GameObject target = GameObject.Find(name);
+            if (!target)
+                Debug.Log("Can't find " + name);
+            Transform child = target.transform.GetChild(0);
+            if (!child)
+                Debug.Log("Can't find child of " + name);
+            if (!child.GetComponent<Renderer>().sharedMaterial.Equals(DefuseMaterial))
+            {
+                //defuse only 1 bomb at each press on Defuse button
+                child.GetComponent<Renderer>().material = DefuseMaterial;
+                gameManager.defuseBomb();
+                Debug.Log("Defused " + name);
+                break;
+            }
+        }
+        if (!gameManager.allBombsDefused())
+        {
+            return;
+        }
+        gameManager.defuseTimer.StopTimer();
         /////////////////////////////////////////////////
         // TODO implement game over functionality
         /////////////////////////////////////////////////
@@ -97,14 +129,16 @@ public class DefuseState : State {
         //scenario only works for 1 bomb currently need to point to current bomb
         //redundant looking for all bombs since 1 is a dummy
         //TODO MAKE POINT TO ACTIVE BOMB
+ /*
+        //not needed anymore, handled above
         bombs = GameObject.FindGameObjectsWithTag("Bomb"); //find the bombs again
         foreach (GameObject x in bombs)
         {
-            if(DefuseMaterial != null)
-            x.GetComponent<Renderer>().material = DefuseMaterial;
+            if (DefuseMaterial != null)
+                x.GetComponent<Renderer>().material = DefuseMaterial;
         }
 
-
+*/
         localPlayer.playerOneWins = false;
         localPlayer.allLocalBombsPlanted = false;
         StartCoroutine(DelayForDisarmedRoutine());
