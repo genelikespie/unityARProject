@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Vuforia;
 
 /* The GameManager class manages all the game states
  */
@@ -23,22 +24,28 @@ public class GameManager : MonoBehaviour {
     private Camera vuforiaCamera; // Camera for Vuforia's GUI
     private Camera menuCamera; // Camera for menus
 
-    // Code refactor
-    public Player localPlayer;
+	// Can either represent NetworkPlayer or Player.
+	public PlayerAdapter player;
 
-    // Do not manually set this. That will be handled by NetworkPlayer code.
-    public NetworkPlayer networkPlayer;
-    //
-    private int bombsCount = 3;
-    private int bombsDefused = 0;
-    private int bombsPlanted = 0;
-    public bool allBombsPlanted() { return bombsPlanted == bombsCount ? true : false; }
-    public bool allBombsDefused () { return bombsDefused == bombsCount ? true : false; }
-    public void defuseBomb() { bombsDefused++; }
-//
+	//Temporary variables for NetworkPlayer initializing.
+
+	[System.NonSerialized]
+	public string tempDefuserName;
+
+	[System.NonSerialized]
+	public string tempPlanterName;
+  
+    private int bombsCount = 2;
+	public int getMaxBombLimit() { return bombsCount; }
+	public Material DefuseMaterial;
+    //private int bombsDefused = 0;
+    //private int bombsPlanted = 0;
+    //public bool allBombsPlanted() { return bombsPlanted == bombsCount ? true : false; }
+    //public bool allBombsDefused () { return bombsDefused == bombsCount ? true : false; }
+    //public void defuseBomb() { bombsDefused++; }
+
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
-	public bool isMultiplayer = false;
 
 	// These variables are initialized in SharedModeMenu
 	public Timer plantTimer;
@@ -200,7 +207,7 @@ public class GameManager : MonoBehaviour {
         if (udtHandler != null)
         {
             udtHandler.CreateTarget();
-            bombsPlanted++;
+            //bombsPlanted++;
         }
         else
             Debug.Log("Could not create new target. UDT Event Handler variable not set in GameManager.");
@@ -209,7 +216,36 @@ public class GameManager : MonoBehaviour {
     public void ResetGame()
     {
         udtHandler.ReInitialize();
-        bombsDefused = 0;
-        bombsPlanted = 0;
+        player.setLocalBombsDefused(0);
+        player.setLocalBombsPlanted(0);
+		//TODO: If we implement a scoring system, reset that here too.
     }
+
+	// Attempts to defuse one bomb on the screen.
+	// If succeeds, returns true. If it doesn't defuse a bomb, returns false.
+	public bool AttemptDefuse() {
+		StateManager sm = TrackerManager.Instance.GetStateManager();
+		IEnumerable<TrackableBehaviour> tbs = sm.GetActiveTrackableBehaviours();
+		
+		foreach (TrackableBehaviour tb in tbs)
+		{
+			//find all bombs that are currently in camera view
+			string name = tb.TrackableName;
+			
+			GameObject target = GameObject.Find(name);
+			if (!target)
+				Debug.Log("Can't find " + name);
+			Transform child = target.transform.GetChild(0);
+			if (!child)
+				Debug.Log("Can't find child of " + name);
+			if (!child.GetComponent<Renderer>().sharedMaterial.Equals(DefuseMaterial))
+			{
+				//defuse only 1 bomb at each press on Defuse button
+				child.GetComponent<Renderer>().material = DefuseMaterial;
+				Debug.Log("Defused " + name);
+				return true;
+			}
+		}
+		return false;
+	}
 }

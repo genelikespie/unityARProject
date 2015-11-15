@@ -17,6 +17,9 @@ public class MainMenuState : State {
 		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = false;
 	}
 
+	public override void RunState() {
+	}
+
 	public override void ToSharedModeMenu()
 	{
 		Debug.Log("To shared Menu");

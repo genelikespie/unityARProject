@@ -63,11 +63,10 @@ public class SharedModeMenuState : State {
             return;
         }
 
-		gameManager.isMultiplayer = false;
-
-		gameManager.localPlayer = new Player(SMM_PlanterNameInputField.text,
-		        	                     			SMM_DefuserNameInputField.text,
-						                             1);
+		gameManager.player = new LocalPlayerAdapter(
+			new Player(SMM_PlanterNameInputField.text,
+		        	   SMM_DefuserNameInputField.text,
+		           gameManager.getMaxBombLimit()));
 
 		// Join match here for multiplayer (different state)
 

@@ -73,15 +73,13 @@ public class MultiplayerLobbyState : State {
         {
             if (p.isLocalPlayer)
             {
-                p.CmdSetReady();
+                p.CmdSetReady(true);
             }
         }
     }
 
     public override void PlantBomb()
-    {
-        gameManager.isMultiplayer = true;
-
+	{
        /* if (MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "")
         {
             // TODO throw a modal panel or some message to the screen/camera

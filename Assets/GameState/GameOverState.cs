@@ -55,30 +55,30 @@ public class GameOverState : State
     {
         ObjectTracker imgTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
         imgTracker.Stop();
-        if (localPlayer.playerOneWins)
+        if (player.getPlayerOneWins())
         {
             explosion.SetActive(true);
             /*
                         CameraDevice.Instance.Stop();
                         CameraDevice.Instance.Deinit();*/
-            if (gameManager.isMultiplayer)
+            if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 1 wins!";
             }
             else
             {
-                DisplayWinner.text = localPlayer.planterName + " wins!";
+                DisplayWinner.text = player.getPlanterName() + " wins!";
             }
         }
         else
         {
-            if (gameManager.isMultiplayer)
+            if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 2 wins!";
             }
             else
             {
-                DisplayWinner.text = localPlayer.defuserName + " wins!";
+                DisplayWinner.text = player.getDefuserName() + " wins!";
             }
         }
     }

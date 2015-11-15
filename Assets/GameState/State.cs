@@ -5,9 +5,9 @@ public class State : MonoBehaviour{
 
     protected GameManager gameManager;
 
-	protected Player localPlayer {
-		get { return gameManager.localPlayer; }
-		set { gameManager.localPlayer = value; }
+	protected PlayerAdapter player {
+		get { return gameManager.player; }
+		set { gameManager.player = value; }
 	}
 	
     /* NOTE: All derived classes must call this base Awake() function in their respective Awake() functions
@@ -80,7 +80,7 @@ public class State : MonoBehaviour{
         /////////////////////////////////////////////////
         // TODO implement time expired
         /////////////////////////////////////////////////
-        localPlayer.playerOneWins = true;
+		player.setPlayerOneWins(true);
         gameManager.SetState(gameManager.gameOverState);
     }
 

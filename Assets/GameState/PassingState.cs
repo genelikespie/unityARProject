@@ -7,6 +7,7 @@ public class PassingState : State {
     // UI
     Text P_TimeLeftText;
     Button P_PassedToDefuserButton;
+	Text P_Waiting;
 
     public virtual void Awake()
     {
@@ -16,16 +17,21 @@ public class PassingState : State {
         // Find all UI elements in the scene
         P_TimeLeftText = GameObject.Find("P_TimeLeftText").GetComponent<Text>();
         P_PassedToDefuserButton = GameObject.Find("P_PassedToDefuserButton").GetComponent<Button>();
+		P_Waiting = GameObject.Find ("P_Waiting").GetComponent<Text>();
 
         if (!P_TimeLeftText)
             Debug.LogError("P_TimeLeftText");
         if (!P_PassedToDefuserButton)
             Debug.LogError("P_PassedToDefuserButton");
+		if (!P_Waiting)
+			Debug.LogError("P_Waiting");
     }
 
 	public override void Initialize() {
 		// Initialize to 30 seconds to pass phone to defuser
 		gameManager.passTimer.StartTimer();
+
+		P_Waiting.gameObject.SetActive(false);
 	}
 
     public override void RunState()
@@ -33,16 +39,24 @@ public class PassingState : State {
         // Update the timer UI
 		P_TimeLeftText.text = string.Format("{0:N1}", gameManager.passTimer.timeLeft);
 
-            // If time runs out and we have not changed state to DefuseBomb(), planter loses
-            /////////////////////////////////////////////////
-            // TODO implement time expired
-            /////////////////////////////////////////////////
+        // If time runs out and we have not changed state to DefuseBomb(), planter loses
+        /////////////////////////////////////////////////
+        // TODO implement time expired
+        /////////////////////////////////////////////////
 
-		if (gameManager.passTimer.TimedOut())
-            {
-                //Debug.LogWarning("Time ran out to plant the bomb!");
-                //
-            }
+		if(!player.isPassReady()) {
+			if (gameManager.passTimer.TimedOut())
+    	    {
+				Debug.LogWarning("Time ran out to plant the bomb!");
+        	}
+		}
+		else if(!player.isAllPassReady()) {
+			P_Waiting.gameObject.SetActive(true);
+		}
+		else {
+			P_Waiting.gameObject.SetActive(false);
+			gameManager.SetState(gameManager.defuseState);
+		}
     }
     public override void DefuseBomb()
     {
@@ -50,7 +64,7 @@ public class PassingState : State {
 		gameManager.passTimer.StopTimer();
 
 		//gameManager.bombVisible = false;
-		gameManager.SetState(gameManager.defuseState);
+
 
     }
 }
