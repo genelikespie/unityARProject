@@ -46,9 +46,22 @@ public class MultiplayerMenuState : State {
 	public override void RunState() {
 	}
 
+    private void UpdateInput()
+    {
+        MMS_DefuserNameInputField = GameObject.Find("MMS_DefuserNameInputField").GetComponent<InputField>();
+        MMS_PlanterNameInputField = GameObject.Find("MMS_PlanterNameInputField").GetComponent<InputField>();
+        gameManager.tempDefuserName = MMS_DefuserNameInputField.text;
+        gameManager.tempPlanterName = MMS_PlanterNameInputField.text;
+    }
 
     public void CreateGame()
     {
+        UpdateInput();
+        if (gameManager.tempDefuserName == null || gameManager.tempPlanterName == null)
+        {
+            Debug.LogError("DefuserName or PlanterName Empty");
+            return;
+        }
         NetworkManager.singleton.StartMatchMaker();
         MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
         string roomName = MMS_CreateGameInputField.text;
@@ -86,8 +99,20 @@ public class MultiplayerMenuState : State {
 
     public void JoinGame()
     {
+        UpdateInput();
+        if (gameManager.tempDefuserName == null || gameManager.tempPlanterName == null)
+        {
+            Debug.LogError("DefuserName or PlanterName Empty");
+            return;
+        }
         MMS_JoinGameInputField = GameObject.Find("MMS_JoinGameInputField").GetComponent<InputField>();
         string roomName = MMS_JoinGameInputField.text;
+        if (roomName == null)
+        {
+            Debug.LogError("RoomName Empty");
+            return;
+        }
+
         NetworkManager manager = NetworkManager.singleton;
         foreach (MatchDesc match in roomList)
         {

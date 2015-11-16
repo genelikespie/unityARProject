@@ -80,14 +80,12 @@ public class MultiplayerLobbyState : State {
 
     public override void PlantBomb()
 	{
-       /* if (MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "")
-        {
-            // TODO throw a modal panel or some message to the screen/camera
-            return;
-        }*/
 
         // TODO: Right now the screen results in nonfunctional buttons.
         // Implement matchmaker here.
+        gameManager.plantTimer = new Timer(45);
+        gameManager.defuseTimer = new Timer(60);
+        gameManager.passTimer = new Timer(30);
 
         gameManager.SetAR();
 
