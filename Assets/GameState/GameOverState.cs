@@ -57,7 +57,7 @@ public class GameOverState : State
     {
         ObjectTracker imgTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
         imgTracker.Stop();
-        if (player.getPlayerOneWins())
+        if (!player.isAllGlobalBombsDefused())
         {
             explosion.SetActive(true);
 

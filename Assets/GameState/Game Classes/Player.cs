@@ -139,7 +139,7 @@ public class NetworkPlayerAdapter : PlayerAdapter {
 
 	public bool isAllLocalBombsPlanted() { return player.allLocalBombsPlanted(); }
 	public bool isAllLocalBombsDefused() { return player.allLocalBombsDefused(); }
-	public bool getPlayerOneWins() { return player.teamOneWins; }
+	public bool getPlayerOneWins() { return player.getPlayerOneWins(); }
 
 	public bool isReady() { return player.ready; }
 	public bool isPassReady() { return player.passReady; }

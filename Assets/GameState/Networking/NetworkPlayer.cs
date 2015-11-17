@@ -57,7 +57,17 @@ public class NetworkPlayer : NetworkBehaviour{
 		return localBombsDefused == maxLocalBombs;
 	}
 
-	public override void OnStartLocalPlayer() {
+    public bool getPlayerOneWins()
+    {
+        foreach (NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
+            if (p.teamOneWins)
+            {
+                return true;
+            }
+        return false;
+    }
+
+    public override void OnStartLocalPlayer() {
 		GameManager gm = GameObject.FindObjectOfType<GameManager>();
 		if(gm != null)
 			gm.player = new NetworkPlayerAdapter(this);
