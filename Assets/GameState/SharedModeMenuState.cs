@@ -68,7 +68,7 @@ public class SharedModeMenuState : State {
 		        	   SMM_DefuserNameInputField.text,
 		           gameManager.getMaxBombLimit()));
 
-		// Join match here for multiplayer (different state)
+
 
 		gameManager.plantTimer = new Timer(45);
 		gameManager.defuseTimer = new Timer(60);

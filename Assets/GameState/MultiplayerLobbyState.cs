@@ -17,12 +17,18 @@ public class MultiplayerLobbyState : State {
 	Button MMS_BackButton;
 	Button MMS_ReadyButton;
 
+	GameObject mmBack;
+
 	protected virtual void Awake()
 	{
 		// Call the base class's function to initialize all variables
 		base.Awake();
 		if (!gameManager)
 			Debug.LogError("AWAKE: CANT find game manager in base");
+
+		// Get SM_Backdrop and disable renderer
+		mmBack = GameObject.Find("MM_Backdrop");
+		mmBack.GetComponent<MeshRenderer>().enabled = false;
 	}
 
 	/* Reset the UI
@@ -31,6 +37,9 @@ public class MultiplayerLobbyState : State {
 	{
 		if (!gameManager)
 			Debug.LogError("Cant find game manager");
+
+		// Enable SM_Backdrop renderer
+		mmBack.GetComponent<MeshRenderer>().enabled = true;
 	}
 
     NetworkPlayer[] playerList = null;
@@ -46,9 +55,9 @@ public class MultiplayerLobbyState : State {
             return;
         }
 
-        Debug.LogError("Name " + MLS_PlayerJoinedCount.text + " ");
-        Debug.LogError("PlayerList " + playerList + " " );
-        Debug.LogError("PlayerList " + playerList.Length + " ");
+        Debug.Log("Name " + MLS_PlayerJoinedCount.text + " ");
+        Debug.Log("PlayerList " + playerList + " " );
+        Debug.Log("PlayerList " + playerList.Length + " ");
         MLS_PlayerJoinedCount.text = "Joined Players: " + playerList.Length;
 
         int readyCount = 0;
@@ -78,19 +87,18 @@ public class MultiplayerLobbyState : State {
         }
     }
 
-    public override void PlantBomb()
+	public override void PlantBomb()
 	{
-       /* if (MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "")
-        {
-            // TODO throw a modal panel or some message to the screen/camera
-            return;
-        }*/
-
-        // TODO: Right now the screen results in nonfunctional buttons.
-        // Implement matchmaker here.
-
-        gameManager.SetAR();
-
-        gameManager.SetState(gameManager.plantBombState);
-    }
+		gameManager.plantTimer = new Timer(45);
+		gameManager.defuseTimer = new Timer(60);
+		gameManager.passTimer = new Timer(30);
+		
+		gameManager.SetAR();
+		
+		//Disable SM_Backdrop renderer, enabled camera plane
+		mmBack.GetComponent<MeshRenderer>().enabled = false;
+		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
+		
+		gameManager.SetState(gameManager.plantBombState);
+	}
 }

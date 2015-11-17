@@ -19,6 +19,7 @@ public class DefuseState : State
     IEnumerator DelayForDisarmedRoutine()
     {
         yield return new WaitForSeconds(2f);
+		player.setPlayerOneWins(false);
         gameManager.SetState(gameManager.gameOverState);
     }
 
@@ -89,9 +90,9 @@ public class DefuseState : State
 
 		if (!player.isAllLocalBombsDefused())
         {
-			if(gameManager.defuseTimer.TimedOut())
-            	//Debug.LogWarning("Time ran out to plant the bomb!");
+			if(gameManager.defuseTimer.TimedOut()) {
         	    base.TimeExpired();
+			}
         }
 		else if (!player.isAllGlobalBombsDefused()) {
 			D_Waiting.gameObject.SetActive(true);

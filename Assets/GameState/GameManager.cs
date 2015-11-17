@@ -29,10 +29,10 @@ public class GameManager : MonoBehaviour {
 
 	//Temporary variables for NetworkPlayer initializing.
 
-	[System.NonSerialized]
+	[HideInInspector]
 	public string tempDefuserName;
 
-	[System.NonSerialized]
+	[HideInInspector]
 	public string tempPlanterName;
   
     private int bombsCount = 2;

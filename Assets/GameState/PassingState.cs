@@ -60,11 +60,7 @@ public class PassingState : State {
     }
     public override void DefuseBomb()
     {
-        base.DefuseBomb();
+		player.setPassReady(true);
 		gameManager.passTimer.StopTimer();
-
-		//gameManager.bombVisible = false;
-
-
     }
 }

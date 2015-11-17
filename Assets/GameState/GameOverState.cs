@@ -58,9 +58,7 @@ public class GameOverState : State
         if (player.getPlayerOneWins())
         {
             explosion.SetActive(true);
-            /*
-                        CameraDevice.Instance.Stop();
-                        CameraDevice.Instance.Deinit();*/
+
             if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 1 wins!";

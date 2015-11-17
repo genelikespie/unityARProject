@@ -139,10 +139,7 @@ public class NetworkPlayerAdapter : PlayerAdapter {
 
 	public bool isAllLocalBombsPlanted() { return player.allLocalBombsPlanted(); }
 	public bool isAllLocalBombsDefused() { return player.allLocalBombsDefused(); }
-	public bool getPlayerOneWins() { 
-		Debug.LogWarning("Unsure of how playerOneWins works in networking. Returning true.");
-		return true; 
-	}
+	public bool getPlayerOneWins() { return player.teamOneWins; }
 
 	public bool isReady() { return player.ready; }
 	public bool isPassReady() { return player.passReady; }
@@ -159,8 +156,7 @@ public class NetworkPlayerAdapter : PlayerAdapter {
 	public void setLocalBombsDefused(int val) { player.CmdSetLocalBombsDefused(val); }
 	
 	public void setPlayerOneWins(bool val) {
-		Debug.LogWarning("Unsure of how playerOneWins works in networking. No variable is set.");
-		return;
+		player.CmdSetTeamOneWins(val);
 	}
 
 	public void setReady(bool val) { player.CmdSetReady(val); } 

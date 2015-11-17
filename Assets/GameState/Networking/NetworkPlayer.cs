@@ -46,6 +46,9 @@ public class NetworkPlayer : NetworkBehaviour{
 	[SyncVar]
 	public bool allNetworkBombsDefused;
 
+	// Because this variable is tied to timers, it does not have to be synched.
+	public bool teamOneWins;
+
 	public bool allLocalBombsPlanted() {
 		return localBombsPlanted == maxLocalBombs;
 	}
@@ -125,6 +128,11 @@ public class NetworkPlayer : NetworkBehaviour{
 	[Command]
 	public void CmdSetDefuserName(string val) {
 		defuserName = val;
+	}
+
+	[Command]
+	public void CmdSetTeamOneWins(bool val) {
+		teamOneWins = val;
 	}
 
 	// Checks if everyone is done planting bombs, setting the

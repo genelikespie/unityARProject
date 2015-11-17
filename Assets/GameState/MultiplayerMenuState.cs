@@ -19,8 +19,6 @@ public class MultiplayerMenuState : State {
 	Button MMS_BackButton;
 	Button MMS_PlayButton;
 
-	GameObject smBack;
-
 	protected virtual void Awake()
 	{
 		// Call the base class's function to initialize all variables
@@ -28,9 +26,10 @@ public class MultiplayerMenuState : State {
 		if (!gameManager)
 			Debug.LogError("AWAKE: CANT find game manager in base");
 
-		// Get SM_Backdrop and disable renderer
-		smBack = GameObject.Find("SM_Backdrop");
-		smBack.GetComponent<MeshRenderer>().enabled = false;
+
+
+		MMS_PlanterNameInputField = GameObject.Find("MMS_PlanterNameInputField").GetComponent<InputField>();
+		MMS_DefuserNameInputField = GameObject.Find("MMS_DefuserNameInputField").GetComponent<InputField>();
 	}
 
 	/* Reset the UI
@@ -39,8 +38,7 @@ public class MultiplayerMenuState : State {
 	{
 		if (!gameManager)
 			Debug.LogError("Cant find game manager");
-		// Enable SM_Backdrop renderer
-		smBack.GetComponent<MeshRenderer>().enabled = true;
+
 	}
 
 	public override void RunState() {
@@ -99,30 +97,4 @@ public class MultiplayerMenuState : State {
             }
         }
     }
-
-    public override void PlantBomb()
-	{
-		if (MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "")
-		{
-			// TODO throw a modal panel or some message to the screen/camera
-			return;
-		}
-
-		gameManager.tempDefuserName = MMS_DefuserNameInputField.text;
-		gameManager.tempPlanterName = MMS_PlanterNameInputField.text;
-
-
-		// TODO: Right now the screen results in nonfunctional buttons.
-		// Implement matchmaker here.
-
-		gameManager.SetAR();
-
-		//Disable SM_Backdrop renderer, enabled camera plane
-		smBack.GetComponent<MeshRenderer>().enabled = false;
-		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
-		
-		gameManager.SetState(gameManager.plantBombState);
-	}
-
-	
 }
