@@ -34,8 +34,12 @@ public class GameManager : MonoBehaviour {
 
 	[HideInInspector]
 	public string tempPlanterName;
-  
+
     private int bombsCount = 2;
+    public void SetNumOfBombs(int num)
+    {
+        bombsCount = num;
+    }
 	public int getMaxBombLimit() { return bombsCount; }
 	public Material DefuseMaterial;
     //private int bombsDefused = 0;
@@ -248,4 +252,5 @@ public class GameManager : MonoBehaviour {
 		}
 		return false;
 	}
+
 }
