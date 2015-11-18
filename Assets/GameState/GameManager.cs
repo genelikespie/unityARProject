@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
     private int bombsDefused = 0;
     private int bombsPlanted = 0;
     public bool allBombsPlanted() { return bombsPlanted == bombsCount ? true : false; }
-    public bool allBombsDefused () { return bombsDefused == bombsCount ? true : false; }
+    public bool allBombsDefused() { return bombsDefused == bombsCount ? true : false; }
     public void defuseBomb() { bombsDefused++; }
 //
 	public bool bombVisible { get; set; }
@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour {
 	public Timer defuseTimer;
 	public Timer passTimer;
 
-
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
     public SharedModeMenuState sharedModeMenuState { get; private set; }
@@ -53,7 +52,6 @@ public class GameManager : MonoBehaviour {
     // TODO multiplayerMenuState
     ///////////////////////////////////////////////////////
 	public MultiplayerMenuState multiplayerMenuState {get; private set;}
-
     public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
     public PassingState passingState { get; private set; }

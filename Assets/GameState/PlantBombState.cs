@@ -18,19 +18,22 @@ public class PlantBombState : State {
         base.Awake();
 
         // Find all UI elements in the scene
-		PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
-        PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
         PB_MenuTitle = GameObject.Find("PB_MenuTitle").GetComponent<Text>();
         PB_TimeLeftText = GameObject.Find("PB_TimeLeftText").GetComponent<Text>();
         PB_PassPhoneButton = GameObject.Find("PB_PassPhoneButton").GetComponent<Button>();
-        if (!PB_HintField)
-            Debug.LogError("PB_HintField");
+        PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
+        PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
+
         if (!PB_MenuTitle)
             Debug.LogError("PB_MenuTitle");
         if (!PB_TimeLeftText)
             Debug.LogError("PB_TimeLeftText");
         if (!PB_PassPhoneButton)
             Debug.LogError("PB_PassPhoneButton");
+        if (!PB_HintField)
+            Debug.LogError("PB_HintField");
+        if (!PB_PlantBomb)
+            Debug.LogError("PB_PlantBomb");
 
     }
 
