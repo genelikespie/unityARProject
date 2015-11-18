@@ -16,9 +16,9 @@ public class BombNetworkManager : NetworkManager {
 		GameObject playerObj = ((GameObject)GameObject.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity));
 		NetworkPlayer netPlayer = playerObj.GetComponent<NetworkPlayer>();
 
-		netPlayer.InitPlayer(gameManager.localPlayer.planterName,
-		                     gameManager.localPlayer.defuserName,
-		                     gameManager.localPlayer.numLocalBombs);
+		netPlayer.InitPlayer(gameManager.tempPlanterName,
+		                     gameManager.tempDefuserName,
+		                     gameManager.getMaxBombLimit());
 		NetworkServer.AddPlayerForConnection(conn, playerObj, playerControllerId);
 
 	}

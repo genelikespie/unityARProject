@@ -7,76 +7,142 @@ using UnityEngine.Networking;
 
 public class NetworkPlayer : NetworkBehaviour{
 
-	// All variables with [SyncVar] attribute are synchronized
-	// from server to client. (not the other way around)
+    // All variables with [SyncVar] attribute are synchronized
+    // from server to client. (not the other way around)
 
-	// Because of this, these variables CANNOT be set directly.
-	// They can only be set through functions marked [Command].
-	// However, they can still be read.
+    // Because of this, these variables CANNOT be set directly.
+    // They can only be set through functions marked [Command].
+    // However, they can still be read.
+
+    [SyncVar]
+    public bool ready = false;
 
 	[SyncVar]
-	string planterName;
-	
-	[SyncVar]
-	string defuserName;
-	
-	[SyncVar]
-	int score;
-	
-	[SyncVar]
-	public int numLocalBombs = 0;
+	public bool passReady = false;
 
-	// These are for bombs local to the device.
 	[SyncVar]
-	public bool allLocalBombsPlanted = false;
-	[SyncVar]
-	public bool allLocalBombsFound = false;
+	public bool allPassReady = false;
+
+    [SyncVar]
+	public string planterName;
 	
+	[SyncVar]
+	public string defuserName;
+	
+	[SyncVar]
+	public int score;
+	
+	[SyncVar]
+	public int maxLocalBombs = 0;
+
+	[SyncVar]
+	public int localBombsDefused = 0;
+
+	[SyncVar]
+	public int localBombsPlanted = 0;
+
 	[SyncVar]
 	public bool allNetworkBombsPlanted;
 	[SyncVar]
-	public bool allNetworkBombsFound;
+	public bool allNetworkBombsDefused;
 
-	void OnStartLocalPlayer() {
-		GameManager gm = GameObject.FindObjectOfType<GameManager>();
-		if(gm != null)
-			gm.networkPlayer = this;
-		else
-			Debug.Log ("When creating local NetworkPlayer, GameManager could not be found.");
+	// Because this variable is tied to timers, it does not have to be synched.
+	public bool teamOneWins;
+
+	public bool allLocalBombsPlanted() {
+		return localBombsPlanted == maxLocalBombs;
 	}
 
-	// Do not call this, it is called by BombNetworkManager.
-	// Used to initialize NetworkPlayer on creation.
-	public void InitPlayer(string pName, string dName, int numBombs)
+	public bool allLocalBombsDefused() {
+		return localBombsDefused == maxLocalBombs;
+	}
+
+    public bool getPlayerOneWins()
+    {
+        foreach (NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
+            if (p.teamOneWins)
+            {
+                return true;
+            }
+        return false;
+    }
+
+    public override void OnStartLocalPlayer() {
+		GameManager gm = GameObject.FindObjectOfType<GameManager>();
+		if(gm != null)
+			gm.player = new NetworkPlayerAdapter(this);
+		else
+			Debug.Log ("When creating local NetworkPlayer, GameManager could not be Defused.");
+	}
+    
+    // Do not call this, it is called by BombNetworkManager.
+    // Used to initialize NetworkPlayer on creation.
+	
+    public void InitPlayer(string pName, string dName, int numBombs)
 	{
 		planterName = pName;
 		defuserName = dName;
-		numLocalBombs = numBombs;
+		maxLocalBombs = numBombs;
 		score = 0;
-		allNetworkBombsFound = false;
+		allNetworkBombsDefused = false;
 		allNetworkBombsPlanted = false;
 	}
 
-	// All [Command] functions are called on the server.
-	// TODO: Command functions for modifying score and number of bombs.
+    // All [Command] functions are called on the server.
 
+    // Sets the boolean indicating if the player is ready do start plant bombs.
+    [Command]
+    public void CmdSetReady(bool val)
+    {
+        ready = val;
+    }
 
-	// Sets the boolean indicating if all local bombs are planted.
-	// If true, checks if everyone else is done as well.
 	[Command]
-	public void CmdSetPlanted(bool val) {
-		allLocalBombsPlanted = val;
-		if(val)
-			CmdCheckDonePlanting();		
+	public void CmdSetPassReady(bool val)
+	{
+		passReady = val;
+		if(passReady)
+			CmdCheckAllPassReady();
 	}
 
-	// Sets the boolean indicating if all local bombs are found.
-	// If true, checks if everyone else is done as well.
+	// Other basic setters.
 	[Command]
-	public void CmdSetFound(bool val) {
-		allLocalBombsFound = val;
-		if(val)
+	public void CmdSetScore(int val) {
+		score = val;
+	}
+
+	[Command]
+	public void CmdSetMaxLocalBombs(int val) {
+		maxLocalBombs = val;
+	}
+
+	[Command]
+	public void CmdSetLocalBombsPlanted(int val) {
+		localBombsPlanted = val;
+		if(allLocalBombsPlanted())
+			CmdCheckDonePlanting();
+	}
+
+	[Command]
+	public void CmdSetLocalBombsDefused(int val) {
+		localBombsDefused = val;
+		if(allLocalBombsDefused())
 			CmdCheckDoneDefusing();
+	}
+
+	[Command]
+	public void CmdSetPlanterName(string val) {
+		planterName = val;
+	}
+	
+	[Command]
+	public void CmdSetDefuserName(string val) {
+		defuserName = val;
+	}
+
+	[Command]
+	public void CmdSetTeamOneWins(bool val) {
+		teamOneWins = val;
 	}
 
 	// Checks if everyone is done planting bombs, setting the
@@ -91,13 +157,21 @@ public class NetworkPlayer : NetworkBehaviour{
 	}
 
 	// Checks if everyone is done defusing bombs, setting the
-	// allNetworkBombsFound boolean to true if so.
+	// allNetworkBombsDefused boolean to true if so.
 	// In the state machine, check that variable instead of using this function.
 	[Command]
 	private void CmdCheckDoneDefusing() {
 		if(AllDoneSearching()) {
 			foreach(NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
-				p.allNetworkBombsFound = true;
+				p.allNetworkBombsDefused = true;
+		}
+	}
+
+	[Command]
+	private void CmdCheckAllPassReady() {
+		if(AllPassReady()) {
+			foreach(NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>()) 
+				p.allPassReady = true;
 		}
 	}
 
@@ -105,7 +179,7 @@ public class NetworkPlayer : NetworkBehaviour{
 	private bool AllDonePlanting() {
 		bool allDone = true;
 		foreach(NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
-			allDone = allDone && p.allLocalBombsPlanted;
+			allDone = allDone && p.allLocalBombsPlanted();
 		return allDone;
 	}
 
@@ -113,7 +187,14 @@ public class NetworkPlayer : NetworkBehaviour{
 	private bool AllDoneSearching() {
 		bool allDone = true;
 		foreach(NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
-			allDone = allDone && p.allLocalBombsFound;
+			allDone = allDone && p.allLocalBombsDefused();
+		return allDone;
+	}
+
+	private bool AllPassReady() {
+		bool allDone = true;
+		foreach(NetworkPlayer p in GameObject.FindObjectsOfType<NetworkPlayer>())
+			allDone = allDone && p.passReady;
 		return allDone;
 	}
 }

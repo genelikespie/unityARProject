@@ -11,6 +11,8 @@ public class SharedModeMenuState : State {
     Toggle SMM_TutorialToggle; // Toggles between showing tutorial or not
     Button SMM_BackButton;
     Button SMM_PlayButton;
+    Slider SMM_NumOfBombsSlider;
+    Text SMM_NumOfBombsText;
 
 	GameObject smBack;
 
@@ -25,6 +27,8 @@ public class SharedModeMenuState : State {
         SMM_TutorialToggle = GameObject.Find("SMM_TutorialToggle").GetComponent<Toggle>();
         SMM_BackButton = GameObject.Find("SMM_BackButton").GetComponent<Button>();
         SMM_PlayButton = GameObject.Find("SMM_PlayButton").GetComponent<Button>();
+        SMM_NumOfBombsSlider = GameObject.Find("SMM_NumOfBombsSlider").GetComponent<Slider>();
+        SMM_NumOfBombsText = GameObject.Find("SMM_NumOfBombsText").GetComponent<Text>();
         if (!SMM_PlanterNameInputField)
             Debug.LogError("SMM_PlanterNameInputField");
         if (!SMM_DefuserNameInputField)
@@ -35,6 +39,10 @@ public class SharedModeMenuState : State {
             Debug.LogError("SMM_BackButton");
         if (!SMM_PlayButton)
             Debug.LogError("SMM_PlayButton");
+        if (!SMM_NumOfBombsSlider)
+            Debug.LogError("SMM_NumOfBombsSlider");
+        if (!SMM_NumOfBombsText)
+            Debug.LogError("SMM_NumOfBombsText");
 
         if (!gameManager)
             Debug.LogError("AWAKE: CANT find game manager in base");
@@ -53,6 +61,12 @@ public class SharedModeMenuState : State {
 
 		// Enable SM_Backdrop renderer
 		smBack.GetComponent<MeshRenderer>().enabled = true;
+        gameManager.SetNumOfBombs((int)SMM_NumOfBombsSlider.value);
+    }
+
+    public override void RunState()
+    {
+        DisplayNumOfBombs();
     }
 
     public override void PlantBomb()
@@ -63,16 +77,15 @@ public class SharedModeMenuState : State {
             return;
         }
 
-		gameManager.isMultiplayer = false;
+		gameManager.player = new LocalPlayerAdapter(
+			new Player(SMM_PlanterNameInputField.text,
+		        	   SMM_DefuserNameInputField.text,
+		           gameManager.getMaxBombLimit()));
 
-		gameManager.localPlayer = new Player(SMM_PlanterNameInputField.text,
-		        	                     			SMM_DefuserNameInputField.text,
-						                             1);
 
-		// Join match here for multiplayer (different state)
 
 		gameManager.plantTimer = new Timer(45);
-		gameManager.defuseTimer = new Timer(60);
+		gameManager.defuseTimer = new Timer(60*gameManager.getMaxBombLimit());
 		gameManager.passTimer = new Timer(30);
 
         gameManager.SetAR();
@@ -84,4 +97,14 @@ public class SharedModeMenuState : State {
         gameManager.SetState(gameManager.plantBombState);
     }
 
+    
+    public void OnValueChanged()
+    {
+        gameManager.SetNumOfBombs((int)SMM_NumOfBombsSlider.value);
+    }
+    
+    public void DisplayNumOfBombs()
+    {
+        SMM_NumOfBombsText.text = "Number of Bombs: " + gameManager.getMaxBombLimit().ToString();
+    }
 }

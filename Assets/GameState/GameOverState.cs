@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using Vuforia;
+using UnityEngine.Networking;
+
 public class GameOverState : State
 {
     GameObject explosion;
@@ -35,7 +37,7 @@ public class GameOverState : State
     {
         //Debug.Log("GameManager " + gameManager.name);
         //Debug.Log("MainMenuState " + gameManager.mainMenuState.name);
-
+        NetworkManager.singleton.StopHost();
         gameManager.SetState(gameManager.mainMenuState);
         gameManager.ResetGame();
     }
@@ -55,30 +57,28 @@ public class GameOverState : State
     {
         ObjectTracker imgTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
         imgTracker.Stop();
-        if (localPlayer.playerOneWins)
+        if (!player.isAllGlobalBombsDefused())
         {
             explosion.SetActive(true);
-            /*
-                        CameraDevice.Instance.Stop();
-                        CameraDevice.Instance.Deinit();*/
-            if (gameManager.isMultiplayer)
+
+            if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 1 wins!";
             }
             else
             {
-                DisplayWinner.text = localPlayer.planterName + " wins!";
+                DisplayWinner.text = player.getPlanterName() + " wins!";
             }
         }
         else
         {
-            if (gameManager.isMultiplayer)
+            if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 2 wins!";
             }
             else
             {
-                DisplayWinner.text = localPlayer.defuserName + " wins!";
+                DisplayWinner.text = player.getDefuserName() + " wins!";
             }
         }
     }

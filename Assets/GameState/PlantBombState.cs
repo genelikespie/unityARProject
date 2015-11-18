@@ -11,6 +11,7 @@ public class PlantBombState : State {
     Button PB_PassPhoneButton;
     InputField PB_HintField;
 	Button PB_PlantBomb;
+	Text PB_Waiting;
 
     protected virtual void Awake()
     {
@@ -23,17 +24,7 @@ public class PlantBombState : State {
         PB_PassPhoneButton = GameObject.Find("PB_PassPhoneButton").GetComponent<Button>();
         PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
         PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
-
-        if (!PB_MenuTitle)
-            Debug.LogError("PB_MenuTitle");
-        if (!PB_TimeLeftText)
-            Debug.LogError("PB_TimeLeftText");
-        if (!PB_PassPhoneButton)
-            Debug.LogError("PB_PassPhoneButton");
-        if (!PB_HintField)
-            Debug.LogError("PB_HintField");
-        if (!PB_PlantBomb)
-            Debug.LogError("PB_PlantBomb");
+		PB_Waiting = GameObject.Find ("PB_Waiting").GetComponent<Text>();
 
     }
 
@@ -42,6 +33,7 @@ public class PlantBombState : State {
 		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
         PB_PassPhoneButton.gameObject.SetActive(false);
 		PB_PlantBomb.gameObject.SetActive(true);
+		PB_Waiting.gameObject.SetActive(false);
 
 		gameManager.plantTimer.StartTimer();
 		
@@ -51,41 +43,36 @@ public class PlantBombState : State {
     // Update the timer to plant the bomb
     public override void RunState() 
 	{
-		if (!localPlayer.allLocalBombsPlanted)
-            {
-                // Update the timer UI
-			PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
+		// Update the timer UI
+		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
 
-                // If time runs out, planter loses
+		if (!player.isAllLocalBombsPlanted()) {
                 /////////////////////////////////////////////////
                 // TODO implement time expired
                 /////////////////////////////////////////////////
-
-			if (gameManager.plantTimer.TimedOut())
-                {
-                    //Debug.LogWarning("Time ran out to plant the bomb!");
-                    //
-                }
-
-            }
-            // If the pass phone button is NOT active, make it active
-            else if (!PB_PassPhoneButton.gameObject.activeSelf)
-            {
-                PB_PassPhoneButton.gameObject.SetActive(true);
-            }
+			if(gameManager.plantTimer.TimedOut())
+            	Debug.LogWarning("Time ran out to plant the bomb!");
+		}
+		// If not all global bombs (all players) are planted, display the
+		// "Waiting for others" text. In singleplayer global and local will
+		// have the same value.
+		else if(!player.isAllGlobalBombsPlanted()) {
+			PB_Waiting.gameObject.SetActive(true);
+		}
+		else {
+			PB_Waiting.gameObject.SetActive(false);
+			PB_PassPhoneButton.gameObject.SetActive(true);
+		}
 	}
 
 	public void OnTappedOnNewTargetButton()
 	{
-
 		gameManager.CreateBombTarget();
+		player.setLocalBombsPlanted(player.getLocalBombsPlanted() + 1);
         
-        if (!gameManager.allBombsPlanted())
-            return;
-        //TODO: Only works when only one bomb is planted
-        //done
-        localPlayer.allLocalBombsPlanted = true;
-		PB_PlantBomb.gameObject.SetActive(false);
+        if (player.isAllLocalBombsPlanted()) {    
+			PB_PlantBomb.gameObject.SetActive(false);
+		}
 	}
 	
 	public override void PassPhone()
