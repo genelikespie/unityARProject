@@ -18,6 +18,7 @@ public class MultiplayerLobbyState : State {
 	Button MMS_ReadyButton;
 
 	GameObject mmBack;
+    GameObject mmsBack;
 
 	protected virtual void Awake()
 	{
@@ -29,6 +30,12 @@ public class MultiplayerLobbyState : State {
 		// Get SM_Backdrop and disable renderer
 		mmBack = GameObject.Find("MM_Backdrop");
 		mmBack.GetComponent<MeshRenderer>().enabled = false;
+
+        mmsBack = GameObject.Find("MMS_Backdrop");
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+        }
 	}
 
 	/* Reset the UI
@@ -40,6 +47,10 @@ public class MultiplayerLobbyState : State {
 
 		// Enable SM_Backdrop renderer
 		mmBack.GetComponent<MeshRenderer>().enabled = true;
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = true;
+        }
 	}
 
     NetworkPlayer[] playerList = null;
@@ -97,6 +108,10 @@ public class MultiplayerLobbyState : State {
 		
 		//Disable SM_Backdrop renderer, enabled camera plane
 		mmBack.GetComponent<MeshRenderer>().enabled = false;
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+        }
 		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
 		
 		gameManager.SetState(gameManager.plantBombState);
