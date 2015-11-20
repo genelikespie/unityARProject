@@ -15,6 +15,11 @@ TO PLAYTEST GAME:
 7. Once the scene is done loading into the Unity Editor, hit the play button at the top.
       NOTE: You must have a webcam installed for the game to work.
 
+TO DEPLOY THE GAME IN ANDROID:
+
+8. Under File->Build Settings choose Android as the Platform and click Build
+9. Install the apk file in your phone
+
 TO EDIT GAME:
 
 6. Create your own scene to play around in under Assets/Scenes
