@@ -60,6 +60,7 @@ public class MultiplayerMenuState : State {
 
     public void CreateGame()
     {
+        NetworkManager.singleton.StopHost();
         NetworkManager.singleton.StartMatchMaker();
         MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
         string roomName = MMS_CreateGameInputField.text;
