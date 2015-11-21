@@ -89,6 +89,36 @@ public class UserDefinedTargetEventHandler : MonoBehaviour, IUserDefinedTargetEv
         mFrameQuality = frameQuality;
     }
 
+    // Get the trackables in our data set
+    public IEnumerable<Trackable> GetTrackables()
+    {
+        return mBuiltDataSet.GetTrackables();
+    }
+
+    // Get the data set
+    public DataSet GetDataSet()
+    {
+        return mBuiltDataSet;
+    }
+
+    // Delete a trackable object based on its name
+    public bool DeleteTrackable(string trackableName)
+    {
+        IEnumerable<Trackable> trackables = mBuiltDataSet.GetTrackables();
+        foreach (Trackable trackable in trackables)
+        {
+            Debug.LogWarning("Found trackable with name: " + trackable.Name);
+            if (trackable.Name.Equals(trackableName))
+            {
+                mObjectTracker.DeactivateDataSet(mBuiltDataSet);
+                mBuiltDataSet.Destroy(trackable, true);
+                mObjectTracker.ActivateDataSet(mBuiltDataSet);
+                mTargetCounter--;
+                return true;
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// Takes a new trackable source and adds it to the dataset
     /// This gets called automatically as soon as you 'BuildNewTarget with UserDefinedTargetBuildingBehaviour

@@ -51,8 +51,10 @@ public class GameManager : MonoBehaviour {
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
 
-	// These variables are initialized in SharedModeMenu
+	// Timer for each state
 	public Timer plantTimer;
+    public Timer armBombTimer;
+
 	public Timer defuseTimer;
 	public Timer passTimer;
 
@@ -91,8 +93,12 @@ public class GameManager : MonoBehaviour {
 
 		udtHandler = GameObject.Find ("UserDefinedTargetBuilder")
 			.GetComponent<UserDefinedTargetEventHandler>();
+
+        // Set the timers for each state
 		plantTimer = new Timer(10);
-		defuseTimer = new Timer(10);
+        // Set the time for arming the bomb
+        armBombTimer = new Timer(4);
+        defuseTimer = new Timer(10);
 		passTimer = new Timer(10);
 
         // Set Screen Size
@@ -173,6 +179,7 @@ public class GameManager : MonoBehaviour {
 		plantTimer.Run();
 		defuseTimer.Run();
 		passTimer.Run();
+        armBombTimer.Run();
 	}
 
 	// Update is called once per frame

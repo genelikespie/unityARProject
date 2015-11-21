@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 // TODO: SyncVars only work from server to client.
 // Use Commands instead to indicate changes in numLocalBombs and other state booleans.
 
-public class Player {
+public class LocalPlayer {
 	
     public string planterName;
 	public string defuserName;
@@ -24,7 +24,7 @@ public class Player {
 	public bool playerOneWins;
 
 
-    public Player(string pName, string dName, int maxBombs)
+    public LocalPlayer(string pName, string dName, int maxBombs)
     {
         planterName = pName;
 		defuserName = dName;
@@ -78,9 +78,9 @@ public interface PlayerAdapter {
 }
 
 public class LocalPlayerAdapter : PlayerAdapter {
-	Player player;
+	LocalPlayer player;
 
-	public LocalPlayerAdapter(Player p) {
+	public LocalPlayerAdapter(LocalPlayer p) {
 		player = p;
 	}
 

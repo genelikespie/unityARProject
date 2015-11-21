@@ -3,13 +3,14 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class Timer {
-	
+
+    public float timeSet;
 	public float timeLeft;
 	
 	private bool isRunning = false;
 
 	public Timer(float val) {
-		timeLeft = val;
+        timeLeft = timeSet = val;
 	}
 
 	// Starts the timer.
@@ -22,13 +23,23 @@ public class Timer {
 		isRunning = false;
 	}
 
-	// Toggles the timer on/off.
-	public void ToggleTimer() {
-		if(isRunning)
-			StopTimer();
-		else
-			StartTimer();
+	// Resets the timer (Stops timer by default)
+	public void ResetTimer(float newVal) {
+        timeLeft = newVal;
+        StopTimer();
 	}
+    public void ResetTimer()
+    {
+        ResetTimer(timeSet);
+    }
+
+    public void ToggleTimer()
+    {
+        if (isRunning)
+            StopTimer();
+        else
+            StartTimer();
+    }
 
 	// Checks if time has run out.
 	public bool TimedOut() {

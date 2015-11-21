@@ -78,7 +78,7 @@ public class SharedModeMenuState : State {
         }
 
 		gameManager.player = new LocalPlayerAdapter(
-			new Player(SMM_PlanterNameInputField.text,
+			new LocalPlayer(SMM_PlanterNameInputField.text,
 		        	   SMM_DefuserNameInputField.text,
 		           gameManager.getMaxBombLimit()));
 

@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Vuforia;
 
 public class PlantBombState : State {
 
@@ -12,6 +13,23 @@ public class PlantBombState : State {
     InputField PB_HintField;
 	Button PB_PlantBomb;
 	Text PB_Waiting;
+    Text PB_ArmTimeLeftText;
+    Button PB_ReplantBomb;
+
+    // Get a reference to the UDTH to get trackables (for deletion)
+    UserDefinedTargetEventHandler userDefinedTargetHandler;
+    // Reference to the armBombTimer (from GameManager)
+    Timer armBombTimer;
+
+
+    // Arming bomb variables
+    // Keep track of current bomb being planted to get the bomb using Find
+    int curBombNum;
+    // Variable to store our reference to the current bomb
+    GameObject curBomb;
+    bool isArmingBomb;
+    // If we are arming the bomb, check if bomb is in view (handled in ChangeCurBombVisibility)
+    bool curBombIsVisible;
 
     protected virtual void Awake()
     {
@@ -25,7 +43,9 @@ public class PlantBombState : State {
         PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
         PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
 		PB_Waiting = GameObject.Find ("PB_Waiting").GetComponent<Text>();
-
+        PB_ArmTimeLeftText = GameObject.Find("PB_ArmTimeLeftText").GetComponent<Text>();
+        PB_ReplantBomb = GameObject.Find("PB_ReplantBomb").GetComponent<Button>();
+        userDefinedTargetHandler = GameObject.Find("UserDefinedTargetBuilder").GetComponent<UserDefinedTargetEventHandler>();
     }
 
     public override void Initialize()
@@ -36,7 +56,17 @@ public class PlantBombState : State {
 		PB_Waiting.gameObject.SetActive(false);
 
 		gameManager.plantTimer.StartTimer();
-		
+        // Deactivate arming bomb logic
+        gameManager.armBombTimer.ResetTimer();
+        armBombTimer = gameManager.armBombTimer;
+        PB_ArmTimeLeftText.gameObject.SetActive(false);
+        PB_ReplantBomb.gameObject.SetActive(false);
+        curBombNum = 0;
+        // Set current bomb to null (delete it if it isn't)
+        if (curBomb)
+            Destroy(curBomb);
+        isArmingBomb = false;
+
 		//Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
     }
 
@@ -46,12 +76,28 @@ public class PlantBombState : State {
 		// Update the timer UI
 		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
 
-		if (!player.isAllLocalBombsPlanted()) {
+        // Player is arming the bomb
+        if (isArmingBomb && PB_ArmTimeLeftText.gameObject.activeSelf)
+        {
+            // If arm bomb timer is done, create the bomb
+            if (gameManager.armBombTimer.timeLeft <= 0)
+            {
+                PB_ArmTimeLeftText.text = "0";
+                OnTappedOnNewTargetButton();
+            }
+            else if (curBombIsVisible)
+            {
+                PB_ArmTimeLeftText.text = string.Format("{0:N1}", armBombTimer.timeLeft);
+            }
+        }
+
+		if (!player.isAllLocalBombsPlanted() && gameManager.plantTimer.TimedOut()) {
                 /////////////////////////////////////////////////
                 // TODO implement time expired
                 /////////////////////////////////////////////////
-			if(gameManager.plantTimer.TimedOut())
             	Debug.LogWarning("Time ran out to plant the bomb!");
+                gameManager.SetState(gameManager.gameOverState);
+
 		}
 		// If not all global bombs (all players) are planted, display the
 		// "Waiting for others" text. In singleplayer global and local will
@@ -65,16 +111,91 @@ public class PlantBombState : State {
 		}
 	}
 
+    // Successfully created the bomb
 	public void OnTappedOnNewTargetButton()
 	{
-		gameManager.CreateBombTarget();
-		player.setLocalBombsPlanted(player.getLocalBombsPlanted() + 1);
-        
+        // Reset arming logic
+        isArmingBomb = false;
+        gameManager.armBombTimer.ResetTimer();
+        PB_ArmTimeLeftText.gameObject.SetActive(false);
+        PB_PlantBomb.gameObject.SetActive(true);
+        PB_ReplantBomb.gameObject.SetActive(false);
+
+        player.setLocalBombsPlanted(player.getLocalBombsPlanted() + 1);
+        // increment current bomb at the end
+        curBombNum++;
         if (player.isAllLocalBombsPlanted()) {    
 			PB_PlantBomb.gameObject.SetActive(false);
 		}
+
 	}
-	
+
+
+    // Attempt to create the bomb
+    public void ArmBomb()
+    {
+        isArmingBomb = true;
+        gameManager.CreateBombTarget();
+
+        // Set the armBombTimer to start
+        gameManager.armBombTimer.ResetTimer();
+        gameManager.armBombTimer.StartTimer();
+
+        // Activate the armBombText (to show the time)
+        PB_ArmTimeLeftText.gameObject.SetActive(true);
+
+        // Keep the plant timer in game manager running
+        // Deactivate plantBombButton
+        PB_PlantBomb.gameObject.SetActive(false);
+
+        // Activate ReplantBombButton
+        PB_ReplantBomb.gameObject.SetActive(true);
+
+        // Find created bomb in the game
+        // Keep track of the bomb (make sure we can see it)
+
+    }
+
+    // Let the player replant the bomb
+    public void ReplantBomb()
+    {
+        isArmingBomb = false;
+        string bombName = "UserTarget-" + curBombNum;
+        Debug.LogWarning("Deleting trackable for replant: " + bombName);
+
+        // Delete the trackable object
+        userDefinedTargetHandler.DeleteTrackable(bombName);
+        curBomb = null; // make object null
+
+        gameManager.armBombTimer.ResetTimer();
+        PB_ArmTimeLeftText.gameObject.SetActive(false);
+        PB_PlantBomb.gameObject.SetActive(true);
+        PB_ReplantBomb.gameObject.SetActive(false);
+    }
+
+    public void ChangeCurBombVisibility(string bombName, bool IsVisible)
+    {
+        string curBombName = ("UserTarget-" + curBombNum);
+        Debug.LogWarning (" curbombName: " + curBombName + " bombName: " + bombName);
+        if (bombName == curBombName)
+        {
+            curBombIsVisible = IsVisible;
+            if (isArmingBomb && PB_ArmTimeLeftText.gameObject.activeSelf)
+            {
+                if (IsVisible)
+                {
+                    gameManager.armBombTimer.ResetTimer();
+                    gameManager.armBombTimer.StartTimer();
+                }
+                else
+                {
+                    gameManager.armBombTimer.ResetTimer();
+                    PB_ArmTimeLeftText.text = string.Format("{0:N1}", armBombTimer.timeLeft);
+                }
+            }
+        }
+    }
+
 	public override void PassPhone()
 	{
 		gameManager.plantTimer.StopTimer();

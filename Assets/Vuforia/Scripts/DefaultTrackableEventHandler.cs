@@ -92,6 +92,9 @@ namespace Vuforia
 
             //Notify GameManager that bomb has been found   
             gameManager.bombVisible = true;
+            // Notify the PlantBombState that the trackable is found
+            gameManager.plantBombState.ChangeCurBombVisibility(mTrackableBehaviour.TrackableName, true);
+
 
         }
 
@@ -115,8 +118,10 @@ namespace Vuforia
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
 
-            //Notify GameManager that bomb has been lost   
+            // Notify GameManager that bomb has been lost   
             gameManager.bombVisible = false;
+            // Notify the PlantBombState that the trackable is lost
+            gameManager.plantBombState.ChangeCurBombVisibility(mTrackableBehaviour.TrackableName, false);
 
         }
 

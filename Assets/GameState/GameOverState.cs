@@ -57,7 +57,18 @@ public class GameOverState : State
     {
         ObjectTracker imgTracker = TrackerManager.Instance.GetTracker<ObjectTracker>();
         imgTracker.Stop();
-        if (!player.isAllGlobalBombsDefused())
+        if (!player.isAllGlobalBombsPlanted())
+        {
+            if (player.isMultiplayer())
+            {
+                DisplayWinner.text = "Team 2 wins!";
+            }
+            else
+            {
+                DisplayWinner.text = "You ran out of time! " + player.getDefuserName() + " wins!";
+            }
+        }
+        else if (!player.isAllGlobalBombsDefused())
         {
             explosion.SetActive(true);
 
