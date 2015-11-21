@@ -10,11 +10,17 @@ public class GameOverState : State
     Button PlayAgainButton;
     Button QuitButton;
     Text DisplayWinner;
+    GameObject goBack;
     // Use this for initialization
     protected virtual void Awake()
     {
         explosion = GameObject.Find("explosion");
         explosion.SetActive(false);
+        goBack = GameObject.Find("GO_Backdrop");
+        if (goBack != null)
+        {
+            goBack.GetComponent<MeshRenderer>().enabled = false;
+        }
         base.Awake();
 
         PlayAgainButton = GameObject.Find("PlayAgainButton").GetComponent<Button>();
@@ -31,6 +37,11 @@ public class GameOverState : State
     {
         if (!gameManager)
             Debug.LogError("Cant find game manager");
+
+        if (goBack != null)
+        {
+            goBack.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
 
     public override void ToMainMenu()
@@ -40,12 +51,22 @@ public class GameOverState : State
         NetworkManager.singleton.StopHost();
         gameManager.SetState(gameManager.mainMenuState);
         gameManager.ResetGame();
+
+        if (goBack != null)
+        {
+            goBack.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public override void ToSharedModeMenu()
     {
         //Debug.Log("To shared Menu");
         gameManager.SetState(gameManager.sharedModeMenuState);
+
+        if (goBack != null)
+        {
+            goBack.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
 
     public override void RunState()

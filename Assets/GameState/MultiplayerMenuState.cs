@@ -8,6 +8,7 @@ using UnityEngine.Networking.Match;
 public class MultiplayerMenuState : State {
 
 	public GameObject networkSessionPrefab;
+    GameObject mmsBack;
 
 	// UI elements
 	InputField MMS_PlanterNameInputField;
@@ -23,6 +24,13 @@ public class MultiplayerMenuState : State {
 	{
 		// Call the base class's function to initialize all variables
 		base.Awake();
+
+        mmsBack = GameObject.Find("MMS_Backdrop");
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+        }
+
 		if (!gameManager)
 			Debug.LogError("AWAKE: CANT find game manager in base");
 
@@ -39,6 +47,11 @@ public class MultiplayerMenuState : State {
 		if (!gameManager)
 			Debug.LogError("Cant find game manager");
 
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = true;
+        }
+
 	}
 
 	public override void RunState() {
@@ -47,6 +60,7 @@ public class MultiplayerMenuState : State {
 
     public void CreateGame()
     {
+        NetworkManager.singleton.StopHost();
         NetworkManager.singleton.StartMatchMaker();
         MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
         string roomName = MMS_CreateGameInputField.text;
@@ -96,5 +110,16 @@ public class MultiplayerMenuState : State {
                 break;
             }
         }
+    }
+
+    public override void ToMainMenu()
+    {
+
+        if (mmsBack != null)
+        {
+            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+        }
+
+        gameManager.SetState(gameManager.mainMenuState);
     }
 }
