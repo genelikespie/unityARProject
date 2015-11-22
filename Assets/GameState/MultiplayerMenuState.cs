@@ -123,6 +123,12 @@ public class MultiplayerMenuState : State {
         }
         // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
+        if (matchList.matches.Count == 0)
+        {
+            Debug.Log("Match List Empty");
+            MMS_GameInputField.text = "Match List Empty";
+            return;
+        }
         string roomName = MMS_GameInputField.text;
         NetworkManager manager = NetworkManager.singleton;
         int position = Random.Range(0, matchList.matches.Count - 1);
