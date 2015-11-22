@@ -74,7 +74,7 @@ public class PlantBombState : State {
     public override void RunState() 
 	{
 		// Update the timer UI
-		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
+		PB_TimeLeftText.text = string.Format("Time Left: {0:N1}", gameManager.plantTimer.timeLeft);
 
         // Player is arming the bomb
         if (isArmingBomb && PB_ArmTimeLeftText.gameObject.activeSelf)
@@ -87,7 +87,7 @@ public class PlantBombState : State {
             }
             else if (curBombIsVisible)
             {
-                PB_ArmTimeLeftText.text = string.Format("{0:N1}", armBombTimer.timeLeft);
+                PB_ArmTimeLeftText.text = string.Format("Registering Bomb: {0:N1}", armBombTimer.timeLeft);
             }
         }
 
@@ -102,10 +102,10 @@ public class PlantBombState : State {
 		// If not all global bombs (all players) are planted, display the
 		// "Waiting for others" text. In singleplayer global and local will
 		// have the same value.
-		else if(!player.isAllGlobalBombsPlanted()) {
+		else if(player.isAllLocalBombsPlanted() && !player.isAllGlobalBombsPlanted()) {
 			PB_Waiting.gameObject.SetActive(true);
 		}
-		else {
+		else if(player.isAllLocalBombsPlanted() && player.isAllGlobalBombsPlanted()){
 			PB_Waiting.gameObject.SetActive(false);
 			PB_PassPhoneButton.gameObject.SetActive(true);
 		}
@@ -190,7 +190,7 @@ public class PlantBombState : State {
                 else
                 {
                     gameManager.armBombTimer.ResetTimer();
-                    PB_ArmTimeLeftText.text = string.Format("{0:N1}", armBombTimer.timeLeft);
+                    PB_ArmTimeLeftText.text = string.Format("Hold bomb still to register!");
                 }
             }
         }
@@ -198,6 +198,7 @@ public class PlantBombState : State {
 
 	public override void PassPhone()
 	{
+		gameManager.hint = PB_HintField.text;
 		gameManager.plantTimer.StopTimer();
         gameManager.SetState(gameManager.passingState);
     }

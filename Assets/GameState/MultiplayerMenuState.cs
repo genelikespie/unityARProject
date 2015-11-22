@@ -13,12 +13,14 @@ public class MultiplayerMenuState : State {
 	// UI elements
 	InputField MMS_PlanterNameInputField;
 	InputField MMS_DefuserNameInputField;
-    InputField MMS_CreateGameInputField;
-    InputField MMS_JoinGameInputField;
+    InputField MMS_GameInputField;
 
     Toggle MMS_TutorialToggle; // Toggles between showing tutorial or not
 	Button MMS_BackButton;
 	Button MMS_PlayButton;
+
+	Slider MMS_NumOfBombsSlider;
+	Text MMS_NumOfBombsText;
 
 	protected virtual void Awake()
 	{
@@ -35,6 +37,8 @@ public class MultiplayerMenuState : State {
 			Debug.LogError("AWAKE: CANT find game manager in base");
 
 
+		MMS_NumOfBombsSlider = GameObject.Find("MMS_NumOfBombsSlider").GetComponent<Slider>();
+		MMS_NumOfBombsText = GameObject.Find("MMS_NumOfBombsText").GetComponent<Text>();
 
 		MMS_PlanterNameInputField = GameObject.Find("MMS_PlanterNameInputField").GetComponent<InputField>();
 		MMS_DefuserNameInputField = GameObject.Find("MMS_DefuserNameInputField").GetComponent<InputField>();
@@ -52,9 +56,22 @@ public class MultiplayerMenuState : State {
             mmsBack.GetComponent<MeshRenderer>().enabled = true;
         }
 
+		gameManager.SetNumOfBombs((int)MMS_NumOfBombsSlider.value);
+
+	}
+
+	public void OnValueChanged()
+	{
+		gameManager.SetNumOfBombs((int)MMS_NumOfBombsSlider.value);
+	}
+
+	public void DisplayNumOfBombs()
+	{
+		MMS_NumOfBombsText.text = "Number of Bombs: " + gameManager.getMaxBombLimit().ToString();
 	}
 
 	public override void RunState() {
+		DisplayNumOfBombs();
 	}
 
 
@@ -62,8 +79,8 @@ public class MultiplayerMenuState : State {
     {
         NetworkManager.singleton.StopHost();
         NetworkManager.singleton.StartMatchMaker();
-        MMS_CreateGameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
-        string roomName = MMS_CreateGameInputField.text;
+        MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
+        string roomName = MMS_GameInputField.text;
         uint roomSize = 8;
         NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
         Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
@@ -98,8 +115,10 @@ public class MultiplayerMenuState : State {
 
     public void JoinGame()
     {
-        MMS_JoinGameInputField = GameObject.Find("MMS_JoinGameInputField").GetComponent<InputField>();
-        string roomName = MMS_JoinGameInputField.text;
+		// The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
+		MMS_GameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
+        
+		string roomName = MMS_GameInputField.text;
         NetworkManager manager = NetworkManager.singleton;
         foreach (MatchDesc match in roomList)
         {

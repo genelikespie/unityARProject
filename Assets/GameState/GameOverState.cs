@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 public class GameOverState : State
 {
     GameObject explosion;
-    Button PlayAgainButton;
     Button QuitButton;
     Text DisplayWinner;
     GameObject goBack;
@@ -22,13 +21,10 @@ public class GameOverState : State
             goBack.GetComponent<MeshRenderer>().enabled = false;
         }
         base.Awake();
-
-        PlayAgainButton = GameObject.Find("PlayAgainButton").GetComponent<Button>();
+		
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         DisplayWinner = GameObject.Find("DisplayWinner").GetComponent<Text>();
 
-        if (!PlayAgainButton)
-            Debug.LogError("PlayAgainButton");
         if (!QuitButton)
             Debug.LogError("QuitButton");
     }

@@ -62,7 +62,7 @@ public class DefuseState : State
     {
 
         //update the hint if something was left
-        if (GameObject.Find("Hintholder").GetComponent<Text>().text != "")
+        if (gameManager.hint != "")
             D_HintLeftBehind.text = "Hint: " + GameObject.Find("Hintholder").GetComponent<Text>().text;
 
 

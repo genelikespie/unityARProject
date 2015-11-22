@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour {
 	public bool bombVisible { get; set; }
 	private UserDefinedTargetEventHandler udtHandler;
 
+	//Hint text
+	public string hint;
+
+
 	// Timer for each state
 	public Timer plantTimer;
     public Timer armBombTimer;
@@ -166,9 +170,10 @@ public class GameManager : MonoBehaviour {
             // Set their position to be (0,0). i.e. in the center
             menuRectTransform.localPosition = Vector2.zero;
             // Set the screensize of all menus
-            menuRectTransform.sizeDelta = screenSize;
+            //menuRectTransform.sizeDelta = screenSize;
             // Set all menus to be invisible (outside of the screen)
-            menuRectTransform.pivot = closedMenuPivot;
+            //menuRectTransform.pivot = closedMenuPivot;
+			s.gameObject.SetActive(false);
         }
 
         SetState(mainMenuState);
@@ -191,8 +196,8 @@ public class GameManager : MonoBehaviour {
     public void SetState (State nextState) {
         // Change the pivot of the current menu to set it outside of view
         if (currentState)
-            this.currentState.GetComponent<RectTransform>().pivot = closedMenuPivot;
-
+            //this.currentState.GetComponent<RectTransform>().pivot = closedMenuPivot;
+			currentState.gameObject.SetActive(false);
         // Initialize the next state
         nextState.Initialize();
 
@@ -200,7 +205,8 @@ public class GameManager : MonoBehaviour {
         this.currentState = nextState;
 
         // Set the next state to be in view
-        this.currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
+        //this.currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
+		currentState.gameObject.SetActive(true);
     }
 
      /* It enables the vuforia GUI and AR camera and its audio listener
