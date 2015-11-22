@@ -9,9 +9,8 @@ public class MultiplayerMenuState : State {
 
 	public GameObject networkSessionPrefab;
     GameObject mmsBack;
-
-	// UI elements
-	InputField MMS_PlanterNameInputField;
+    // UI elements
+    InputField MMS_PlanterNameInputField;
 	InputField MMS_DefuserNameInputField;
     InputField MMS_GameInputField;
 
@@ -87,7 +86,7 @@ public class MultiplayerMenuState : State {
         gameManager.SetState(gameManager.multiplayerLobbyState);
     }
 
-    List<MatchDesc> roomList = null;
+    
 
     public void OnMatchList(ListMatchResponse matchList)
     {
@@ -96,39 +95,53 @@ public class MultiplayerMenuState : State {
             Debug.Log("null Match List returned from server");
             return;
         }
+        // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
+        MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
+        string roomName = MMS_GameInputField.text;
+        NetworkManager manager = NetworkManager.singleton;
 
-        roomList = new List<MatchDesc>();
-        roomList.Clear();
         foreach (MatchDesc match in matchList.matches)
         {
-            roomList.Add(match);
+            if (match.name.Equals(roomName))
+            {
+                manager.matchMaker.JoinMatch(match.networkId, "", manager.OnMatchJoined);
+                gameManager.SetState(gameManager.multiplayerLobbyState);
+                Debug.Log("Match " + roomName + "Found");
+                return;
+            }
         }
-        Debug.Log("room list after calling " + roomList.Count);
+        MMS_GameInputField.text = roomName + " Not Found";
+        Debug.Log("Match " + roomName + "Not Found");
+    }
+
+    public void OnMatchList2(ListMatchResponse matchList)
+    {
+        if (matchList == null)
+        {
+            Debug.Log("null Match List returned from server");
+            return;
+        }
+        // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
+        MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
+        string roomName = MMS_GameInputField.text;
+        NetworkManager manager = NetworkManager.singleton;
+        int position = Random.Range(0, matchList.matches.Count - 1);
+        MMS_GameInputField.text = matchList.matches[position].name;
     }
 
     public void Refresh()
     {
         NetworkManager manager = NetworkManager.singleton;
         manager.StartMatchMaker();
-        manager.matchMaker.ListMatches(0, 10, "", OnMatchList);
+        manager.matchMaker.ListMatches(0, 100, "", OnMatchList2);
     }
 
     public void JoinGame()
     {
-		// The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
-		MMS_GameInputField = GameObject.Find("MMS_CreateGameInputField").GetComponent<InputField>();
-        
-		string roomName = MMS_GameInputField.text;
+        NetworkManager.singleton.StopHost();
         NetworkManager manager = NetworkManager.singleton;
-        foreach (MatchDesc match in roomList)
-        {
-            if (match.name.Equals(roomName))
-            {
-                manager.matchMaker.JoinMatch(match.networkId, "", manager.OnMatchJoined);
-                gameManager.SetState(gameManager.multiplayerLobbyState);
-                break;
-            }
-        }
+        manager.StartMatchMaker();
+        manager.matchMaker.ListMatches(0, 100, "", OnMatchList);
     }
 
     public override void ToMainMenu()
