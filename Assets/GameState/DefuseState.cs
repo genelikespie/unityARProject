@@ -9,6 +9,8 @@ public class DefuseState : State
     // UI
     Text D_TimeLeftText;
     Text D_HintLeftBehind;
+    Text D_HintLeftBehind2;
+    Text D_HintLeftBehind3;
     Button D_DefuseBombButton;
     Text D_Waiting;
     Button D_Tutorial;
@@ -21,7 +23,7 @@ public class DefuseState : State
     bool NextHint2;
     bool DoOnce1;
     bool DoOnce2;
-    public int displayHintCount;
+    int displayHintCount;
 
     //Bomb Texture
     //GameObject[] bombs;
@@ -43,6 +45,8 @@ public class DefuseState : State
         D_TimeLeftText = GameObject.Find("D_TimeLeftText").GetComponent<Text>();
         D_DefuseBombButton = GameObject.Find("D_DefuseBombButton").GetComponent<Button>();
         D_HintLeftBehind = GameObject.Find("D_HintLeftBehind").GetComponent<Text>();
+        D_HintLeftBehind2 = GameObject.Find("D_HintLeftBehind2").GetComponent<Text>();
+        D_HintLeftBehind3 = GameObject.Find("D_HintLeftBehind3").GetComponent<Text>();
         D_Waiting = GameObject.Find("D_Waiting").GetComponent<Text>();
         D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
 
@@ -55,6 +59,10 @@ public class DefuseState : State
             Debug.LogError("D_DefuseBombButton");
         if (!D_HintLeftBehind)
             Debug.LogError("D_HintLeftBehind");
+        if (!D_HintLeftBehind2)
+            Debug.LogError("D_HintLeftBehind2");
+        if (!D_HintLeftBehind3)
+            Debug.LogError("D_HintLeftBehind3");
         if (!D_Waiting)
             Debug.LogError("D_Waiting");
     }
@@ -65,6 +73,10 @@ public class DefuseState : State
         // Set the defuse button to be false
         // Activate it when the bomb is in view
         D_DefuseBombButton.gameObject.SetActive(false);
+        displayHintCount = 0;
+        D_HintLeftBehind.gameObject.SetActive(false);
+        D_HintLeftBehind2.gameObject.SetActive(false);
+        D_HintLeftBehind3.gameObject.SetActive(false);
         gameManager.defuseTimer.StartTimer();
         D_Waiting.gameObject.SetActive(false);
 
