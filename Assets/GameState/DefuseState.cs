@@ -19,7 +19,7 @@ public class DefuseState : State
     bool NextHint2;
     bool DoOnce1;
     bool DoOnce2;
-    public int displayHintCount;
+    int displayHintCount;
 
     //Bomb Texture
     //GameObject[] bombs;
@@ -155,7 +155,6 @@ public class DefuseState : State
         //update the hint if something was left        
         if (gameManager.hint3 != "" && displayHintCount >= 2)
         {
-            print("DEBUG");
             D_HintLeftBehind3.text = "Hint: " + gameManager.hint3;
             D_HintLeftBehind3.gameObject.SetActive(true);
             displayHintCount++;
