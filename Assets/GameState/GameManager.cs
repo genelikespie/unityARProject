@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
@@ -53,9 +54,9 @@ public class GameManager : MonoBehaviour {
 
 	//Hint text
 	public string hint;
-    public string hint2;
-    public string hint3;
 
+    // Check if tutorial is on
+    public bool tutorialToggleOn = true;
 
     // Timer for each state
     public Timer plantTimer;
@@ -193,7 +194,14 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		updateTimers();
 		currentState.RunState();
-	}
+
+        // Get if tutorial is checked (may be checked/unchecked during runtime)
+        if (GameObject.Find("SMM_TutorialToggle") != null)
+        {
+            tutorialToggleOn = GameObject.Find("SMM_TutorialToggle").GetComponent<Toggle>().isOn;
+            Debug.Log("SMM_TutorialToggle in gameManager: " + tutorialToggleOn);
+        }
+    }
 
     public void SetState (State nextState) {
         // Change the pivot of the current menu to set it outside of view
@@ -266,5 +274,4 @@ public class GameManager : MonoBehaviour {
 		}
 		return false;
 	}
-
 }
