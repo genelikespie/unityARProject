@@ -10,7 +10,7 @@
 
 TO PLAYTEST GAME:
 
-6. open the latest scene: Assets/Scenes/sarahs_playground
+6. open the latest scene: Assets/Scenes/jasons_playground - ReplantBomb
       (this will have a little Unity symbol to the left of the file name)
 7. Once the scene is done loading into the Unity Editor, hit the play button at the top.
       NOTE: You must have a webcam installed for the game to work.
