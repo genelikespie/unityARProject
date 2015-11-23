@@ -53,10 +53,12 @@ public class GameManager : MonoBehaviour {
 
 	//Hint text
 	public string hint;
+    public string hint2;
+    public string hint3;
+    public int displayHintCount;
 
-
-	// Timer for each state
-	public Timer plantTimer;
+    // Timer for each state
+    public Timer plantTimer;
     public Timer armBombTimer;
 
 	public Timer defuseTimer;

@@ -11,8 +11,12 @@ public class PlantBombState : State {
     Text PB_TimeLeftText;
     Button PB_PassPhoneButton;
     InputField PB_HintField;
-	Button PB_PlantBomb;
-	Text PB_Waiting;
+    InputField PB_HintField2;
+    InputField PB_HintField3;
+    Button PB_PlantBomb;
+    Button PB_InsertHints;
+    Button PB_HideHints;
+    Text PB_Waiting;
     Text PB_ArmTimeLeftText;
     Button PB_ReplantBomb;
 
@@ -41,6 +45,10 @@ public class PlantBombState : State {
         PB_TimeLeftText = GameObject.Find("PB_TimeLeftText").GetComponent<Text>();
         PB_PassPhoneButton = GameObject.Find("PB_PassPhoneButton").GetComponent<Button>();
         PB_HintField = GameObject.Find("PB_HintField").GetComponent<InputField>();
+        PB_HintField2 = GameObject.Find("PB_HintField2").GetComponent<InputField>();
+        PB_HintField3 = GameObject.Find("PB_HintField3").GetComponent<InputField>();
+        PB_InsertHints = GameObject.Find("PB_InsertHints").GetComponent<Button>();
+        PB_HideHints = GameObject.Find("PB_HideHints").GetComponent<Button>();
         PB_PlantBomb = GameObject.Find("PB_PlantBomb").GetComponent<Button>();
 		PB_Waiting = GameObject.Find ("PB_Waiting").GetComponent<Text>();
         PB_ArmTimeLeftText = GameObject.Find("PB_ArmTimeLeftText").GetComponent<Text>();
@@ -55,7 +63,13 @@ public class PlantBombState : State {
 		PB_PlantBomb.gameObject.SetActive(true);
 		PB_Waiting.gameObject.SetActive(false);
 
-		gameManager.plantTimer.StartTimer();
+        //Don't Display the hints until button press
+        PB_HintField.gameObject.SetActive(false);
+        PB_HintField2.gameObject.SetActive(false);
+        PB_HintField3.gameObject.SetActive(false);
+        PB_HideHints.gameObject.SetActive(false);
+
+        gameManager.plantTimer.StartTimer();
         // Deactivate arming bomb logic
         gameManager.armBombTimer.ResetTimer();
         armBombTimer = gameManager.armBombTimer;
@@ -173,6 +187,26 @@ public class PlantBombState : State {
         PB_ReplantBomb.gameObject.SetActive(false);
     }
 
+    // Let the player insert hints into the game
+    public void InsertHints()
+    {
+        PB_HintField.gameObject.SetActive(true);
+        PB_HintField2.gameObject.SetActive(true);
+        PB_HintField3.gameObject.SetActive(true);
+        PB_InsertHints.gameObject.SetActive(false);
+        PB_HideHints.gameObject.SetActive(true);
+    }
+
+    // Let the player insert hints into the game
+    public void HideHints()
+    {
+        PB_HintField.gameObject.SetActive(false);
+        PB_HintField2.gameObject.SetActive(false);
+        PB_HintField3.gameObject.SetActive(false);
+        PB_InsertHints.gameObject.SetActive(true);
+        PB_HideHints.gameObject.SetActive(false);
+    }
+
     public void ChangeCurBombVisibility(string bombName, bool IsVisible)
     {
         string curBombName = ("UserTarget-" + curBombNum);
@@ -199,7 +233,9 @@ public class PlantBombState : State {
 	public override void PassPhone()
 	{
 		gameManager.hint = PB_HintField.text;
-		gameManager.plantTimer.StopTimer();
+        gameManager.hint2 = PB_HintField2.text;
+        gameManager.hint3 = PB_HintField3.text;
+        gameManager.plantTimer.StopTimer();
         gameManager.SetState(gameManager.passingState);
     }
 }
