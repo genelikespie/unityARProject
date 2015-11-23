@@ -71,26 +71,31 @@ public class SharedModeMenuState : State {
 
     public override void PlantBomb()
     {
-        if (SMM_PlanterNameInputField.text == "" || SMM_DefuserNameInputField.text == "")
+        // If no name is provided, use these default ones
+        if (SMM_PlanterNameInputField.text == "")
         {
-            // TODO throw a modal panel or some message to the screen/camera
-            return;
+            SMM_PlanterNameInputField.text = "Planter";
+        }
+        if (SMM_DefuserNameInputField.text == "")
+        {
+            SMM_DefuserNameInputField.text = "Defuser";
         }
 
+        // Create the player objects and give them the names and bomb information
 		gameManager.player = new LocalPlayerAdapter(
 			new LocalPlayer(SMM_PlanterNameInputField.text,
 		        	   SMM_DefuserNameInputField.text,
 		           gameManager.getMaxBombLimit()));
 
-
-
-		gameManager.plantTimer = new Timer(45);
-		gameManager.defuseTimer = new Timer(60*gameManager.getMaxBombLimit());
+        // Setup all the timers
+        gameManager.plantTimer = new Timer(0 + 15 * gameManager.getMaxBombLimit());
+		gameManager.defuseTimer = new Timer(0 + 30 * gameManager.getMaxBombLimit());
 		gameManager.passTimer = new Timer(30);
 
+        // Setup the camera
         gameManager.SetAR();
 
-		//Disable SM_Backdrop renderer, enabled camera plane
+		// Disable SM_Backdrop renderer, enabled camera plane
 		smBack.GetComponent<MeshRenderer>().enabled = false;
 		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
 

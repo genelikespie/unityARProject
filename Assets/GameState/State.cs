@@ -45,14 +45,6 @@ public class State : MonoBehaviour{
         gameManager.SetState(gameManager.sharedModeMenuState);
     }
 
-    /*
-     * Not implemented yet
-     */
-    public virtual void ToTutorialMenu()
-    {
-        gameManager.SetState(gameManager.tutorialMenuState);
-    }
-
     public virtual void ToMultiplayerMenu()
     {
 		gameManager.SetState(gameManager.multiplayerMenuState);

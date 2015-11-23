@@ -161,7 +161,7 @@ public class PlantBombState : State {
     {
         isArmingBomb = false;
         string bombName = "UserTarget-" + curBombNum;
-        Debug.LogWarning("Deleting trackable for replant: " + bombName);
+        //Debug.LogWarning("Deleting trackable for replant: " + bombName);
 
         // Delete the trackable object
         userDefinedTargetHandler.DeleteTrackable(bombName);
@@ -176,7 +176,7 @@ public class PlantBombState : State {
     public void ChangeCurBombVisibility(string bombName, bool IsVisible)
     {
         string curBombName = ("UserTarget-" + curBombNum);
-        Debug.LogWarning (" curbombName: " + curBombName + " bombName: " + bombName);
+        //Debug.LogWarning (" curbombName: " + curBombName + " bombName: " + bombName);
         if (bombName == curBombName)
         {
             curBombIsVisible = IsVisible;

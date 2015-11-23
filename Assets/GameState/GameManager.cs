@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
@@ -13,22 +14,15 @@ public class GameManager : MonoBehaviour {
     Vector2 screenSize;
 
     // Camera properties
-    ///////////////////////////////////////////////////////
-    // TODO rename vuforia camera's name
-    ///////////////////////////////////////////////////////
-
     string arCameraName = "ARCamera";
     string vuforiaCameraName = "Camera";
-    string menuCameraName = "MenuCamera";
     private GameObject arCamera; // Camera for the gameObject that hols Vuforia's GUI camera
     private Camera vuforiaCamera; // Camera for Vuforia's GUI
-    private Camera menuCamera; // Camera for menus
 
 	// Can either represent NetworkPlayer or Player.
 	public PlayerAdapter player;
 
 	//Temporary variables for NetworkPlayer initializing.
-
 	[HideInInspector]
 	public string tempDefuserName;
 
@@ -61,13 +55,8 @@ public class GameManager : MonoBehaviour {
     // Derived states
     public MainMenuState mainMenuState { get; private set; }
     public SharedModeMenuState sharedModeMenuState { get; private set; }
-    ///////////////////////////////////////////////////////
-    // TODO multiplayerMenuState
-    ///////////////////////////////////////////////////////
 	public MultiplayerMenuState multiplayerMenuState {get; private set;}
     public MultiplayerLobbyState multiplayerLobbyState { get; private set; }
-    // May need to delete tutorial state
-    public TutorialMenuState tutorialMenuState { get; private set; }
     public PlantBombState plantBombState { get; private set; }
     public PassingState passingState { get; private set; }
     public DefuseState defuseState { get; private set; }
@@ -90,13 +79,16 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for linking the states with their variables
 	void Awake () {
+        // Set exceptions to be raised whenever an Assert statement fails
+        Assert.raiseExceptions = true;
 
 		udtHandler = GameObject.Find ("UserDefinedTargetBuilder")
 			.GetComponent<UserDefinedTargetEventHandler>();
+        Assert.IsNotNull(udtHandler, "Cannot find udtHandler");
+
 
         // Set the timers for each state
 		plantTimer = new Timer(10);
-        // Set the time for arming the bomb
         armBombTimer = new Timer(4);
         defuseTimer = new Timer(10);
 		passTimer = new Timer(10);
@@ -108,24 +100,15 @@ public class GameManager : MonoBehaviour {
         // Find the cameras in the game scene
         arCamera = GameObject.Find(arCameraName);
         vuforiaCamera = GameObject.Find(vuforiaCameraName).GetComponent<Camera>();
-        menuCamera = GameObject.Find(menuCameraName).GetComponent<Camera>();
 
-        if (!arCamera)
-            Debug.LogError("Cannot find" + arCameraName);
-        if (!vuforiaCamera)
-            Debug.LogError("Cannot find: " + vuforiaCameraName);
-        if (!menuCamera)
-            Debug.LogError("Cannot find" + menuCameraName);
+        Assert.IsNotNull(arCamera, "Cannot find" + arCameraName);
+        Assert.IsNotNull(vuforiaCamera, "Cannot find" + vuforiaCameraName);
 
+        // Get references to all states
         mainMenuState = GetComponentInChildren<MainMenuState>();
         sharedModeMenuState = GetComponentInChildren<SharedModeMenuState>();
-        tutorialMenuState = GetComponentInChildren<TutorialMenuState>();
-        ///////////////////////////////////////////////////////
-        // TODO add multiplayer state initialization
-        ///////////////////////////////////////////////////////
 		multiplayerMenuState = GetComponentInChildren<MultiplayerMenuState>();
         multiplayerLobbyState = GetComponentInChildren<MultiplayerLobbyState>();
-
         plantBombState = GetComponentInChildren<PlantBombState>();
         passingState = GetComponentInChildren<PassingState>();
         defuseState = GetComponentInChildren<DefuseState>();
@@ -135,25 +118,17 @@ public class GameManager : MonoBehaviour {
         // Add all of the states to the stateList to keep track of them
         stateList.Add(mainMenuState);
         stateList.Add(sharedModeMenuState);
-        stateList.Add(tutorialMenuState);
-        ///////////////////////////////////////////////////////
-        //// TODO add multiplayer state
-        ///////////////////////////////////////////////////////
 		stateList.Add (multiplayerMenuState);
         stateList.Add(multiplayerLobbyState);
-
         stateList.Add(plantBombState);
         stateList.Add(passingState);
         stateList.Add(defuseState);
         stateList.Add(gameOverState);
 
         // Check if any of the states are null
-        if (!mainMenuState)
-            Debug.LogError("MainMenuState not found!");
         foreach (State s in stateList)
         {
-            if (!s)
-                Debug.LogError("At least one of the states are not found");
+            Assert.IsNotNull(s, "One of the states is NOT FOUND");
         }
     }
 
@@ -189,18 +164,20 @@ public class GameManager : MonoBehaviour {
 	}
 
     public void SetState (State nextState) {
+        Assert.IsNotNull(nextState, "Next State is NULL");
+        Debug.Log("Passing from state " + currentState + " to " + nextState);
         // Change the pivot of the current menu to set it outside of view
         if (currentState)
-            this.currentState.GetComponent<RectTransform>().pivot = closedMenuPivot;
+            currentState.GetComponent<RectTransform>().pivot = closedMenuPivot;
 
         // Initialize the next state
         nextState.Initialize();
 
         // Set the current state to be the next state
-        this.currentState = nextState;
+        currentState = nextState;
 
         // Set the next state to be in view
-        this.currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
+        currentState.GetComponent<RectTransform>().pivot = openMenuPivot;
     }
 
      /* It enables the vuforia GUI and AR camera and its audio listener
@@ -209,26 +186,23 @@ public class GameManager : MonoBehaviour {
     {
         arCamera.GetComponent<AudioListener>().enabled = true;
         vuforiaCamera.enabled = true;
-        //menuCamera.enabled = false;
-        //menuCamera.GetComponent<AudioListener>().enabled = false;
     }
 
 	public void CreateBombTarget() {
-        if (udtHandler != null)
-        {
-            udtHandler.CreateTarget();
-            //bombsPlanted++;
-        }
-        else
-            Debug.Log("Could not create new target. UDT Event Handler variable not set in GameManager.");
+        Assert.IsNotNull(udtHandler, "Could not create new target. UDT Event Handler variable not set in GameManager.");
+        udtHandler.CreateTarget();
 	}
 
     public void ResetGame()
     {
+        
         udtHandler.ReInitialize();
         player.setLocalBombsDefused(0);
         player.setLocalBombsPlanted(0);
-		//TODO: If we implement a scoring system, reset that here too.
+        /////////////////////////////////////////////////////////////////
+		/// TODO: If we implement a scoring system, reset that here too.
+        /////////////////////////////////////////////////////////////////
+
     }
 
 	// Attempts to defuse one bomb on the screen.
@@ -243,11 +217,11 @@ public class GameManager : MonoBehaviour {
 			string name = tb.TrackableName;
 			
 			GameObject target = GameObject.Find(name);
-			if (!target)
-				Debug.Log("Can't find " + name);
+            Assert.IsNotNull(target, "Can't find target of " + name);
+
 			Transform child = target.transform.GetChild(0);
-			if (!child)
-				Debug.Log("Can't find child of " + name);
+            Assert.IsNotNull(child, "Can't find child of " + name);
+
 			if (!child.GetComponent<Renderer>().sharedMaterial.Equals(DefuseMaterial))
 			{
 				//defuse only 1 bomb at each press on Defuse button

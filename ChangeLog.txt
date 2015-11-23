@@ -1,17 +1,15 @@
-Added an armBombTimer for arming the bomb
-    + 4 seconds to arm the bomb
-    
-Added ArmBomb function for attempted bomb plants (because the bomb plant may fail)
-    + Removed bomb arming functionality in OnTappedOnNewTargetButton and put it in ArmBomb
-    
-Added new UI Elements into PlantBombState
-    + PB_ArmTimeLeftText
-    + PB_ReplantBomb
-    
-Changed max targets in view to 3
+Testing assert statements
+    + using UnityEngine.Assertions
+    + Whenever an Assert fails, we raise an exception
+    + replaced a lot of (!object) Debug.LogError statements
 
-Added a function in UserDefinedTargetEventHandler
-    + DeleteTrackable() function for deleting bombs for replanting
+Edited GameManager
+    + Cleaned up comments
+    + Removed TutorialState from GameManager
+    + Removed some functionaility that is deprecated (like menuCamera)
+
+Changed the plant/defuse bomb timers
+    + plant time = 30 + 15 * gameManager.getMaxBombLimit()
+    + defuse time = 30 + 30 * gameManager.getMaxBombLimit()
     
-Changed DisplayWinner() in GameOverState to include lose condition for when the planter doesn't plant the bomb(s) in time
-    - BUG: displays two lose/win messages one after another even if defuser wins
+Default player names are now given for shared mode
