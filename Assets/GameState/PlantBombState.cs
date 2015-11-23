@@ -68,6 +68,13 @@ public class PlantBombState : State {
         PB_HintField2.gameObject.SetActive(false);
         PB_HintField3.gameObject.SetActive(false);
         PB_HideHints.gameObject.SetActive(false);
+        gameManager.hint = "";
+        gameManager.hint2 = "";
+        gameManager.hint3 = "";
+        PB_HintField.text = "";
+        PB_HintField2.text = "";
+        PB_HintField3.text = "";
+        PB_InsertHints.gameObject.SetActive(true);
 
         gameManager.plantTimer.StartTimer();
         // Deactivate arming bomb logic
@@ -232,7 +239,7 @@ public class PlantBombState : State {
 
 	public override void PassPhone()
 	{
-		gameManager.hint = PB_HintField.text;
+        gameManager.hint = PB_HintField.text;
         gameManager.hint2 = PB_HintField2.text;
         gameManager.hint3 = PB_HintField3.text;
         gameManager.plantTimer.StopTimer();

@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour {
 	public string hint;
     public string hint2;
     public string hint3;
-    public int displayHintCount;
+
 
     // Timer for each state
     public Timer plantTimer;

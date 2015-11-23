@@ -14,6 +14,13 @@ public class DefuseState : State
     Button D_DefuseBombButton;
     Text D_Waiting;
 
+    //cover Hint Checks 
+    bool NextHint1;
+    bool NextHint2;
+    bool DoOnce1;
+    bool DoOnce2;
+    public int displayHintCount;
+
     //Bomb Texture
     //GameObject[] bombs;
     //public Material DefuseMaterial;
@@ -61,10 +68,14 @@ public class DefuseState : State
         // Set the defuse button to be false
         // Activate it when the bomb is in view
         D_DefuseBombButton.gameObject.SetActive(false);
-        gameManager.displayHintCount = 0;
+        displayHintCount = 0;
         D_HintLeftBehind.gameObject.SetActive(false);
         D_HintLeftBehind2.gameObject.SetActive(false);
         D_HintLeftBehind3.gameObject.SetActive(false);
+        NextHint1 = false;
+        NextHint2 = false;
+        DoOnce1 = false;
+        DoOnce2 = false;
         gameManager.defuseTimer.StartTimer();
         D_Waiting.gameObject.SetActive(false);
 
@@ -128,23 +139,41 @@ public class DefuseState : State
     }
 
     public void HintButton() {
+
+        if (gameManager.hint2 == "" && gameManager.hint3 != "" && NextHint2 == false && (displayHintCount >= 1 || gameManager.hint == ""))
+        {
+            NextHint2 = true;
+            displayHintCount++;
+        }
+
+        if (gameManager.hint == "" && (gameManager.hint2 != "" || gameManager.hint3 != "") && NextHint1 == false)
+        {
+            NextHint1 = true;
+            displayHintCount++; 
+        }
+
         //update the hint if something was left        
-        if (gameManager.hint3 != "" && gameManager.displayHintCount >= 2)
+        if (gameManager.hint3 != "" && displayHintCount >= 2)
         {
-            D_HintLeftBehind3.text = "Hint 3: " + gameManager.hint3;
+            print("DEBUG");
+            D_HintLeftBehind3.text = "Hint: " + gameManager.hint3;
             D_HintLeftBehind3.gameObject.SetActive(true);
+            displayHintCount++;
         }
-        if (gameManager.hint2 != "" && gameManager.displayHintCount >= 1)
+        if (gameManager.hint2 != "" && displayHintCount >= 1 && DoOnce2 == false)
         {
-            D_HintLeftBehind2.text = "Hint 2: " + gameManager.hint2;
+            DoOnce2 = true;
+            D_HintLeftBehind2.text = "Hint: " + gameManager.hint2;
             D_HintLeftBehind2.gameObject.SetActive(true);
-            gameManager.displayHintCount++;
+            displayHintCount++;
+
         }
-        if (gameManager.hint != "")
+        if (gameManager.hint != "" && DoOnce1 == false)
         {
-            D_HintLeftBehind.text = "Hint 1: " + gameManager.hint;
+            DoOnce1 = true;
+            D_HintLeftBehind.text = "Hint: " + gameManager.hint;
             D_HintLeftBehind.gameObject.SetActive(true);
-            gameManager.displayHintCount++;
+            displayHintCount++;
         }
 
 
