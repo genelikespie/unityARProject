@@ -23,7 +23,7 @@ public class DefuseState : State
     bool NextHint2;
     bool DoOnce1;
     bool DoOnce2;
-    int displayHintCount;
+    public int displayHintCount;
 
     //Bomb Texture
     //GameObject[] bombs;
