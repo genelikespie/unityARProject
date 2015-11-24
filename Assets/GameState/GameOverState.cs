@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Vuforia;
 using UnityEngine.Networking;
+using UnityEngine.Assertions;
 
 public class GameOverState : State
 {
@@ -13,6 +14,7 @@ public class GameOverState : State
     // Use this for initialization
     protected virtual void Awake()
     {
+        Assert.raiseExceptions = true;
         explosion = GameObject.Find("explosion");
         explosion.SetActive(false);
         goBack = GameObject.Find("GO_Backdrop");
@@ -25,14 +27,18 @@ public class GameOverState : State
         QuitButton = GameObject.Find("QuitButton").GetComponent<Button>();
         DisplayWinner = GameObject.Find("DisplayWinner").GetComponent<Text>();
 
-        if (!QuitButton)
-            Debug.LogError("QuitButton");
+        //check if quit button is null
+        Assert.IsNotNull(QuitButton);
+        //if (!QuitButton)
+        //    Debug.LogError("QuitButton");
     }
 
     public override void Initialize()
     {
-        if (!gameManager)
-            Debug.LogError("Cant find game manager");
+        //if (!gameManager)
+            //Debug.LogError("Cant find game manager");
+        //Checks if game manager is null
+        Assert.IsNotNull(gameManager, "Cant find game manager");
 
         if (goBack != null)
         {

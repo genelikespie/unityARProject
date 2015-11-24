@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Assertions;
 
 public class DefuseState : State
 {
@@ -37,6 +38,8 @@ public class DefuseState : State
     {
         base.Awake();
 
+        Assert.raiseExceptions = true;
+
         // Find all UI elements in the scene
         D_TimeLeftText = GameObject.Find("D_TimeLeftText").GetComponent<Text>();
         D_DefuseBombButton = GameObject.Find("D_DefuseBombButton").GetComponent<Button>();
@@ -48,18 +51,12 @@ public class DefuseState : State
         //find bomb tag
         //bombs = GameObject.FindGameObjectsWithTag("Bomb");
 
-        if (!D_TimeLeftText)
-            Debug.LogError("D_TimeLeftText");
-        if (!D_DefuseBombButton)
-            Debug.LogError("D_DefuseBombButton");
-        if (!D_HintLeftBehind)
-            Debug.LogError("D_HintLeftBehind");
-        if (!D_HintLeftBehind2)
-            Debug.LogError("D_HintLeftBehind2");
-        if (!D_HintLeftBehind3)
-            Debug.LogError("D_HintLeftBehind3");
-        if (!D_Waiting)
-            Debug.LogError("D_Waiting");
+        Assert.IsNotNull(D_TimeLeftText, "D_TimeLeftText not found");
+        Assert.IsNotNull(D_DefuseBombButton, "D_DefuseBombButton not found");
+        Assert.IsNotNull(D_HintLeftBehind, "D_HintLeftBehind not found");
+        Assert.IsNotNull(D_HintLeftBehind2, "D_HintLeftBehind2 not found");
+        Assert.IsNotNull(D_HintLeftBehind3, "D_HintLeftBehind3 not found");
+        Assert.IsNotNull(D_Waiting, "D_Waiting not found");
     }
 
     public override void Initialize()
@@ -78,7 +75,8 @@ public class DefuseState : State
         DoOnce2 = false;
         gameManager.defuseTimer.StartTimer();
         D_Waiting.gameObject.SetActive(false);
-
+        //check if gameManager is not null
+        Assert.IsNotNull(gameManager, "Cant find game manager");
     }
 
     public override void RunState()
@@ -108,6 +106,8 @@ public class DefuseState : State
 
         if (!player.isAllLocalBombsDefused())
         {
+            //check if the player fails to defuse all bombs
+            Assert.AreNotEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
             if (gameManager.defuseTimer.TimedOut())
             {
                 base.TimeExpired();
@@ -115,6 +115,8 @@ public class DefuseState : State
         }
         else if (!player.isAllGlobalBombsDefused())
         {
+            //check if the player fails to defuse all bombs
+            Assert.AreNotEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
             D_Waiting.gameObject.SetActive(true);
             if (player.getPlayerOneWins())
             {
@@ -124,6 +126,8 @@ public class DefuseState : State
         }
         else
         {
+            //check if the player successfully defuses all bombs
+            Assert.AreEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
             gameManager.defuseTimer.StopTimer();
             /////////////////////////////////////////////////
             // TODO implement game over functionality
