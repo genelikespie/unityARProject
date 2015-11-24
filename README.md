@@ -31,7 +31,7 @@ TO RUN AUTOMATED TESTS:
 12. On the toolbar at the top of the editor, open Unit Test Tools->Unit Test Runner
 13. Run the game (click the play button)
 14. In the Unit Test Runner window, right click MyTests->RunTest, and run the test (game must be running)
-  * NOTE: All tests run as coroutines, therefore, the Unit Test window cannot return failures. Test failures will print to the console instead!!
+  * NOTE: All tests run as coroutines, therefore, the Unit Test window cannot return failures. **Test failures will print to the console instead!**
 
 TO EDIT GAME:
 
