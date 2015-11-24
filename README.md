@@ -8,9 +8,9 @@
 5. Go to Cs130 project on github and install vuforia unity 5-0-6.unitypackage 
       or download unity 5-0-6 unity package on vuforia.com 
 
-TO PLAYTEST GAME:
+TO PLAYTEST GAME IN EDITOR:
 
-6. open the latest scene: Assets/Scenes/genes_playground
+6. Open the latest scene: Assets/Scenes/genes_playground
       (this will have a little Unity symbol to the left of the file name)
 7. Once the scene is done loading into the Unity Editor, hit the play button at the top.
       NOTE: You must have a webcam installed for the game to work.
@@ -19,6 +19,18 @@ TO DEPLOY THE GAME IN ANDROID:
 
 8. Under File->Build Settings choose Android as the Platform and click Build
 9. Install the apk file in your phone
+
+      
+TO RUN AUTOMATED TESTS:
+
+10. Download the "unity test tools" from the Asset store
+      a) In the Editor, go to Window->Asset Store
+      b) Search for "unity test tools"
+      c) download (you need to log in to your unity account) and import the package
+11. Our test script is in: Asset/Editor/MyTest.cs
+12. 
+      
+11. 
 
 TO EDIT GAME:
 

@@ -14,10 +14,21 @@ namespace UnityTest
     {
         [Test]
         [Category("Failing Tests")]
-        public void SharedModeTest()
+        public void RunTest()
         {
+            Debug.Log("Running Failing Tests, All failures should return an error");
+            Debug.Log("All unit tests should return positive (since we are running in a coroutine)");
+
             GameManager gameManager = GameManager.Instance();
             Assert.That(gameManager != null);
+            gameManager.StartCoroutine(SharedModeTest());
+        }
+        IEnumerator SharedModeTest()
+        {
+            Debug.Log("Running SharedModeTest: Defuser wins");
+            GameManager gameManager = GameManager.Instance();
+            Assert.That(gameManager != null);
+            Assert.That(gameManager.mainMenuState != null);
             Assert.That(gameManager.currentState == gameManager.mainMenuState);
             gameManager.mainMenuState.ToSharedModeMenu();
             Assert.That(gameManager.currentState == gameManager.sharedModeMenuState);
@@ -26,14 +37,23 @@ namespace UnityTest
             gameManager.sharedModeMenuState.PlantBomb();
             Assert.That(gameManager.currentState == gameManager.plantBombState);
             gameManager.plantBombState.ArmBomb();
+
+            // Wait for bomb to plant
+            yield return new WaitForSeconds(6f);
+
             gameManager.plantBombState.PassPhone();
             Assert.That(gameManager.currentState == gameManager.passingState);
             gameManager.passingState.DefuseBomb();
             Assert.That(gameManager.currentState == gameManager.defuseState);
             gameManager.defuseState.AllBombsDefused();
-            Assert.That(gameManager.currentState == gameManager.gameOverState);
-            Assert.That(gameManager.player.getPlayerOneWins());
-        }
 
+            // Wait for the other coroutine in DefuseState
+            yield return new WaitForSeconds(60f);
+
+            Assert.That(gameManager.currentState == gameManager.gameOverState);
+            Assert.That(!gameManager.player.getPlayerOneWins());
+            gameManager.currentState.ToMainMenu();
+            Debug.Log("Finished SharedModeTest: Defuser wins");
+        }
     }
 }

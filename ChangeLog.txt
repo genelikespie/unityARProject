@@ -1,15 +1,15 @@
-Testing assert statements
-    + using UnityEngine.Assertions
-    + Whenever an Assert fails, we raise an exception
-    + replaced a lot of (!object) Debug.LogError statements
+Merged with Jason_Testing_Assert
+Merged with testing (Kainan's test cases)
+    + Test cases is under Assets/Editor/MyTests.cs
 
-Edited GameManager
-    + Cleaned up comments
-    + Removed TutorialState from GameManager
-    + Removed some functionaility that is deprecated (like menuCamera)
-
-Changed the plant/defuse bomb timers
-    + plant time = 30 + 15 * gameManager.getMaxBombLimit()
-    + defuse time = 30 + 30 * gameManager.getMaxBombLimit()
+Added Test Cases
+    + All tests run as coroutines, therefore, the automated unit test checker may return false positives
+    + Test failures will print to the console instead!!
+    + To run tests, open up Unit Test Tools->Unit Test runner
+        + Run the game (click the play button)
+        + Right Click MyTests->RunTest, and run the test (game must be running)
     
-Default player names are now given for shared mode
+Changed folder arrangement
+    + ALL GameStates are now under Assets/Scripts/GameStates
+    + Timer is now under Assets/Scripts/GameClasses
+    + Vuforia scripts Assets/originally under Scripts is now under Scripts/VuforiaScripts
