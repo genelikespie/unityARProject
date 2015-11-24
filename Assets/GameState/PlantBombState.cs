@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
@@ -116,6 +117,18 @@ public class PlantBombState : State {
         isArmingBomb = false;
 
 		//Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
+
+		Assert.IsNotNull<string>(player.getDefuserName());
+		Assert.AreEqual(0, player.getLocalBombsDefused());
+		Assert.AreEqual(0, player.getLocalBombsPlanted());
+		Assert.AreNotEqual(0, player.getMaxLocalBombs());
+		Assert.IsNotNull<string>(player.getPlanterName());
+		Assert.IsFalse(player.isAllGlobalBombsDefused());
+		Assert.IsFalse(player.isAllGlobalBombsPlanted());
+		Assert.IsFalse(player.isAllLocalBombsDefused());
+		Assert.IsFalse(player.isAllLocalBombsPlanted());
+		Assert.IsFalse(player.isAllPassReady());
+		Assert.IsFalse(player.isPassReady());
     }
 
     // Update the timer to plant the bomb
