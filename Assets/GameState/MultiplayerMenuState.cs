@@ -86,9 +86,9 @@ public class MultiplayerMenuState : State {
         //Make sure the name of the game isn't null
         Assert.AreNotEqual(roomName, "");
         //Make sure the name of the planter isn't null
-        Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+        //Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
         //Make sure the name of the defuser isn't null
-        Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+        //Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
         uint roomSize = 8;
         NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
         Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
@@ -114,9 +114,9 @@ public class MultiplayerMenuState : State {
         //Make sure the name of the game isn't null
         Assert.AreNotEqual(roomName, "");
         //Make sure the name of the planter isn't null
-        Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+        //Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
         //Make sure the name of the defuser isn't null
-        Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+        //Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
 
         NetworkManager manager = NetworkManager.singleton;
 
