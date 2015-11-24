@@ -127,8 +127,6 @@ public class PlantBombState : State {
 		Assert.IsFalse(player.isAllGlobalBombsPlanted());
 		Assert.IsFalse(player.isAllLocalBombsDefused());
 		Assert.IsFalse(player.isAllLocalBombsPlanted());
-		Assert.IsFalse(player.isAllPassReady());
-		Assert.IsFalse(player.isPassReady());
     }
 
     // Update the timer to plant the bomb

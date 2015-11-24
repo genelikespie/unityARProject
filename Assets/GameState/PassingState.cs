@@ -43,8 +43,6 @@ public class PassingState : State {
 		Assert.IsTrue(player.isAllGlobalBombsPlanted());
 		Assert.IsFalse(player.isAllLocalBombsDefused());
 		Assert.IsTrue(player.isAllLocalBombsPlanted());
-		Assert.IsFalse(player.isAllPassReady());
-		Assert.IsFalse(player.isPassReady());
 	}
 
     public override void RunState()
