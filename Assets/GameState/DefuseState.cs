@@ -14,13 +14,17 @@ public class DefuseState : State
     Text D_HintLeftBehind3;
     Button D_DefuseBombButton;
     Text D_Waiting;
+    Button D_Tutorial;
+
+    // Is the tutorial box checked?
+    bool tutorialToggleOn;
 
     //cover Hint Checks 
     bool NextHint1;
     bool NextHint2;
     bool DoOnce1;
     bool DoOnce2;
-    int displayHintCount;
+    public int displayHintCount;
 
     //Bomb Texture
     //GameObject[] bombs;
@@ -47,6 +51,7 @@ public class DefuseState : State
         D_HintLeftBehind2 = GameObject.Find("D_HintLeftBehind2").GetComponent<Text>();
         D_HintLeftBehind3 = GameObject.Find("D_HintLeftBehind3").GetComponent<Text>();
         D_Waiting = GameObject.Find("D_Waiting").GetComponent<Text>();
+        D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
 
         //find bomb tag
         //bombs = GameObject.FindGameObjectsWithTag("Bomb");
@@ -69,18 +74,40 @@ public class DefuseState : State
         D_HintLeftBehind.gameObject.SetActive(false);
         D_HintLeftBehind2.gameObject.SetActive(false);
         D_HintLeftBehind3.gameObject.SetActive(false);
-        NextHint1 = false;
-        NextHint2 = false;
-        DoOnce1 = false;
-        DoOnce2 = false;
         gameManager.defuseTimer.StartTimer();
         D_Waiting.gameObject.SetActive(false);
+
         //check if gameManager is not null
         Assert.IsNotNull(gameManager, "Cant find game manager");
+
+        // init tutorialToggleOn before update()
+        tutorialToggleOn = gameManager.tutorialToggleOn;
+        if (tutorialToggleOn)
+        {
+            D_Tutorial.gameObject.SetActive(true);
+        }
+        else
+        {
+            D_Tutorial.gameObject.SetActive(false);
+        }
+
+    }
+
+    // Need to check if tutorial is TRUE even after everything is initialized b/c can be set during runtime
+    public void Update()
+    {
+        //Display tutorial if tutorial toggle is checked
+        tutorialToggleOn = gameManager.tutorialToggleOn;
+        Debug.Log("tutorialToggleOn in PlantBombState: " + tutorialToggleOn);
     }
 
     public override void RunState()
     {
+
+        //update the hint if something was left
+        if (gameManager.hint != "")
+            D_HintLeftBehind.text = "Hint: " + gameManager.hint;
+
 
         // Update the timer UI
         D_TimeLeftText.text = string.Format("{0:N1}", gameManager.defuseTimer.timeLeft);
@@ -93,10 +120,18 @@ public class DefuseState : State
         if (gameManager.bombVisible)
         {
             D_DefuseBombButton.gameObject.SetActive(true);
+            if (tutorialToggleOn)
+            {
+                D_Tutorial.gameObject.SetActive(false);
+            }
         }
         else
         {
             D_DefuseBombButton.gameObject.SetActive(false);
+            if (tutorialToggleOn)
+            {
+                D_Tutorial.gameObject.SetActive(true);
+            }
         }
 
         // If time runs out and we have not defused the bomb, defuser loses
@@ -142,6 +177,7 @@ public class DefuseState : State
         }
     }
 
+
     public void HintButton() {
 
         if (gameManager.hint2 == "" && gameManager.hint3 != "" && NextHint2 == false && (displayHintCount >= 1 || gameManager.hint == ""))
@@ -159,6 +195,7 @@ public class DefuseState : State
         //update the hint if something was left        
         if (gameManager.hint3 != "" && displayHintCount >= 2)
         {
+            print("DEBUG");
             D_HintLeftBehind3.text = "Hint: " + gameManager.hint3;
             D_HintLeftBehind3.gameObject.SetActive(true);
             displayHintCount++;

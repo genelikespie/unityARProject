@@ -39,7 +39,9 @@ public class MultiplayerLobbyState : State {
         {
             mmsBack.GetComponent<MeshRenderer>().enabled = false;
         }
-	}
+        MLS_PlayerJoinedCount = GameObject.Find("MLS_PlayerJoinedCount").GetComponent<Text>();
+        MLS_PlayerReadyCount = GameObject.Find("MLS_PlayerReadyCount").GetComponent<Text>();
+    }
 
 	/* Reset the UI
      */
@@ -54,15 +56,15 @@ public class MultiplayerLobbyState : State {
         {
             mmsBack.GetComponent<MeshRenderer>().enabled = true;
         }
-	}
+        MLS_PlayerJoinedCount.text = "Loading...";
+        MLS_PlayerReadyCount.text = "";
+    }
 
     NetworkPlayer[] playerList = null;
 
     public override void RunState()
     {
         base.RunState();
-        MLS_PlayerJoinedCount = GameObject.Find("MLS_PlayerJoinedCount").GetComponent<Text>();
-        MLS_PlayerReadyCount = GameObject.Find("MLS_PlayerReadyCount").GetComponent<Text>();
         playerList = GameObject.FindObjectsOfType<NetworkPlayer>();
         if (playerList.Length == 0)
         {

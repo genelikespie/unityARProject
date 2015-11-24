@@ -88,7 +88,7 @@ public class SharedModeMenuState : State {
 		           gameManager.getMaxBombLimit()));
 
         // Setup all the timers
-        gameManager.plantTimer = new Timer(0 + 15 * gameManager.getMaxBombLimit());
+        gameManager.plantTimer = new Timer(15 + 15 * gameManager.getMaxBombLimit());
 		gameManager.defuseTimer = new Timer(0 + 30 * gameManager.getMaxBombLimit());
 		gameManager.passTimer = new Timer(30);
 
