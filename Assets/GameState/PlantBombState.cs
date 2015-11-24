@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
@@ -54,6 +55,11 @@ public class PlantBombState : State {
         PB_ArmTimeLeftText = GameObject.Find("PB_ArmTimeLeftText").GetComponent<Text>();
         PB_ReplantBomb = GameObject.Find("PB_ReplantBomb").GetComponent<Button>();
         userDefinedTargetHandler = GameObject.Find("UserDefinedTargetBuilder").GetComponent<UserDefinedTargetEventHandler>();
+
+        Assert.IsNotNull(PB_MenuTitle, "Cannot find PB_MenuTitle");
+        Assert.IsNotNull(PB_TimeLeftText, "Cannot find PB_TimeLeftText");
+        Assert.IsNotNull(PB_PassPhoneButton, "Cannot find PB_PassPhoneButton");
+        Assert.IsNotNull(PB_HintField, "Cannot find PB_HintField");    
     }
 
     public override void Initialize()

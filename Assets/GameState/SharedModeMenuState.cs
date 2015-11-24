@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,6 +17,12 @@ public class SharedModeMenuState : State {
 
 	GameObject smBack;
 
+    public float basePlantTime;
+    public float plantTimePerBomb;
+    public float baseDefuseTime;
+    public float defuseTimePerBomb;
+    public float passTime;
+
     protected virtual void Awake()
     {
         // Call the base class's function to initialize all variables
@@ -29,26 +36,20 @@ public class SharedModeMenuState : State {
         SMM_PlayButton = GameObject.Find("SMM_PlayButton").GetComponent<Button>();
         SMM_NumOfBombsSlider = GameObject.Find("SMM_NumOfBombsSlider").GetComponent<Slider>();
         SMM_NumOfBombsText = GameObject.Find("SMM_NumOfBombsText").GetComponent<Text>();
-        if (!SMM_PlanterNameInputField)
-            Debug.LogError("SMM_PlanterNameInputField");
-        if (!SMM_DefuserNameInputField)
-            Debug.LogError("SMM_DefuserNameInputField");
-        if (!SMM_TutorialToggle)
-            Debug.LogError("SMM_TutorialToggle");
-        if (!SMM_BackButton)
-            Debug.LogError("SMM_BackButton");
-        if (!SMM_PlayButton)
-            Debug.LogError("SMM_PlayButton");
-        if (!SMM_NumOfBombsSlider)
-            Debug.LogError("SMM_NumOfBombsSlider");
-        if (!SMM_NumOfBombsText)
-            Debug.LogError("SMM_NumOfBombsText");
 
-        if (!gameManager)
-            Debug.LogError("AWAKE: CANT find game manager in base");
+        // Get SM_Backdrop and disable renderer
+        smBack = GameObject.Find("SM_Backdrop");
 
-		// Get SM_Backdrop and disable renderer
-		smBack = GameObject.Find("SM_Backdrop");
+        Assert.IsNotNull(SMM_PlanterNameInputField, "Cannot find SMM_BackButton");
+        Assert.IsNotNull(SMM_PlanterNameInputField, "Cannot find SMM_BackButton");
+        Assert.IsNotNull(SMM_TutorialToggle, "Cannot find SMM_BackButton");
+        Assert.IsNotNull(SMM_BackButton, "Cannot find SMM_BackButton");
+        Assert.IsNotNull(SMM_PlayButton, "Cannot find SMM_PlayButton");
+        Assert.IsNotNull(SMM_NumOfBombsSlider, "Cannot find SMM_NumOfBombsSlider");
+        Assert.IsNotNull(SMM_NumOfBombsText, "Cannot find SMM_NumOfBombsText");
+        Assert.IsNotNull(gameManager, "Cannot find game manager");
+        Assert.IsNotNull(smBack, "Cannot find smBack");
+
 		smBack.GetComponent<MeshRenderer>().enabled = false;
     }
 
@@ -61,7 +62,10 @@ public class SharedModeMenuState : State {
 
 		// Enable SM_Backdrop renderer
 		smBack.GetComponent<MeshRenderer>().enabled = true;
-        gameManager.SetNumOfBombs((int)SMM_NumOfBombsSlider.value);
+
+        int sliderValue = (int)SMM_NumOfBombsSlider.value;
+        Assert.IsTrue(sliderValue >= 1);
+        gameManager.SetNumOfBombs(sliderValue);
     }
 
     public override void RunState()
@@ -88,16 +92,19 @@ public class SharedModeMenuState : State {
 		           gameManager.getMaxBombLimit()));
 
         // Setup all the timers
-        gameManager.plantTimer = new Timer(0 + 15 * gameManager.getMaxBombLimit());
-		gameManager.defuseTimer = new Timer(0 + 30 * gameManager.getMaxBombLimit());
-		gameManager.passTimer = new Timer(30);
+        gameManager.plantTimer = new Timer(basePlantTime + plantTimePerBomb * gameManager.getMaxBombLimit());
+		gameManager.defuseTimer = new Timer(baseDefuseTime + defuseTimePerBomb * gameManager.getMaxBombLimit());
+		gameManager.passTimer = new Timer(passTime);
 
         // Setup the camera
         gameManager.SetAR();
 
 		// Disable SM_Backdrop renderer, enabled camera plane
 		smBack.GetComponent<MeshRenderer>().enabled = false;
-		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
+        MeshRenderer backgroundPlantMeshRender = GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>();
+        
+        Assert.IsNotNull(backgroundPlantMeshRender, "Cannot find BackgroundPlane");
+        backgroundPlantMeshRender.enabled = true;
 
         gameManager.SetState(gameManager.plantBombState);
     }
@@ -105,6 +112,8 @@ public class SharedModeMenuState : State {
     
     public void OnValueChanged()
     {
+        int sliderValue = (int)SMM_NumOfBombsSlider.value;
+        Assert.IsTrue(sliderValue >= 1);
         gameManager.SetNumOfBombs((int)SMM_NumOfBombsSlider.value);
     }
     
