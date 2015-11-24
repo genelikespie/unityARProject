@@ -28,9 +28,10 @@ TO RUN AUTOMATED TESTS:
       b) Search for "unity test tools"
       c) download (you need to log in to your unity account) and import the package
 11. Our test script is in: Asset/Editor/MyTest.cs
-12. 
-      
-11. 
+12. On the toolbar at the top of the editor, open Unit Test Tools->Unit Test Runner
+13. Run the game (click the play button)
+14. In the Unit Test Runner window, right click MyTests->RunTest, and run the test (game must be running)
+    NOTE: All tests run as coroutines, therefore, the Unit Test window cannot return failures. Test failures will print to the console instead!!
 
 TO EDIT GAME:
 
