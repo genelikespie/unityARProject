@@ -44,7 +44,6 @@ public class GameOverState : State
     {
         //Debug.Log("GameManager " + gameManager.name);
         //Debug.Log("MainMenuState " + gameManager.mainMenuState.name);
-        NetworkManager.singleton.StopHost();
         gameManager.SetState(gameManager.mainMenuState);
         gameManager.ResetGame();
 

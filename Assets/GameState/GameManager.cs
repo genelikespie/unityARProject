@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
+using UnityEngine.Networking;
 
 /* The GameManager class manages all the game states
  */
@@ -247,7 +248,11 @@ public class GameManager : MonoBehaviour {
         udtHandler.ReInitialize();
         player.setLocalBombsDefused(0);
         player.setLocalBombsPlanted(0);
-		//TODO: If we implement a scoring system, reset that here too.
+        if (player.isMultiplayer())
+        {
+            NetworkManager.singleton.StopHost();
+        }
+        //TODO: If we implement a scoring system, reset that here too.
     }
 
 	// Attempts to defuse one bomb on the screen.
