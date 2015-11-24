@@ -12,14 +12,19 @@ public class PlantBombState : State {
     Text PB_TimeLeftText;
     Button PB_PassPhoneButton;
     InputField PB_HintField;
-    InputField PB_HintField2;
-    InputField PB_HintField3;
-    Button PB_PlantBomb;
-    Button PB_InsertHints;
-    Button PB_HideHints;
-    Text PB_Waiting;
+	Button PB_PlantBomb;
+	Text PB_Waiting;
     Text PB_ArmTimeLeftText;
     Button PB_ReplantBomb;
+    Button PB_TutorialPlant;
+    Button PB_TutorialReplant;
+    InputField PB_HintField2;
+    InputField PB_HintField3;
+    Button PB_InsertHints;
+    Button PB_HideHints;
+
+    // Is the tutorial box checked?
+    bool tutorialToggleOn;
 
     // Get a reference to the UDTH to get trackables (for deletion)
     UserDefinedTargetEventHandler userDefinedTargetHandler;
@@ -54,12 +59,23 @@ public class PlantBombState : State {
 		PB_Waiting = GameObject.Find ("PB_Waiting").GetComponent<Text>();
         PB_ArmTimeLeftText = GameObject.Find("PB_ArmTimeLeftText").GetComponent<Text>();
         PB_ReplantBomb = GameObject.Find("PB_ReplantBomb").GetComponent<Button>();
+        PB_TutorialPlant = GameObject.Find("PB_TutorialPlant").GetComponent<Button>();
+        PB_TutorialReplant = GameObject.Find("PB_TutorialReplant").GetComponent<Button>();
+
         userDefinedTargetHandler = GameObject.Find("UserDefinedTargetBuilder").GetComponent<UserDefinedTargetEventHandler>();
 
         Assert.IsNotNull(PB_MenuTitle, "Cannot find PB_MenuTitle");
         Assert.IsNotNull(PB_TimeLeftText, "Cannot find PB_TimeLeftText");
         Assert.IsNotNull(PB_PassPhoneButton, "Cannot find PB_PassPhoneButton");
         Assert.IsNotNull(PB_HintField, "Cannot find PB_HintField");    
+    }
+
+    // Need to check if tutorial is TRUE even after everything is initialized b/c can be set during runtime
+    public void Update()
+    {
+        //Display tutorial if tutorial toggle is checked
+        tutorialToggleOn = gameManager.tutorialToggleOn;
+        Debug.Log("tutorialToggleOn in PlantBombState: " + tutorialToggleOn);
     }
 
     public override void Initialize()
@@ -69,18 +85,29 @@ public class PlantBombState : State {
 		PB_PlantBomb.gameObject.SetActive(true);
 		PB_Waiting.gameObject.SetActive(false);
 
+        // init tutorialToggleOn before update()
+        tutorialToggleOn = gameManager.tutorialToggleOn;
+        if (tutorialToggleOn && PB_TutorialPlant != null && PB_ReplantBomb != null)
+        {
+            PB_TutorialPlant.gameObject.SetActive(true);
+            PB_TutorialReplant.gameObject.SetActive(false);
+            //Debug.Log("PB_TutorialPlant is TRUE");
+        }
+        else
+        {
+            if (PB_TutorialPlant != null && PB_ReplantBomb != null)
+            {
+                PB_TutorialPlant.gameObject.SetActive(false);
+                PB_TutorialReplant.gameObject.SetActive(false);
+                //Debug.Log("PB_TutorialPlant is FALSE");
+            }
+        }
+
         //Don't Display the hints until button press
         PB_HintField.gameObject.SetActive(false);
         PB_HintField2.gameObject.SetActive(false);
         PB_HintField3.gameObject.SetActive(false);
         PB_HideHints.gameObject.SetActive(false);
-        gameManager.hint = "";
-        gameManager.hint2 = "";
-        gameManager.hint3 = "";
-        PB_HintField.text = "";
-        PB_HintField2.text = "";
-        PB_HintField3.text = "";
-        PB_InsertHints.gameObject.SetActive(true);
 
         gameManager.plantTimer.StartTimer();
         // Deactivate arming bomb logic
@@ -95,6 +122,16 @@ public class PlantBombState : State {
         isArmingBomb = false;
 
 		//Debug.Log("time to plant: " + timeToPlant + " time start: " + timeStart + " time end: " + timeEnd + " timetodefuse: " + gameManager.timeToDefuse);
+
+		Assert.IsNotNull<string>(player.getDefuserName());
+		Assert.AreEqual(0, player.getLocalBombsDefused());
+		Assert.AreEqual(0, player.getLocalBombsPlanted());
+		Assert.AreNotEqual(0, player.getMaxLocalBombs());
+		Assert.IsNotNull<string>(player.getPlanterName());
+		Assert.IsFalse(player.isAllGlobalBombsDefused());
+		Assert.IsFalse(player.isAllGlobalBombsPlanted());
+		Assert.IsFalse(player.isAllLocalBombsDefused());
+		Assert.IsFalse(player.isAllLocalBombsPlanted());
     }
 
     // Update the timer to plant the bomb
@@ -136,7 +173,7 @@ public class PlantBombState : State {
 			PB_Waiting.gameObject.SetActive(false);
 			PB_PassPhoneButton.gameObject.SetActive(true);
 		}
-	}
+    }
 
     // Successfully created the bomb
 	public void OnTappedOnNewTargetButton()
@@ -153,12 +190,23 @@ public class PlantBombState : State {
         curBombNum++;
         if (player.isAllLocalBombsPlanted()) {    
 			PB_PlantBomb.gameObject.SetActive(false);
-		}
+            PB_TutorialPlant.gameObject.SetActive(false);
 
-	}
+        }
+
+        // turn off re-plant tutorial if bomb successfully planted
+        if (tutorialToggleOn)
+        {
+            if (PB_ReplantBomb != null)
+            {
+                PB_TutorialReplant.gameObject.SetActive(false);
+            }
+        }
+
+    }
 
 
-    // Attempt to create the bomb
+    // Attempt to create the bomb on user-selected location
     public void ArmBomb()
     {
         isArmingBomb = true;
@@ -174,6 +222,16 @@ public class PlantBombState : State {
         // Keep the plant timer in game manager running
         // Deactivate plantBombButton
         PB_PlantBomb.gameObject.SetActive(false);
+
+        // Turn off tutorial Bubble for planting bomb & turn on tutorial for re-planting bomb
+        if (tutorialToggleOn)
+        {
+            if (PB_TutorialPlant != null && PB_ReplantBomb != null)
+            {
+                PB_TutorialPlant.gameObject.SetActive(false);
+                PB_TutorialReplant.gameObject.SetActive(true);
+            }
+        }
 
         // Activate ReplantBombButton
         PB_ReplantBomb.gameObject.SetActive(true);
@@ -197,6 +255,22 @@ public class PlantBombState : State {
         gameManager.armBombTimer.ResetTimer();
         PB_ArmTimeLeftText.gameObject.SetActive(false);
         PB_PlantBomb.gameObject.SetActive(true);
+        if(tutorialToggleOn)
+        {
+            if (PB_TutorialPlant != null && PB_ReplantBomb != null)
+            {
+                PB_TutorialPlant.gameObject.SetActive(true);
+                PB_TutorialReplant.gameObject.SetActive(false);
+            }
+        }
+        else //Tutorial is not on, turn off all tutorials
+        {
+            if (PB_TutorialPlant != null && PB_ReplantBomb != null)
+            {
+                PB_TutorialPlant.gameObject.SetActive(false);
+                PB_TutorialReplant.gameObject.SetActive(false);
+            }
+        }
         PB_ReplantBomb.gameObject.SetActive(false);
     }
 
@@ -219,6 +293,7 @@ public class PlantBombState : State {
         PB_InsertHints.gameObject.SetActive(true);
         PB_HideHints.gameObject.SetActive(false);
     }
+
 
     public void ChangeCurBombVisibility(string bombName, bool IsVisible)
     {
@@ -245,7 +320,7 @@ public class PlantBombState : State {
 
 	public override void PassPhone()
 	{
-        gameManager.hint = PB_HintField.text;
+		gameManager.hint = PB_HintField.text;
         gameManager.hint2 = PB_HintField2.text;
         gameManager.hint3 = PB_HintField3.text;
         gameManager.plantTimer.StopTimer();

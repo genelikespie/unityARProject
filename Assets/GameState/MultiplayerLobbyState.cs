@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
+using UnityEngine.Assertions;
 
 public class MultiplayerLobbyState : State {
 
@@ -24,9 +25,11 @@ public class MultiplayerLobbyState : State {
 	{
 		// Call the base class's function to initialize all variables
 		base.Awake();
+        
 		if (!gameManager)
 			Debug.LogError("AWAKE: CANT find game manager in base");
 
+        Assert.raiseExceptions = true;
 		// Get SM_Backdrop and disable renderer
 		mmBack = GameObject.Find("MM_Backdrop");
 		mmBack.GetComponent<MeshRenderer>().enabled = false;
@@ -36,14 +39,16 @@ public class MultiplayerLobbyState : State {
         {
             mmsBack.GetComponent<MeshRenderer>().enabled = false;
         }
-	}
+        MLS_PlayerJoinedCount = GameObject.Find("MLS_PlayerJoinedCount").GetComponent<Text>();
+        MLS_PlayerReadyCount = GameObject.Find("MLS_PlayerReadyCount").GetComponent<Text>();
+    }
 
 	/* Reset the UI
      */
 	public override void Initialize()
 	{
-		if (!gameManager)
-			Debug.LogError("Cant find game manager");
+        //Check if gameManager exists
+        Assert.IsNotNull(gameManager, "Cant find game manager");
 
 		// Enable SM_Backdrop renderer
 		mmBack.GetComponent<MeshRenderer>().enabled = true;
@@ -51,15 +56,15 @@ public class MultiplayerLobbyState : State {
         {
             mmsBack.GetComponent<MeshRenderer>().enabled = true;
         }
-	}
+        MLS_PlayerJoinedCount.text = "Loading...";
+        MLS_PlayerReadyCount.text = "";
+    }
 
     NetworkPlayer[] playerList = null;
 
     public override void RunState()
     {
         base.RunState();
-        MLS_PlayerJoinedCount = GameObject.Find("MLS_PlayerJoinedCount").GetComponent<Text>();
-        MLS_PlayerReadyCount = GameObject.Find("MLS_PlayerReadyCount").GetComponent<Text>();
         playerList = GameObject.FindObjectsOfType<NetworkPlayer>();
         if (playerList.Length == 0)
         {
@@ -82,6 +87,12 @@ public class MultiplayerLobbyState : State {
         MLS_PlayerReadyCount.text = "Ready Players: " + readyCount;
         if (readyCount == playerList.Length)
         {
+            //Make sure the list of players is not null
+            Assert.IsNotNull<NetworkPlayer[]>(playerList);
+
+            //This may seem redundant, but check if the readyCount 
+            //is equal to the length of the list of players
+            Assert.AreEqual<int>(playerList.Length, readyCount);
             PlantBomb();
         }
     }
@@ -89,6 +100,10 @@ public class MultiplayerLobbyState : State {
     public void getReady()
     {
         playerList = GameObject.FindObjectsOfType<NetworkPlayer>();
+
+        //Make sure the list of players is not null
+        Assert.IsNotNull<NetworkPlayer[]>(playerList);
+
         foreach (NetworkPlayer p in playerList)
         {
             if (p.isLocalPlayer)

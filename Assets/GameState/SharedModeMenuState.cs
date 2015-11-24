@@ -51,6 +51,13 @@ public class SharedModeMenuState : State {
         Assert.IsNotNull(smBack, "Cannot find smBack");
 
 		smBack.GetComponent<MeshRenderer>().enabled = false;
+
+        // Set time to plant bomb, defuse bomb, pass phone
+        basePlantTime = 30;
+        plantTimePerBomb = 15;
+        baseDefuseTime = 45;
+        defuseTimePerBomb = 15;
+        passTime = 30;
     }
 
     /* Reset the UI

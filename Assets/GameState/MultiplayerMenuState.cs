@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
+using UnityEngine.Assertions;
 
 public class MultiplayerMenuState : State {
 
@@ -25,6 +26,7 @@ public class MultiplayerMenuState : State {
 	{
 		// Call the base class's function to initialize all variables
 		base.Awake();
+        Assert.raiseExceptions = true;
 
         mmsBack = GameObject.Find("MMS_Backdrop");
         if (mmsBack != null)
@@ -32,23 +34,24 @@ public class MultiplayerMenuState : State {
             mmsBack.GetComponent<MeshRenderer>().enabled = false;
         }
 
-		if (!gameManager)
-			Debug.LogError("AWAKE: CANT find game manager in base");
 
-
+        //Make sure all UI components exist
 		MMS_NumOfBombsSlider = GameObject.Find("MMS_NumOfBombsSlider").GetComponent<Slider>();
+        Assert.IsNotNull(MMS_NumOfBombsSlider, "MMS_NumOfBombsSlider not found");
 		MMS_NumOfBombsText = GameObject.Find("MMS_NumOfBombsText").GetComponent<Text>();
-
+        Assert.IsNotNull(MMS_NumOfBombsText, "MMS_NumOfBombsText not found");
 		MMS_PlanterNameInputField = GameObject.Find("MMS_PlanterNameInputField").GetComponent<InputField>();
+        Assert.IsNotNull(MMS_PlanterNameInputField, "MMS_PlanterNameInputField not found");
 		MMS_DefuserNameInputField = GameObject.Find("MMS_DefuserNameInputField").GetComponent<InputField>();
+        Assert.IsNotNull(MMS_DefuserNameInputField, "MMS_DefuserNameInputField not found");
 	}
 
 	/* Reset the UI
      */
 	public override void Initialize()
 	{
-		if (!gameManager)
-			Debug.LogError("Cant find game manager");
+        //Make sure gameManager exists
+        Assert.IsNotNull(gameManager, "Cant find game manager");
 
         if (mmsBack != null)
         {
@@ -80,6 +83,12 @@ public class MultiplayerMenuState : State {
         NetworkManager.singleton.StartMatchMaker();
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
         string roomName = MMS_GameInputField.text;
+        //Make sure the name of the game isn't null
+        Assert.AreNotEqual(roomName, "");
+        //Make sure the name of the planter isn't null
+        Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+        //Make sure the name of the defuser isn't null
+        Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
         uint roomSize = 8;
         NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
         Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
@@ -90,14 +99,25 @@ public class MultiplayerMenuState : State {
 
     public void OnMatchList(ListMatchResponse matchList)
     {
+        //make sure match list is not null
+        Assert.IsNotNull(matchList, "null Match List returned from server");
+        /*
         if (matchList == null)
         {
             Debug.Log("null Match List returned from server");
             return;
         }
+        */
         // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
         string roomName = MMS_GameInputField.text;
+        //Make sure the name of the game isn't null
+        Assert.AreNotEqual(roomName, "");
+        //Make sure the name of the planter isn't null
+        Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+        //Make sure the name of the defuser isn't null
+        Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+
         NetworkManager manager = NetworkManager.singleton;
 
         foreach (MatchDesc match in matchList.matches)
@@ -123,21 +143,33 @@ public class MultiplayerMenuState : State {
         }
         // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
+
+        //Make sure the name of the game isn't null
+        Assert.AreNotEqual(matchList.matches.Count, 0);
+
+        /*
         if (matchList.matches.Count == 0)
         {
             Debug.Log("Match List Empty");
             MMS_GameInputField.text = "Match List Empty";
             return;
         }
+        */
         string roomName = MMS_GameInputField.text;
         NetworkManager manager = NetworkManager.singleton;
+
+        Assert.IsNotNull(manager, "NetworkManager not found");
+
         int position = Random.Range(0, matchList.matches.Count - 1);
         MMS_GameInputField.text = matchList.matches[position].name;
+
+        Assert.AreNotEqual(MMS_GameInputField.text, "");
     }
 
     public void Refresh()
     {
         NetworkManager manager = NetworkManager.singleton;
+        Assert.IsNotNull(manager, "NetworkManager not found");
         manager.StartMatchMaker();
         manager.matchMaker.ListMatches(0, 100, "", OnMatchList2);
     }
@@ -146,6 +178,7 @@ public class MultiplayerMenuState : State {
     {
         NetworkManager.singleton.StopHost();
         NetworkManager manager = NetworkManager.singleton;
+        Assert.IsNotNull(manager, "NetworkManager not found");
         manager.StartMatchMaker();
         manager.matchMaker.ListMatches(0, 100, "", OnMatchList);
     }

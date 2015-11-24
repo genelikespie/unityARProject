@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 using System.Collections;
 
 public class PassingState : State {
@@ -32,6 +33,16 @@ public class PassingState : State {
 		gameManager.passTimer.StartTimer();
 
 		P_Waiting.gameObject.SetActive(false);
+
+		Assert.IsNotNull<string>(player.getDefuserName());
+		Assert.AreEqual(0, player.getLocalBombsDefused());
+		Assert.AreEqual(player.getMaxLocalBombs(), player.getLocalBombsPlanted());
+		Assert.AreNotEqual(0, player.getMaxLocalBombs());
+		Assert.IsNotNull<string>(player.getPlanterName());
+		Assert.IsFalse(player.isAllGlobalBombsDefused());
+		Assert.IsTrue(player.isAllGlobalBombsPlanted());
+		Assert.IsFalse(player.isAllLocalBombsDefused());
+		Assert.IsTrue(player.isAllLocalBombsPlanted());
 	}
 
     public override void RunState()

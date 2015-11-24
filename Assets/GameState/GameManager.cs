@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using Vuforia;
+using UnityEngine.Networking;
 
 /* The GameManager class manages all the game states
  */
@@ -49,7 +51,10 @@ public class GameManager : MonoBehaviour {
 	public string hint;
     public string hint2;
     public string hint3;
+    //public int displayHintCount;
 
+    // Check if tutorial is on
+    public bool tutorialToggleOn = true;
 
     // Timer for each state
     public Timer plantTimer;
@@ -168,7 +173,14 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		updateTimers();
 		currentState.RunState();
-	}
+
+        // Get if tutorial is checked (may be checked/unchecked during runtime)
+        if (GameObject.Find("SMM_TutorialToggle") != null)
+        {
+            tutorialToggleOn = GameObject.Find("SMM_TutorialToggle").GetComponent<Toggle>().isOn;
+            Debug.Log("SMM_TutorialToggle in gameManager: " + tutorialToggleOn);
+        }
+    }
 
     public void SetState (State nextState) {
         Assert.IsNotNull(nextState, "Next State is NULL");
@@ -208,9 +220,12 @@ public class GameManager : MonoBehaviour {
         udtHandler.ReInitialize();
         player.setLocalBombsDefused(0);
         player.setLocalBombsPlanted(0);
-        /////////////////////////////////////////////////////////////////
-		/// TODO: If we implement a scoring system, reset that here too.
-        /////////////////////////////////////////////////////////////////
+
+        if (player.isMultiplayer())
+        {
+            NetworkManager.singleton.StopHost();
+        }
+        //TODO: If we implement a scoring system, reset that here too.
 
     }
 
@@ -241,5 +256,4 @@ public class GameManager : MonoBehaviour {
 		}
 		return false;
 	}
-
 }
