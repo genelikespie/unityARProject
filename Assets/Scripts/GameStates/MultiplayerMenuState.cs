@@ -21,6 +21,7 @@ public class MultiplayerMenuState : State {
 
 	Slider MMS_NumOfBombsSlider;
 	Text MMS_NumOfBombsText;
+	Text MMS_NoNameText;
 
 	protected virtual void Awake()
 	{
@@ -44,6 +45,10 @@ public class MultiplayerMenuState : State {
         Assert.IsNotNull(MMS_PlanterNameInputField, "MMS_PlanterNameInputField not found");
 		MMS_DefuserNameInputField = GameObject.Find("MMS_DefuserNameInputField").GetComponent<InputField>();
         Assert.IsNotNull(MMS_DefuserNameInputField, "MMS_DefuserNameInputField not found");
+		MMS_NoNameText = GameObject.Find ("MMS_NoNameText").GetComponent<Text>();
+		Assert.IsNotNull(MMS_NoNameText);
+		MMS_GameInputField = GameObject.Find ("MMS_GameInputField").GetComponent<InputField>();
+		Assert.IsNotNull(MMS_GameInputField);
 	}
 
 	/* Reset the UI
@@ -59,6 +64,7 @@ public class MultiplayerMenuState : State {
         }
 
 		gameManager.SetNumOfBombs((int)MMS_NumOfBombsSlider.value);
+		MMS_NoNameText.gameObject.SetActive(false);
 
 	}
 
@@ -76,9 +82,25 @@ public class MultiplayerMenuState : State {
 		DisplayNumOfBombs();
 	}
 
+	private bool isInputValid() {
+		if(MMS_PlanterNameInputField.text == "" || MMS_DefuserNameInputField.text == "") {
+			MMS_NoNameText.gameObject.SetActive(true);
+			MMS_NoNameText.text = "Please enter planter and defuser names.";
+			return false;
+		}
+		else if (MMS_GameInputField.text == "") {
+			MMS_NoNameText.gameObject.SetActive(true);
+			MMS_NoNameText.text = "Please enter a game name.";
+			return false;
+		}
+		return true;
+	}
 
     public void CreateGame()
     {
+		if (!isInputValid())
+			return;
+
         NetworkManager.singleton.StopHost();
         NetworkManager.singleton.StartMatchMaker();
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
@@ -86,9 +108,9 @@ public class MultiplayerMenuState : State {
         //Make sure the name of the game isn't null
         Assert.AreNotEqual(roomName, "");
         //Make sure the name of the planter isn't null
-        //Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+        Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
         //Make sure the name of the defuser isn't null
-        //Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+        Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
         uint roomSize = 8;
         NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
         Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
@@ -99,6 +121,9 @@ public class MultiplayerMenuState : State {
 
     public void OnMatchList(ListMatchResponse matchList)
     {
+		if (!isInputValid())
+			return;
+
         //make sure match list is not null
         Assert.IsNotNull(matchList, "null Match List returned from server");
         /*
@@ -130,12 +155,15 @@ public class MultiplayerMenuState : State {
                 return;
             }
         }
-        MMS_GameInputField.text = roomName + " Not Found";
+        MMS_GameInputField.text = "Game Not Found";
         Debug.Log("Match " + roomName + "Not Found");
     }
 
     public void OnMatchList2(ListMatchResponse matchList)
     {
+		if (!isInputValid())
+			return;
+
         if (matchList == null)
         {
             Debug.Log("null Match List returned from server");
@@ -176,6 +204,9 @@ public class MultiplayerMenuState : State {
 
     public void JoinGame()
     {
+		if (!isInputValid())
+			return;
+
         NetworkManager.singleton.StopHost();
         NetworkManager manager = NetworkManager.singleton;
         Assert.IsNotNull(manager, "NetworkManager not found");
