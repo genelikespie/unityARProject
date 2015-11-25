@@ -77,6 +77,34 @@ public class GameManager : MonoBehaviour {
     // A list of all the states
     public List<State> stateList { get; private set; }
 
+	public AudioClip tripleBomb;
+	public AudioClip singleBomb;
+	public AudioClip beep;
+	public AudioClip loudBeep;
+	public AudioClip bigExplosion;
+
+	public AudioSource audioSource;
+
+	public void playTriple() {
+		audioSource.PlayOneShot(tripleBomb);
+	}
+
+	public void playSingle() {
+		audioSource.PlayOneShot(singleBomb);
+	}
+
+	public void playBeep() {
+		audioSource.PlayOneShot(beep);
+	}
+
+	public void playExplode() {
+		audioSource.PlayOneShot(bigExplosion);
+	}
+
+	public void playLoudBeep() {
+		audioSource.PlayOneShot(loudBeep);
+	}
+
     public static GameManager gameManager;
     public static GameManager Instance() {
         if (!gameManager)
@@ -145,6 +173,8 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
+		audioSource = GameObject.Find ("AudioPlayer").GetComponent<AudioSource>();
+
         RectTransform menuRectTransform; // temporary variable to reduce overhead
         foreach (State s in stateList)
         {
