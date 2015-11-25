@@ -76,6 +76,10 @@ public class DefuseState : State
         D_HintLeftBehind3.gameObject.SetActive(false);
         gameManager.defuseTimer.StartTimer();
         D_Waiting.gameObject.SetActive(false);
+        DoOnce1 = false;
+        DoOnce2 = false;
+        NextHint1 = false;
+        NextHint2 = false;
 
         //check if gameManager is not null
         Assert.IsNotNull(gameManager, "Cant find game manager");

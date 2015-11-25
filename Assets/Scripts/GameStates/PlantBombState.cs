@@ -75,10 +75,18 @@ public class PlantBombState : State {
 
     public override void Initialize()
     {
-		PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
+        PB_InsertHints.gameObject.SetActive(true);
+        PB_HideHints.gameObject.SetActive(false);
+        PB_TimeLeftText.text = string.Format("{0:N1}", gameManager.plantTimer.timeLeft);
         PB_PassPhoneButton.gameObject.SetActive(false);
 		PB_PlantBomb.gameObject.SetActive(true);
 		PB_Waiting.gameObject.SetActive(false);
+        gameManager.hint = "";
+        PB_HintField.text = "";
+        gameManager.hint2 = "";
+        PB_HintField2.text = "";
+        gameManager.hint3 = "";
+        PB_HintField3.text = "";
 
         // init tutorialToggleOn before update()
         tutorialToggleOn = gameManager.tutorialToggleOn;
@@ -315,7 +323,7 @@ public class PlantBombState : State {
 
 	public override void PassPhone()
 	{
-		gameManager.hint = PB_HintField.text;
+        gameManager.hint = PB_HintField.text;
         gameManager.hint2 = PB_HintField2.text;
         gameManager.hint3 = PB_HintField3.text;
         gameManager.plantTimer.StopTimer();
