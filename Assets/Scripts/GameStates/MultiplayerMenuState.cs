@@ -83,16 +83,19 @@ public class MultiplayerMenuState : State {
         NetworkManager.singleton.StartMatchMaker();
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
         string roomName = MMS_GameInputField.text;
-        //Make sure the name of the game isn't null
-        Assert.AreNotEqual(roomName, "");
-        //Make sure the name of the planter isn't null
-        //Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
-        //Make sure the name of the defuser isn't null
-        //Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
-        uint roomSize = 8;
-        NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
-        Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
-        gameManager.SetState(gameManager.multiplayerLobbyState);
+        if (roomName != "" && MMS_PlanterNameInputField.text != "" && MMS_DefuserNameInputField.text != "")
+        {
+            //Make sure the name of the game isn't null
+            Assert.AreNotEqual(roomName, "");
+            //Make sure the name of the planter isn't null
+            Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+            //Make sure the name of the defuser isn't null
+            Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+            uint roomSize = 8;
+            NetworkManager.singleton.matchMaker.CreateMatch(roomName, roomSize, true, "", NetworkManager.singleton.OnMatchCreate);
+            Debug.LogWarning("Creating match [" + roomName + ":" + roomSize + "]");
+            gameManager.SetState(gameManager.multiplayerLobbyState);
+        }
     }
 
     
@@ -111,27 +114,30 @@ public class MultiplayerMenuState : State {
         // The naming is NOT a bug. The MMS_JoinGameInputField has been removed.
         MMS_GameInputField = GameObject.Find("MMS_GameInputField").GetComponent<InputField>();
         string roomName = MMS_GameInputField.text;
-        //Make sure the name of the game isn't null
-        Assert.AreNotEqual(roomName, "");
-        //Make sure the name of the planter isn't null
-        //Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
-        //Make sure the name of the defuser isn't null
-        //Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
-
-        NetworkManager manager = NetworkManager.singleton;
-
-        foreach (MatchDesc match in matchList.matches)
+        if (roomName != "" && MMS_PlanterNameInputField.text != "" && MMS_DefuserNameInputField.text != "")
         {
-            if (match.name.Equals(roomName))
+            //Make sure the name of the game isn't null
+            Assert.AreNotEqual(roomName, "");
+            //Make sure the name of the planter isn't null
+            Assert.AreNotEqual(MMS_PlanterNameInputField.text, "");
+            //Make sure the name of the defuser isn't null
+            Assert.AreNotEqual(MMS_DefuserNameInputField.text, "");
+
+            NetworkManager manager = NetworkManager.singleton;
+
+            foreach (MatchDesc match in matchList.matches)
             {
-                manager.matchMaker.JoinMatch(match.networkId, "", manager.OnMatchJoined);
-                gameManager.SetState(gameManager.multiplayerLobbyState);
-                Debug.Log("Match " + roomName + "Found");
-                return;
+                if (match.name.Equals(roomName))
+                {
+                    manager.matchMaker.JoinMatch(match.networkId, "", manager.OnMatchJoined);
+                    gameManager.SetState(gameManager.multiplayerLobbyState);
+                    Debug.Log("Match " + roomName + "Found");
+                    return;
+                }
             }
+            MMS_GameInputField.text = roomName + " Not Found";
+            Debug.Log("Match " + roomName + "Not Found");
         }
-        MMS_GameInputField.text = roomName + " Not Found";
-        Debug.Log("Match " + roomName + "Not Found");
     }
 
     public void OnMatchList2(ListMatchResponse matchList)
