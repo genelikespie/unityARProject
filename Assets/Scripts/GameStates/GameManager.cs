@@ -250,6 +250,7 @@ public class GameManager : MonoBehaviour {
         udtHandler.ReInitialize();
         player.setLocalBombsDefused(0);
         player.setLocalBombsPlanted(0);
+		player.setPassReady(false);
 
         if (player.isMultiplayer())
         {

@@ -54,33 +54,25 @@ public class PassingState : State {
         /////////////////////////////////////////////////
         // TODO implement time expired
         /////////////////////////////////////////////////
-        if (player.isMultiplayer())
+		/// 
+		if(gameManager.passTimer.TimedOut()) {
+			P_Waiting.gameObject.SetActive(false);
+			player.setPlayerOneWins(false);
+			gameManager.SetState(gameManager.gameOverState);
+		}
+        else if (player.isPassReady() && !player.isAllPassReady())
         {
-            if (!player.isPassReady())
-            {
-                if (gameManager.passTimer.TimedOut())
-                {
-                    Debug.LogWarning("Time ran out to plant the bomb!");
-                }
-            }
-            else if (!player.isAllPassReady())
-            {
-                P_Waiting.gameObject.SetActive(true);
-            }
-            else
-            {
-                P_Waiting.gameObject.SetActive(false);
-                gameManager.SetState(gameManager.defuseState);
-            }
+            P_Waiting.gameObject.SetActive(true);
+        }
+		else if (player.isAllPassReady())
+        {
+			gameManager.passTimer.StopTimer();
+			gameManager.SetState(gameManager.defuseState);
         }
     }
+
     public override void DefuseBomb()
     {
 		player.setPassReady(true);
-		gameManager.passTimer.StopTimer();
-        if (!player.isMultiplayer())
-        {
-            gameManager.SetState(gameManager.defuseState);
-        }
     }
 }

@@ -33,6 +33,7 @@ public class DefuseState : State
     IEnumerator DelayForDisarmedRoutine()
     {
         yield return new WaitForSeconds(2f);
+		gameManager.defuseTimer.StopTimer();
         player.setPlayerOneWins(false);
         gameManager.SetState(gameManager.gameOverState);
     }
@@ -143,31 +144,25 @@ public class DefuseState : State
         // TODO implement time expired
         /////////////////////////////////////////////////
 
+		if(gameManager.defuseTimer.TimedOut()) {
+			player.setPlayerOneWins(true);
+			TimeExpired();
+		}
         if (!player.isAllLocalBombsDefused())
         {
             //check if the player fails to defuse all bombs
             Assert.AreNotEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
-            if (gameManager.defuseTimer.TimedOut())
-            {
-                base.TimeExpired();
-            }
         }
         else if (!player.isAllGlobalBombsDefused())
         {
             //check if the player fails to defuse all bombs
             Assert.AreNotEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
             D_Waiting.gameObject.SetActive(true);
-            if (player.getPlayerOneWins())
-            {
-                gameManager.defuseTimer.StopTimer();
-                gameManager.SetState(gameManager.gameOverState);
-            }
         }
         else
         {
             //check if the player successfully defuses all bombs
             Assert.AreEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
-            gameManager.defuseTimer.StopTimer();
             /////////////////////////////////////////////////
             // TODO implement game over functionality
             /////////////////////////////////////////////////
@@ -222,6 +217,12 @@ public class DefuseState : State
 
 
     }
+
+	public override void TimeExpired ()
+	{
+		gameManager.defuseTimer.StopTimer();
+		base.TimeExpired ();
+	}
 
 
     public override void AllBombsDefused()

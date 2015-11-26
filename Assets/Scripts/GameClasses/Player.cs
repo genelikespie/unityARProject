@@ -22,6 +22,7 @@ public class LocalPlayer {
 	public int localBombsPlanted = 0;
 
 	public bool playerOneWins;
+	public bool passReady = false;
 
 
     public LocalPlayer(string pName, string dName, int maxBombs)
@@ -100,7 +101,7 @@ public class LocalPlayerAdapter : PlayerAdapter {
 
 	// is this correct for singleplayer?
 	public bool isReady() { return true; }
-	public bool isPassReady() { return true; }
+	public bool isPassReady() { return player.passReady; }
 	public bool isAllPassReady() { return isPassReady(); }
 	// for singleplayer, local/global mean the same thing.
 	public bool isAllGlobalBombsPlanted() { return isAllLocalBombsPlanted(); } 
@@ -118,7 +119,7 @@ public class LocalPlayerAdapter : PlayerAdapter {
 
 	// is this correct for singeplayer?
 	public void setReady(bool val) { return; } 
-	public void setPassReady(bool val) { return; }
+	public void setPassReady(bool val) { player.passReady = val; }
 
 	public bool isMultiplayer() { return false; }
 }

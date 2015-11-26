@@ -158,12 +158,14 @@ public class PlantBombState : State {
             }
         }
 
-		if (!player.isAllLocalBombsPlanted() && gameManager.plantTimer.TimedOut()) {
+		if (gameManager.plantTimer.TimedOut()) {
                 /////////////////////////////////////////////////
                 // TODO implement time expired
                 /////////////////////////////////////////////////
-            	Debug.LogWarning("Time ran out to plant the bomb!");
-                gameManager.SetState(gameManager.gameOverState);
+            Debug.LogWarning("Time ran out to plant the bomb!");
+
+			player.setPlayerOneWins(false);
+			TimeExpired();
 
 		}
 		// If not all global bombs (all players) are planted, display the
@@ -329,4 +331,10 @@ public class PlantBombState : State {
         gameManager.plantTimer.StopTimer();
         gameManager.SetState(gameManager.passingState);
     }
+
+	public override void TimeExpired ()
+	{
+		gameManager.plantTimer.StopTimer();
+		base.TimeExpired ();
+	}
 }
