@@ -33,10 +33,10 @@ TO RUN AUTOMATED TESTS:
 14. In the Unit Test Runner window, right click MyTests->RunTest, and run the test (game must be running)
   * NOTE: All tests run as coroutines, therefore, the Unit Test window cannot return failures. **Test failures will print to the console instead!**
 15. Brief description of the tests: we currently have four tests
-    starting from 0s: defuser successfully defuse the bomb and win the shared mode
-    starting from 25s: defuser successfully defuse the bomb and win the multishared mode (consists only one player)
-    starting from 50s: defuser does not defuse the bomb and planter win the shared mode
-    starting from 95s: defuser does not defuse the bomb and planter win the multishared mode (consists only one player)
+16. starting from 0s: defuser successfully defuse the bomb and win the shared mode
+17. starting from 25s: defuser successfully defuse the bomb and win the multishared mode (consists only one player)
+18. starting from 50s: defuser does not defuse the bomb and planter win the shared mode
+19. starting from 95s: defuser does not defuse the bomb and planter win the multishared mode (consists only one player)
 
 TO EDIT GAME:
 
