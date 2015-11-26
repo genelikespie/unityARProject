@@ -72,7 +72,6 @@ public class State : MonoBehaviour{
         /////////////////////////////////////////////////
         // TODO implement time expired
         /////////////////////////////////////////////////
-		player.setPlayerOneWins(true);
         gameManager.SetState(gameManager.gameOverState);
     }
 

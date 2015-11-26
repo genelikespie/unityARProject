@@ -22,6 +22,7 @@ public class PlantBombState : State {
     InputField PB_HintField3;
     Button PB_InsertHints;
     Button PB_HideHints;
+	Button PB_GiveUp;
 
     // Is the tutorial box checked?
     bool tutorialToggleOn;
@@ -61,6 +62,7 @@ public class PlantBombState : State {
         PB_ReplantBomb = GameObject.Find("PB_ReplantBomb").GetComponent<Button>();
         PB_TutorialPlant = GameObject.Find("PB_TutorialPlant").GetComponent<Button>();
         PB_TutorialReplant = GameObject.Find("PB_TutorialReplant").GetComponent<Button>();
+		PB_GiveUp = GameObject.Find ("PB_GiveUp").GetComponent<Button>();
 
         userDefinedTargetHandler = GameObject.Find("UserDefinedTargetBuilder").GetComponent<UserDefinedTargetEventHandler>();
     }
@@ -135,6 +137,12 @@ public class PlantBombState : State {
 		Assert.IsFalse(player.isAllGlobalBombsPlanted());
 		Assert.IsFalse(player.isAllLocalBombsDefused());
 		Assert.IsFalse(player.isAllLocalBombsPlanted());
+
+		//set if player one gives up this state.
+		player.setPlayerOneWins(false);
+
+		// To avoid synchronization issues, you can only give up in single player.
+		PB_GiveUp.gameObject.SetActive(!player.isMultiplayer());
     }
 
     // Update the timer to plant the bomb

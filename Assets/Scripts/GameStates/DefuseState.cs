@@ -15,6 +15,7 @@ public class DefuseState : State
     Button D_DefuseBombButton;
     Text D_Waiting;
     Button D_Tutorial;
+	Button D_GiveUp;
 
     // Is the tutorial box checked?
     bool tutorialToggleOn;
@@ -53,6 +54,7 @@ public class DefuseState : State
         D_HintLeftBehind3 = GameObject.Find("D_HintLeftBehind3").GetComponent<Text>();
         D_Waiting = GameObject.Find("D_Waiting").GetComponent<Text>();
         D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
+		D_GiveUp = GameObject.Find ("D_GiveUp").GetComponent<Button>();
 
         //find bomb tag
         //bombs = GameObject.FindGameObjectsWithTag("Bomb");
@@ -96,6 +98,11 @@ public class DefuseState : State
             D_Tutorial.gameObject.SetActive(false);
         }
 
+		// Done if player two gives up this state.
+		player.setPlayerOneWins(true);
+
+		// To avoid synchronization issues, you can only give up in single player.
+		D_GiveUp.gameObject.SetActive(!player.isMultiplayer());
     }
 
     // Need to check if tutorial is TRUE even after everything is initialized b/c can be set during runtime
