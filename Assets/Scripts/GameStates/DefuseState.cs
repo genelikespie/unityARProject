@@ -16,6 +16,7 @@ public class DefuseState : State
     Text D_Waiting;
     Button D_Tutorial;
 	Button D_GiveUp;
+	Text D_Penalty;
 
     // Is the tutorial box checked?
     bool tutorialToggleOn;
@@ -26,6 +27,11 @@ public class DefuseState : State
     bool DoOnce1;
     bool DoOnce2;
     public int displayHintCount;
+
+	float timePenalty = 5;
+	float fadeRate = .02f;
+
+	IEnumerator fadePenaltyCoroutine;
 
     //Bomb Texture
     //GameObject[] bombs;
@@ -55,6 +61,7 @@ public class DefuseState : State
         D_Waiting = GameObject.Find("D_Waiting").GetComponent<Text>();
         D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
 		D_GiveUp = GameObject.Find ("D_GiveUp").GetComponent<Button>();
+		D_Penalty = GameObject.Find ("D_Penalty").GetComponent<Text>();
 
         //find bomb tag
         //bombs = GameObject.FindGameObjectsWithTag("Bomb");
@@ -65,6 +72,9 @@ public class DefuseState : State
         Assert.IsNotNull(D_HintLeftBehind2, "D_HintLeftBehind2 not found");
         Assert.IsNotNull(D_HintLeftBehind3, "D_HintLeftBehind3 not found");
         Assert.IsNotNull(D_Waiting, "D_Waiting not found");
+
+		//Set hint penalty fade coroutine
+		fadePenaltyCoroutine = FadeAlphaOut();
     }
 
     public override void Initialize()
@@ -103,6 +113,12 @@ public class DefuseState : State
 
 		// To avoid synchronization issues, you can only give up in single player.
 		D_GiveUp.gameObject.SetActive(!player.isMultiplayer());
+
+		// Set the penalty text to hidden initially.
+		D_Penalty.color = new Color(D_Penalty.color.r, 
+		                            D_Penalty.color.g, 
+		                            D_Penalty.color.b, 
+		                            0);
     }
 
     // Need to check if tutorial is TRUE even after everything is initialized b/c can be set during runtime
@@ -222,7 +238,10 @@ public class DefuseState : State
             displayHintCount++;
         }
 
-
+		// Add hint penalty
+		gameManager.defuseTimer.timeLeft -= timePenalty;
+		FlashPenalty();
+		
     }
 
 	public override void TimeExpired ()
@@ -237,4 +256,25 @@ public class DefuseState : State
         if (gameManager.AttemptDefuse())
             player.setLocalBombsDefused(player.getLocalBombsDefused() + 1);
     }
+
+	void FlashPenalty() {
+		StopCoroutine(fadePenaltyCoroutine);
+		D_Penalty.color = new Color(D_Penalty.color.r, 
+		                            D_Penalty.color.g, 
+		                            D_Penalty.color.b, 
+		                            1);
+		StartCoroutine(fadePenaltyCoroutine);
+	}
+
+	IEnumerator FadeAlphaOut() {
+		while(D_Penalty.color.a != 0) {
+			D_Penalty.color = new Color(D_Penalty.color.r, 
+			                            D_Penalty.color.g, 
+			                            D_Penalty.color.b, 
+			                            D_Penalty.color.a - fadeRate);
+			yield return null;
+		}
+	}
 }
+
+
