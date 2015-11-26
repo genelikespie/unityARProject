@@ -17,6 +17,7 @@ public class DefuseState : State
     Button D_Tutorial;
 	Button D_GiveUp;
 	Text D_Penalty;
+	Text D_AllDefusedText;
 
     // Is the tutorial box checked?
     bool tutorialToggleOn;
@@ -62,6 +63,7 @@ public class DefuseState : State
         D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
 		D_GiveUp = GameObject.Find ("D_GiveUp").GetComponent<Button>();
 		D_Penalty = GameObject.Find ("D_Penalty").GetComponent<Text>();
+		D_AllDefusedText = GameObject.Find ("D_AllDefusedText").GetComponent<Text>();
 
         //find bomb tag
         //bombs = GameObject.FindGameObjectsWithTag("Bomb");
@@ -119,6 +121,8 @@ public class DefuseState : State
 		                            D_Penalty.color.g, 
 		                            D_Penalty.color.b, 
 		                            0);
+
+		D_AllDefusedText.gameObject.SetActive(false);
     }
 
     // Need to check if tutorial is TRUE even after everything is initialized b/c can be set during runtime
@@ -184,6 +188,9 @@ public class DefuseState : State
         }
         else
         {
+			D_Waiting.gameObject.SetActive(false);
+			D_AllDefusedText.gameObject.SetActive(true);
+
             //check if the player successfully defuses all bombs
             Assert.AreEqual<int>(player.getLocalBombsDefused(), player.getLocalBombsPlanted());
             /////////////////////////////////////////////////
