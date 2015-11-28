@@ -216,7 +216,6 @@ public class MultiplayerMenuState : State {
 
     public override void ToMainMenu()
     {
-
         if (mmsBack != null)
         {
             mmsBack.GetComponent<MeshRenderer>().enabled = false;
