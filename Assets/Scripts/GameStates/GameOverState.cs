@@ -96,7 +96,7 @@ public class GameOverState : State
 
             if (player.isMultiplayer())
             {
-                DisplayWinner.text = "Team 1 wins!";
+                DisplayWinner.text = "Planter Team wins!";
             }
             else
             {
@@ -107,7 +107,7 @@ public class GameOverState : State
         {
             if (player.isMultiplayer())
             {
-                DisplayWinner.text = "Team 2 wins!";
+                DisplayWinner.text = "Defuser Team wins!";
             }
             else
             {
