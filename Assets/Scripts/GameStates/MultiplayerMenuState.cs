@@ -32,7 +32,7 @@ public class MultiplayerMenuState : State {
         mmsBack = GameObject.Find("MMS_Backdrop");
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+            mmsBack.SetActive(false);
         }
 
 
@@ -60,7 +60,7 @@ public class MultiplayerMenuState : State {
 
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = true;
+            mmsBack.SetActive(true);
         }
 
 		gameManager.SetNumOfBombs((int)MMS_NumOfBombsSlider.value);
@@ -218,7 +218,7 @@ public class MultiplayerMenuState : State {
     {
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+            mmsBack.SetActive(false);
         }
 
         gameManager.SetState(gameManager.mainMenuState);

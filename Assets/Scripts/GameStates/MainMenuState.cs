@@ -5,25 +5,47 @@ public class MainMenuState : State {
 	GameObject mmBack;
 
 	public virtual void Awake() {
-		base.Awake();
-
 		mmBack = GameObject.Find("MM_Backdrop");
-		mmBack.GetComponent<MeshRenderer>().enabled = false;
-	}
+        if (mmBack != null)
+        {
+            mmBack.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("MM_Backdrop not found. = NULL");
+        }
+
+        base.Awake();
+    }
 
 	public override void Initialize ()
 	{
-		mmBack.GetComponent<MeshRenderer>().enabled = true;
-		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = false;
+        if (mmBack != null)
+        {
+            Debug.Log("mmBack not null");
+            mmBack.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("mmBack IS null");
+        }
+        GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = false;
 	}
 
 	public override void RunState() {
-	}
+        if (mmBack != null)
+        {
+            mmBack.SetActive(true);
+        }
+    }
 
 	public override void ToSharedModeMenu()
 	{
 		Debug.Log("To shared Menu");
-		mmBack.GetComponent<MeshRenderer>().enabled = false;
-		gameManager.SetState(gameManager.sharedModeMenuState);
+        if (mmBack != null)
+        {
+            mmBack.SetActive(false);
+        }
+        gameManager.SetState(gameManager.sharedModeMenuState);
 	}
 }

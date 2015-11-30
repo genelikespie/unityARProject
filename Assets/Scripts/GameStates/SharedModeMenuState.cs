@@ -49,7 +49,7 @@ public class SharedModeMenuState : State {
 
 		// Get SM_Backdrop and disable renderer
 		smBack = GameObject.Find("SM_Backdrop");
-		smBack.GetComponent<MeshRenderer>().enabled = false;
+		smBack.SetActive(false);
     }
 
     /* Reset the UI
@@ -60,7 +60,7 @@ public class SharedModeMenuState : State {
             Debug.LogError("Cant find game manager");
 
 		// Enable SM_Backdrop renderer
-		smBack.GetComponent<MeshRenderer>().enabled = true;
+		smBack.SetActive(true);
         gameManager.SetNumOfBombs((int)SMM_NumOfBombsSlider.value);
     }
 
@@ -96,8 +96,8 @@ public class SharedModeMenuState : State {
         gameManager.SetAR();
 
 		// Disable SM_Backdrop renderer, enabled camera plane
-		smBack.GetComponent<MeshRenderer>().enabled = false;
-		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
+		smBack.SetActive(false);
+        GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
 
         gameManager.SetState(gameManager.plantBombState);
     }

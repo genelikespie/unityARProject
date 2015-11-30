@@ -24,7 +24,7 @@ public class GameOverState : State
         goBack = GameObject.Find("GO_Backdrop");
         if (goBack != null)
         {
-            goBack.GetComponent<MeshRenderer>().enabled = false;
+            goBack.SetActive(false);
         }
         base.Awake();
 		
@@ -48,7 +48,7 @@ public class GameOverState : State
 
         if (goBack != null)
         {
-            goBack.GetComponent<MeshRenderer>().enabled = true;
+            goBack.SetActive(true);
         }
     }
 
@@ -61,7 +61,7 @@ public class GameOverState : State
 
         if (goBack != null)
         {
-            goBack.GetComponent<MeshRenderer>().enabled = false;
+            goBack.SetActive(false);
         }
     }
 
@@ -72,7 +72,7 @@ public class GameOverState : State
 
         if (goBack != null)
         {
-            goBack.GetComponent<MeshRenderer>().enabled = false;
+            goBack.SetActive(false);
         }
     }
 

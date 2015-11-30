@@ -18,7 +18,7 @@ public class MultiplayerLobbyState : State {
 	Button MMS_BackButton;
 	Button MMS_ReadyButton;
 
-	GameObject mmBack;
+	//GameObject mmBack;
     GameObject mmsBack;
 
 	protected virtual void Awake()
@@ -31,13 +31,13 @@ public class MultiplayerLobbyState : State {
 
         Assert.raiseExceptions = true;
 		// Get SM_Backdrop and disable renderer
-		mmBack = GameObject.Find("MM_Backdrop");
-		mmBack.GetComponent<MeshRenderer>().enabled = false;
+		//mmBack = GameObject.Find("MM_Backdrop");
+		//mmBack.SetActive(false);
 
         mmsBack = GameObject.Find("MMS_Backdrop");
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+            mmsBack.SetActive(false);
         }
         MLS_PlayerJoinedCount = GameObject.Find("MLS_PlayerJoinedCount").GetComponent<Text>();
         MLS_PlayerReadyCount = GameObject.Find("MLS_PlayerReadyCount").GetComponent<Text>();
@@ -51,10 +51,10 @@ public class MultiplayerLobbyState : State {
         Assert.IsNotNull(gameManager, "Cant find game manager");
 
 		// Enable SM_Backdrop renderer
-		mmBack.GetComponent<MeshRenderer>().enabled = true;
+		//mmBack.GetComponent<MeshRenderer>().enabled = true;
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = true;
+            mmsBack.SetActive(true);
         }
         MLS_PlayerJoinedCount.text = "Loading...";
         MLS_PlayerReadyCount.text = "";
@@ -122,10 +122,10 @@ public class MultiplayerLobbyState : State {
 		gameManager.SetAR();
 		
 		//Disable SM_Backdrop renderer, enabled camera plane
-		mmBack.GetComponent<MeshRenderer>().enabled = false;
+		//mmBack.GetComponent<MeshRenderer>().enabled = false;
         if (mmsBack != null)
         {
-            mmsBack.GetComponent<MeshRenderer>().enabled = false;
+            mmsBack.SetActive(false);
         }
 		GameObject.Find("BackgroundPlane").GetComponent<MeshRenderer>().enabled = true;
 		
