@@ -233,7 +233,7 @@ public class DefuseState : State
         }
 
         //update the hint if something was left        
-        if (gameManager.hint3 != "" && displayHintCount >= 2 && DoOnce3 == false;)
+        if (gameManager.hint3 != "" && displayHintCount >= 2 && DoOnce3 == false)
         {
             DoOnce3 = true;
             D_HintLeftBehind3.text = "Hint: " + gameManager.hint3;
