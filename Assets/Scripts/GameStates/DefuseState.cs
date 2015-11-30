@@ -227,7 +227,7 @@ public class DefuseState : State
         if (gameManager.hint == "" && (gameManager.hint2 != "" || gameManager.hint3 != "") && NextHint1 == false)
         {
             NextHint1 = true;
-            displayHintCount++; 
+            displayHintCount++;
         }
 
         //update the hint if something was left        
@@ -254,10 +254,10 @@ public class DefuseState : State
             displayHintCount++;
         }
 
-		// Add hint penalty
-		gameManager.defuseTimer.timeLeft -= timePenalty;
-		FlashPenalty();
-		
+        // Add hint penalty
+        gameManager.defuseTimer.timeLeft -= timePenalty;
+        FlashPenalty();
+
     }
 
 	public override void TimeExpired ()

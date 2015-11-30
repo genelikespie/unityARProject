@@ -11,6 +11,10 @@ public class GameOverState : State
     Button QuitButton;
     Text DisplayWinner;
     GameObject goBack;
+
+    //Keep sound from playing on loop
+    bool playedOnce = false;
+
     // Use this for initialization
     protected virtual void Awake()
     {
@@ -39,7 +43,8 @@ public class GameOverState : State
             //Debug.LogError("Cant find game manager");
         //Checks if game manager is null
         Assert.IsNotNull(gameManager, "Cant find game manager");
-        gameManager.playExplode();
+
+        playedOnce = false;
 
         if (goBack != null)
         {
@@ -82,18 +87,34 @@ public class GameOverState : State
         imgTracker.Stop();
         if (!player.isAllGlobalBombsPlanted())
         {
+            
             if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 2 wins!";
+                if (!playedOnce)
+                {
+                    gameManager.playCheer();
+                    playedOnce = true;
+                }
             }
             else
             {
                 DisplayWinner.text = "You ran out of time! " + player.getDefuserName() + " wins!";
+                if (!playedOnce)
+                {
+                    gameManager.playCheer();
+                    playedOnce = true;
+                }
             }
         }
         else if (!player.isAllGlobalBombsDefused())
         {
             explosion.SetActive(true);
+            if (!playedOnce)
+            {
+                gameManager.playExplode();
+                playedOnce = true;
+            }
 
             if (player.isMultiplayer())
             {
@@ -106,6 +127,11 @@ public class GameOverState : State
         }
         else
         {
+            if (!playedOnce)
+            {
+                gameManager.playCheer();
+                playedOnce = true;
+            }
             if (player.isMultiplayer())
             {
                 DisplayWinner.text = "Team 2 wins!";

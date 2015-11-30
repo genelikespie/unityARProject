@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour
     public AudioClip beep;
     public AudioClip loudBeep;
     public AudioClip bigExplosion;
+    public AudioClip cheer;
 
     public AudioSource audioSource;
 
@@ -104,12 +105,23 @@ public class GameManager : MonoBehaviour
 
     public void playExplode()
     {
-        audioSource.PlayOneShot(bigExplosion);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(bigExplosion);
+        }
     }
 
     public void playLoudBeep()
     {
         audioSource.PlayOneShot(loudBeep);
+    }
+
+    public void playCheer()
+    {
+        if(!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(cheer);
+        }
     }
 
     public static GameManager gameManager;
