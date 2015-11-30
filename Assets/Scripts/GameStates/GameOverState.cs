@@ -39,6 +39,7 @@ public class GameOverState : State
             //Debug.LogError("Cant find game manager");
         //Checks if game manager is null
         Assert.IsNotNull(gameManager, "Cant find game manager");
+        gameManager.playExplode();
 
         if (goBack != null)
         {

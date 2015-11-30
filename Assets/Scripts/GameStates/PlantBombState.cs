@@ -18,6 +18,7 @@ public class PlantBombState : State {
     Button PB_ReplantBomb;
     Button PB_TutorialPlant;
     Button PB_TutorialReplant;
+    Button PB_TutorialHints;
     InputField PB_HintField2;
     InputField PB_HintField3;
     Button PB_InsertHints;
@@ -62,7 +63,8 @@ public class PlantBombState : State {
         PB_ReplantBomb = GameObject.Find("PB_ReplantBomb").GetComponent<Button>();
         PB_TutorialPlant = GameObject.Find("PB_TutorialPlant").GetComponent<Button>();
         PB_TutorialReplant = GameObject.Find("PB_TutorialReplant").GetComponent<Button>();
-		PB_GiveUp = GameObject.Find ("PB_GiveUp").GetComponent<Button>();
+        PB_TutorialHints = GameObject.Find("PB_TutorialHints").GetComponent<Button>();
+        PB_GiveUp = GameObject.Find ("PB_GiveUp").GetComponent<Button>();
 
         userDefinedTargetHandler = GameObject.Find("UserDefinedTargetBuilder").GetComponent<UserDefinedTargetEventHandler>();
     }
@@ -92,18 +94,20 @@ public class PlantBombState : State {
 
         // init tutorialToggleOn before update()
         tutorialToggleOn = gameManager.tutorialToggleOn;
-        if (tutorialToggleOn && PB_TutorialPlant != null && PB_ReplantBomb != null)
+        if (tutorialToggleOn && PB_TutorialPlant != null && PB_TutorialReplant != null && PB_TutorialHints != null)
         {
             PB_TutorialPlant.gameObject.SetActive(true);
             PB_TutorialReplant.gameObject.SetActive(false);
+            PB_TutorialHints.gameObject.SetActive(true);
             //Debug.Log("PB_TutorialPlant is TRUE");
         }
-        else
+        else // Turn off tutorial
         {
-            if (PB_TutorialPlant != null && PB_ReplantBomb != null)
+            if (PB_TutorialPlant != null && PB_TutorialReplant != null && PB_TutorialHints != null)
             {
                 PB_TutorialPlant.gameObject.SetActive(false);
                 PB_TutorialReplant.gameObject.SetActive(false);
+                PB_TutorialHints.gameObject.SetActive(false);
                 //Debug.Log("PB_TutorialPlant is FALSE");
             }
         }
@@ -203,14 +207,16 @@ public class PlantBombState : State {
         curBombNum++;
         if (player.isAllLocalBombsPlanted()) {    
 			PB_PlantBomb.gameObject.SetActive(false);
-            PB_TutorialPlant.gameObject.SetActive(false);
-
+            if (PB_TutorialPlant != null)
+            {
+                PB_TutorialPlant.gameObject.SetActive(false);
+            }
         }
 
         // turn off re-plant tutorial if bomb successfully planted
         if (tutorialToggleOn)
         {
-            if (PB_ReplantBomb != null)
+            if (PB_TutorialReplant != null)
             {
                 PB_TutorialReplant.gameObject.SetActive(false);
             }
@@ -337,6 +343,10 @@ public class PlantBombState : State {
         gameManager.hint2 = PB_HintField2.text;
         gameManager.hint3 = PB_HintField3.text;
         gameManager.plantTimer.StopTimer();
+        if (PB_TutorialHints != null)
+        {
+            PB_TutorialHints.gameObject.SetActive(false);
+        }
         gameManager.SetState(gameManager.passingState);
     }
 

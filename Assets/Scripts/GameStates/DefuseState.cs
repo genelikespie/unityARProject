@@ -15,7 +15,8 @@ public class DefuseState : State
     Button D_DefuseBombButton;
     Text D_Waiting;
     Button D_Tutorial;
-	Button D_GiveUp;
+    Button D_TutorialHints;
+    Button D_GiveUp;
 	Text D_Penalty;
 	Text D_AllDefusedText;
 
@@ -61,7 +62,8 @@ public class DefuseState : State
         D_HintLeftBehind3 = GameObject.Find("D_HintLeftBehind3").GetComponent<Text>();
         D_Waiting = GameObject.Find("D_Waiting").GetComponent<Text>();
         D_Tutorial = GameObject.Find("D_Tutorial").GetComponent<Button>();
-		D_GiveUp = GameObject.Find ("D_GiveUp").GetComponent<Button>();
+        D_TutorialHints = GameObject.Find("D_TutorialHints").GetComponent<Button>();
+        D_GiveUp = GameObject.Find ("D_GiveUp").GetComponent<Button>();
 		D_Penalty = GameObject.Find ("D_Penalty").GetComponent<Text>();
 		D_AllDefusedText = GameObject.Find ("D_AllDefusedText").GetComponent<Text>();
 
@@ -101,13 +103,18 @@ public class DefuseState : State
 
         // init tutorialToggleOn before update()
         tutorialToggleOn = gameManager.tutorialToggleOn;
-        if (tutorialToggleOn)
+        if (tutorialToggleOn && D_Tutorial != null && D_TutorialHints != null)
         {
             D_Tutorial.gameObject.SetActive(true);
+            D_TutorialHints.gameObject.SetActive(true);
         }
         else
         {
-            D_Tutorial.gameObject.SetActive(false);
+            if (D_Tutorial != null && D_TutorialHints != null)
+            {
+                D_Tutorial.gameObject.SetActive(false);
+                D_TutorialHints.gameObject.SetActive(false);
+            }
         }
 
 		// Done if player two gives up this state.
@@ -152,17 +159,19 @@ public class DefuseState : State
         if (gameManager.bombVisible)
         {
             D_DefuseBombButton.gameObject.SetActive(true);
-            if (tutorialToggleOn)
+            if (tutorialToggleOn && D_Tutorial != null && D_TutorialHints != null)
             {
                 D_Tutorial.gameObject.SetActive(false);
+                D_TutorialHints.gameObject.SetActive(false);
             }
         }
         else
         {
             D_DefuseBombButton.gameObject.SetActive(false);
-            if (tutorialToggleOn)
+            if (tutorialToggleOn && D_Tutorial != null && D_TutorialHints != null)
             {
                 D_Tutorial.gameObject.SetActive(true);
+                D_TutorialHints.gameObject.SetActive(true);
             }
         }
 
