@@ -28,6 +28,7 @@ public class DefuseState : State
     bool NextHint2;
     bool DoOnce1;
     bool DoOnce2;
+    bool DoOnce3;
     public int displayHintCount;
 
 	float timePenalty = 5;
@@ -95,6 +96,7 @@ public class DefuseState : State
         D_Waiting.gameObject.SetActive(false);
         DoOnce1 = false;
         DoOnce2 = false;
+        DoOnce3 = false;
         NextHint1 = false;
         NextHint2 = false;
 
@@ -231,12 +233,15 @@ public class DefuseState : State
         }
 
         //update the hint if something was left        
-        if (gameManager.hint3 != "" && displayHintCount >= 2)
+        if (gameManager.hint3 != "" && displayHintCount >= 2 && DoOnce3 == false;)
         {
-            print("DEBUG");
+            DoOnce3 = true;
             D_HintLeftBehind3.text = "Hint: " + gameManager.hint3;
             D_HintLeftBehind3.gameObject.SetActive(true);
             displayHintCount++;
+            // Add hint penalty
+            gameManager.defuseTimer.timeLeft -= timePenalty;
+            FlashPenalty();
         }
         if (gameManager.hint2 != "" && displayHintCount >= 1 && DoOnce2 == false)
         {
@@ -244,6 +249,9 @@ public class DefuseState : State
             D_HintLeftBehind2.text = "Hint: " + gameManager.hint2;
             D_HintLeftBehind2.gameObject.SetActive(true);
             displayHintCount++;
+            // Add hint penalty
+            gameManager.defuseTimer.timeLeft -= timePenalty;
+            FlashPenalty();
 
         }
         if (gameManager.hint != "" && DoOnce1 == false)
@@ -252,11 +260,10 @@ public class DefuseState : State
             D_HintLeftBehind.text = "Hint: " + gameManager.hint;
             D_HintLeftBehind.gameObject.SetActive(true);
             displayHintCount++;
+            // Add hint penalty
+            gameManager.defuseTimer.timeLeft -= timePenalty;
+            FlashPenalty();
         }
-
-        // Add hint penalty
-        gameManager.defuseTimer.timeLeft -= timePenalty;
-        FlashPenalty();
 
     }
 
